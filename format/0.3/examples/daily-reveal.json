@@ -1,0 +1,41 @@
+{
+  "format": "harmonomicon.activity-package/0.3",
+  "id": "org.harmonomicon.example.daily-reveal",
+  "version": "0.3.0",
+  "content": {
+    "language": "en",
+    "title": "Daily reveal writing circle",
+    "summary": "Everyone writes privately during a window, then the group reads the entries together when it closes.",
+    "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+    "prompt": "Describe a place you would like to visit.",
+    "participant": "Submit one text entry in each open window. Others see that you submitted, but read your entry only after the window closes.",
+    "completion": "Entries from each window remain available after reveal. Missing entries do not block the next window.",
+    "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "repeated_collection@1",
+    "medium": "text",
+    "allowPromptOverride": false,
+    "intervalMs": 86400000,
+    "windowMs": 72000000,
+    "occurrences": 3,
+    "visibility": "group_after_close"
+  }
+}

@@ -1,0 +1,9 @@
+# Staged behavior and assignment policy in 0.3
+
+Candidate 0.3 defines one named `offered_response@1` behavior and separately requires `policy:balanced_artifacts_exact32@1`. The [offer-flow experiment](../../experiments/offer-flows/findings.md) found that a two-recipient race and a two-source choice need different semantics. The [policy experiment](../../experiments/policy-portability/findings.md) fixed the latter choice's arithmetic, tie behavior, and retry rules across three languages. Those results supply the behavior and policy boundaries used here.
+
+The earlier [composition experiment](../../experiments/composition/findings.md) reused operations across three activity shapes, but its two matching definitions grew from 1,486 to 2,613 bytes and its two interpreters from 430 to 590 lines. It still needed distinct assignment policies, and the held-out queue required another policy and operation. These are rough size measures from that experiment, not a runtime benchmark or a measurement of the new HTTP hosts.
+
+The 0.3 named contract limits the host obligation to source collection, two saved artifact offers, one linked text response per contributor, and reveal. The exact assignment policy remains independently versioned. Two local hosts pass the same 0.3 text packages and cases, including concurrent requests and large IDs. This demonstrates the narrower contract through real storage and read boundaries. It does not establish a universal stage grammar or show that named contracts will remain cheaper as more activities are added.
+
+A later candidate can revisit composition when a second structurally different staged activity needs the same operations. The comparison should use package definition size, added host code, conformance agreement, and the number of new policy rules. The 0.3 result is a tested narrow contract, not a decision about every future staged activity.

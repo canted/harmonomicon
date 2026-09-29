@@ -1,6 +1,6 @@
 # Harmonomicon: toward a portable activity package
 
-**Status:** Research synthesis and provisional 0.1 direction, not a published standard or a schema that hosts can implement yet. The conclusions below follow from the linked surveys and contract experiments.
+**Status:** Research synthesis behind the [candidate format](../format/0.3/README.md), not a published standard. The conclusions below follow from the linked surveys and contract experiments.
 
 ## Goal and the demonstrated part
 
@@ -41,6 +41,14 @@ This architecture is language-independent at the package boundary. It does not p
 - **Package records and migration:** decide whether later versions standardize export of instances, event logs, artifacts, and history. If 0.1 promises this, a cross-host migration experiment is required before that claim.
 - **Rights and provenance:** carry source attribution and permission information for human instructions and media; avoid presenting a research reconstruction as a canonical or licensed package for a named activity.
 
-## Next validation gate
+## Local host validation
 
-The next test should import the **same small candidate package** into two separate host implementations and exercise an actual durable event store, scheduler or worker, and participant view boundary. One simple handoff and one activity with either a versioned assignment policy or recurring private/public records would expose whether the envelope and host contract are usable. The hosts need different implementation stacks, but neither needs a polished interface. Their results should be compared with package conformance traces, including unsupported capabilities, retry, deadline, and access cases. This is a focused host integration experiment, not a request for more breadth surveying.
+The host validation gate calls for the same candidate packages in two separate implementations, with durable event stores, workers, and participant view boundaries. Their results must agree with package conformance cases, including unsupported capabilities, retries, deadlines, and access rules. This gate is exercised by the [candidate 0.1 format](../format/0.1/README.md) and [local host validation](../validation/0.1/README.md). The same two packages run in separate Python and Node.js localhost HTTP services with independent SQLite state, deadline workers, authenticated views, restart replay, and concurrent-submit checks. Both services agree on the five candidate conformance cases. The result supports the narrow 0.1 contracts under those local conditions; media storage, notifications, sustained load, arbitrary packages, and deployment remain outside the result.
+
+## Repeated collection in candidate 0.2
+
+The [0.2 candidate](../format/0.2/README.md) retains the two 0.1 behaviors and defines a finite `repeated_collection@1` contract. Its fixed windows, per-occurrence status and entry history, and three visibility modes address the daily-practice gaps identified in the [ongoing-activity experiment](../experiments/ongoing-activities/findings.md). The new [conformance cases](../format/0.2/conformance/README.md) pass one reference model and the [0.2 two-host local trial](../validation/0.2/README.md). The result establishes agreement for the checked-in text packages under those local conditions; arbitrary package import, media, notifications, and deployment remain outside it.
+
+## Staged assignment in candidate 0.3
+
+The [0.3 candidate](../format/0.3/README.md) defines one staged `offered_response@1` contract and requires the exact [balanced-artifact policy](../experiments/policy-portability/contract.md). Its [text conformance cases](../format/0.3/conformance/README.md) pass a reference model and [two independent local hosts](../validation/0.3/README.md), including large numeric IDs, saved offers, concurrent requests, private views, and restart replay. The [design notes](../format/0.3/design-notes.md) record why this candidate uses one named staged behavior while the general composition grammar remains open. Actual image storage, voting, and arbitrary third-party package import are not established by the result.

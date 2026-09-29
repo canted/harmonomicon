@@ -1,0 +1,25 @@
+{
+  "package": "../examples/group-check-in.json",
+  "capabilities": ["identity@1", "serial_events@1", "durable_state@1", "private_views@1", "clock@1", "text@1"],
+  "contracts": ["timed_collection@1"],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": ["a", "b"],
+    "opensAt": 10,
+    "closesAt": 20
+  },
+  "events": [
+    {
+      "event": {"eventId": "open", "type": "tick", "actor": "system", "at": 10, "payload": {}},
+      "outcome": "accepted"
+    },
+    {
+      "event": {"eventId": "answer-a", "type": "submit", "actor": "a", "at": 12, "payload": {"value": "A warm cup of tea"}},
+      "outcome": "accepted",
+      "views": [
+        {"actor": "b", "at": 20, "expect": {"phase": "closed", "submissionCount": 1, "entries": [{"actor": "a", "value": "A warm cup of tea"}]}}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+# Activity package format 0.3 candidate
+
+**Status:** Candidate tested in two independent local hosts for its text example packages; not a published interoperability standard. This document defines four contracts. The [JSON Schema](package.schema.json) checks package structure; this document defines runtime meaning. [Examples](examples/) and [conformance cases](conformance/README.md) accompany the draft.
+
+## What a package is
+
+A package is one UTF-8 JSON object that describes an app-mediated group activity. It contains human directions, participation bounds, provenance, required host capabilities, and one versioned behavior contract. It contains no participant accounts, scheduled instance dates, media files, server code, or database instructions. A host may implement it in any programming language.
+
+A host creates an **instance** by binding real participant IDs and the contract's required setup values to a package. Two hosts can run the same package when they implement its exact behavior contract and capabilities. The package version identifies an author's revision; the `format` value identifies this document's package shape. The `(id, version)` pair is immutable: changed package content requires a new version. Neither implies support for other behavior versions.
+
+The handoff and collection contracts build on the [named-mechanism experiment](../../experiments/named-mechanisms/contract.md), while this candidate gives them a new package envelope and exact host obligations. Its JSON is not interchangeable with the experiment definitions.
+
+0.3 has one behavior contract per package. It carries forward the three 0.2 contracts unchanged and adds `offered_response@1`, with one exact assignment-policy requirement. The package envelope remains the same except for the `format` identifier and the additional policy token allowed in `requires`. A host must reject an unknown contract or policy rather than guess at its meaning. General composition, voting, local-calendar recurrence, general parameter definitions, package variants, executable extensions, and transfer of running instances are outside this candidate.
+
+## Package fields
+
+| Field | Meaning |
+|---|---|
+| `format` | Exactly `harmonomicon.activity-package/0.3`. |
+| `id` | Stable dot-separated package identifier, independent of a host or instance. |
+| `version` | Three nonnegative decimal components, such as `0.3.0`. A changed package is a new version. |
+| `content` | A `language` identifier for this package's single language of human-facing text, plain-text `title`, `summary`, `setup`, `prompt`, `participant`, and `completion` directions, and an `access` note on participation requirements or accommodations. The host presents these to people according to the activity; it does not treat them as executable rules. |
+| `provenance` | `kind` (`original` or `adaptation`), `credit`, `rights`, and optional `sourceUrl`. These describe the package's source and permission basis; they do not verify it. |
+| `participants` | Inclusive `min` and `max` participant counts. An organizer is separate from participants. |
+| `requires` | Unique, exact host capability and policy tokens. The host checks these before creating an instance. |
+| `behavior` | One recognized contract and its configuration. |
+
+Unknown package fields and unknown behavior configuration fields are invalid in 0.3. Plain-text directions are portable content; hosts may lay them out differently. The JSON Schema checks types and enumerated values. It cannot prove that a host obeys privacy, scheduling, durability, or the behavior contract.
+
+### Capabilities
+
+| Token | Host obligation |
+|---|---|
+| `identity@1` | Bind authenticated actor IDs to `organizer` and `participant` roles; do not trust a client-supplied role. |
+| `serial_events@1` | Give every instance one authoritative event order, including a stable order for equal timestamps. |
+| `durable_state@1` | Commit an accepted event ID, its contribution, and resulting state atomically and retain them across restart. |
+| `private_views@1` | Enforce the contract's audience rules at every read/API boundary, including cached and notified content. |
+| `clock@1` | Supply trusted server-side time in integer Unix milliseconds and evaluate scheduled boundaries on reads and events. |
+| `text@1` | Accept and render nonempty text contributions. |
+| `image_ref@1` | Accept an opaque reference to an image stored and access-controlled by the host. The reference is not a portable image file. |
+| `policy:balanced_artifacts_exact32@1` | Implement the exact two-source assignment rule specified below. This is a policy requirement, not a media or transport capability. |
+
+All four contracts require `identity@1`, `serial_events@1`, `durable_state@1`, and `private_views@1`. The three carried-forward contracts retain their 0.2 capability rules. `offered_response@1` additionally requires `clock@1`, `text@1`, the token matching its `sourceMedium`, and `policy:balanced_artifacts_exact32@1`. The policy token is valid only with this contract in 0.3. A host missing a required capability, policy, or exact behavior contract returns `unsupported` with sorted missing tokens before creating an instance. A missing behavior is reported as `behavior:<contract>`. Advertising a token is a claim, not certification; the [conformance cases](conformance/README.md) and later host integration test the claim.
+
+## Instance and event boundary
+
+An instance binds one organizer ID, distinct participant IDs within the package bounds, and any setup required by its behavior. Actor IDs are opaque nonempty strings. A host verifies that the configured actors consent or otherwise legitimately belong to the activity; the package cannot determine this.
+
+All events have `eventId`, `type`, `actor`, `at`, and `payload`. IDs are nonempty, case-sensitive strings. `at` is trusted host time in the safe integer range `0` through `9007199254740991`, measured in milliseconds since the Unix epoch. Events are processed in authoritative order, and their timestamps must be nondecreasing. An event with an earlier timestamp is rejected without applying its operation. Equal timestamps are resolved by event order. `system` is a reserved actor ID used only for host-generated `tick` events. Other actors are bound at instance creation.
+
+Before checking an event, the host advances any time-based phase to the event's `at`. It also advances phases before answering a view request using current trusted time. Thus a late `submit` cannot keep a collection open when a scheduled worker is delayed. A rejected event never adds a contribution, but its trusted time can still advance the phase. The host should schedule ticks at named boundaries so participants see changes promptly; late delivery may delay a notification but cannot extend an acceptance window.
+
+Accepted event IDs are durable. Retrying an accepted `eventId` with the same `type`, `actor`, and structurally equal JSON `payload` returns `replayed` and makes no second contribution, even after a deadline. Reusing it with different values is `rejected`. `at` may differ on a retry; it still advances the time-based phase. Unknown actors, event types, invalid payloads, and invalid actions are `rejected`. The outcome vocabulary is `accepted`, `replayed`, or `rejected`, plus `existing` for a new `request_offer` event ID when that actor already has a saved offer in `offered_response@1`. A host may provide more detail, but these statuses and resulting participant-visible behavior must agree.
+
+A `text` value is a nonempty JSON string; hosts do not trim or normalize it for contract decisions. An `image_ref` value is a nonempty opaque string whose existence and access the host verifies. No package may instruct a host to fetch or execute code from an arbitrary URL. Media bytes, delivery, moderation, accessibility, and text layout remain host responsibilities.
+
+## `timed_collection@1`
+
+The package's `behavior` is `{ "contract": "timed_collection@1", "medium": "text" | "image_ref", "allowPromptOverride": boolean }`. The host supplies `opensAt` and `closesAt` at instance creation, with `opensAt < closesAt`; both are trusted integer Unix milliseconds. Creation must occur no later than `opensAt`. If `allowPromptOverride` is true, the organizer may set a nonempty prompt at creation; otherwise the package's `content.prompt` is used.
+
+The phases are `waiting` before `opensAt`, `open` in `[opensAt, closesAt)`, and `closed` at or after `closesAt`. A participant's first valid `submit` during `open` stores `{actor, value}`. Its payload is `{ "value": ... }`, with the value matching `medium`. A second submission by the same participant is rejected unless it is a replay of the first accepted event ID. `tick` from `system` has an empty payload, may advance the phase, and is accepted even if it changes nothing. The collection closes at `closesAt` regardless of missing submissions. Missing participants contribute no entry.
+
+Before close, every participant and the organizer may see the phase and submission count. A participant may also see their own entry. No one receives another person's entry through the activity view, including the organizer. After close, all bound participants and the organizer may see the ordered entries; their order is the order of accepted submissions. The host may store private data internally but must enforce this projection at its read boundaries.
+
+## `sequential_handoff@1`
+
+The package's `behavior` is `{ "contract": "sequential_handoff@1", "medium": "text" | "image_ref", "steps": integer, "allowPromptOverride": boolean }`. `steps` is at least two and equals both `participants.min` and `participants.max`. At instance creation the host supplies `route`: every participant ID exactly once, in a chosen order, with length `steps`. The first route member is current. The prompt override rule is the same as above.
+
+The phase starts `active`. A valid `submit` from the current participant stores their `{actor, value}` and advances to the next route member. Its payload is `{ "value": ... }`, matching `medium`. Other actors' submissions are rejected. After the final accepted submission, the phase is `complete`, the current actor is null, and no further contribution is accepted.
+
+Before completion, everyone may see the phase, current actor, and one-based step number. A participant may see their own accepted entry. Only the current actor sees the immediate predecessor's value as input; the first actor instead sees the prompt. The organizer sees no entry content before completion. The package prompt is public content, so this contract does not claim that the first input is secret. On completion, all bound participants and the organizer may see the full ordered chain. This contract has no timeout, skip, replacement, or reassignment rule: an unfinished handoff waits for its current actor. A package needing recovery must use a later contract with defined recovery semantics.
+
+## `repeated_collection@1`
+
+This contract defines a finite series of collection windows on a fixed millisecond interval. It supports a private group practice, immediate group sharing, or reveal after each window. Its `behavior` is `{ "contract": "repeated_collection@1", "medium": "text" | "image_ref", "allowPromptOverride": boolean, "intervalMs": integer, "windowMs": integer, "occurrences": integer, "visibility": "private" | "group_after_close" | "group_immediate" }`. `intervalMs` is positive; `windowMs` is positive and no greater than `intervalMs`; `occurrences` is from 2 through 366. These fields are fixed by the package. The organizer supplies `startsAt` when creating an instance. Creation time must be no later than `startsAt`. The final closing time must fit the safe integer time range. The same prompt applies to every occurrence unless the organizer sets a permitted prompt override at instance creation.
+
+Occurrence numbers are one-based. Occurrence `n` opens at `startsAt + (n − 1) × intervalMs` and closes at its opening plus `windowMs`. Its window is half-open: submission is allowed at opening and rejected at closing. Windows do not overlap. The overall phase is `waiting` before the first opening, `open` during a window, `between` in a gap, and `complete` at or after the final closing. `currentOccurrence` is the open occurrence number, or null in any other phase. Time advances before every event and view, including when a worker tick is late or absent. A worker should wake at each opening and closing to make transitions visible promptly. If time jumps across several windows, the host closes all elapsed windows and retains their histories.
+
+A participant may make one accepted `submit` in each window, with payload `{ "occurrence": n, "value": ... }`. The occurrence number is mandatory so a delayed request cannot silently become a submission for the next window. It must identify the currently open occurrence. `value` matches `medium` and follows the shared contribution rules above. A rejected, late, or duplicate submission does not replace an entry. An accepted event ID can be replayed across later windows under the shared replay rule. A `tick` from `system` has empty payload and is accepted even when it changes no phase; it cannot add an entry. `submit` and `tick` are the only event types in this contract.
+
+Every bound participant and the organizer sees the overall `phase`, `currentOccurrence`, and an `occurrences` array covering every occurrence that has opened so far, ordered by number. Each occurrence view contains `number`, `phase` (`open` or `closed`), `submissionCount`, and `statuses` in enrollment order. Each status is `{ "actor": participantId, "status": "pending" | "complete" | "missed" }`. A submitted participant is `complete`; an absent participant is `pending` while the window is open and `missed` after it closes. The status is visible to the whole group even when entries are private. Each participant also sees their own accepted entry for each occurrence as `own`; the organizer never receives `own`.
+
+With `private`, no occurrence view has an `entries` field, including after close. With `group_after_close`, `entries` appears only after that occurrence closes. With `group_immediate`, `entries` appears as soon as the occurrence opens. It contains accepted `{actor, value}` records in authoritative submission order. These audience rules apply to reads, cached views, and notifications. The host may retain private entries internally but must not expose them through another actor's view. An old occurrence keeps its visibility rule and entries when later occurrences begin. There is no removal, edit, skip, or penalty beyond `missed` status.
+
+This is an elapsed-time schedule, not a local-calendar rule. A 86,400,000 ms interval means consecutive windows begin 24 hours apart; it does not promise the same local wall-clock time across daylight-saving changes. Notifications, reminders, timezones, open-ended recurrence, changing membership, and per-occurrence prompts require later contracts or host behavior outside this package.
+
+## `offered_response@1`
+
+This contract has two timed submission stages and a final reveal. Its `behavior` is `{ "contract": "offered_response@1", "sourceMedium": "text" | "image_ref", "allowPromptOverride": boolean, "assignmentPolicy": "policy:balanced_artifacts_exact32@1" }`. Responses are nonempty text. The organizer supplies `opensAt`, `sourceDeadline`, `responseDeadline`, and `roundId` at instance creation. The trusted times satisfy `createdAt ≤ opensAt < sourceDeadline < responseDeadline` and fit the safe integer range. `roundId` and every participant ID for this contract are canonical unsigned decimal strings from `0` through `18446744073709551615`, with no leading zero except `0`. They are activity-local aliases that a host binds to real authenticated accounts. The organizer ID remains an opaque nonempty string, distinct from participants and `system`.
+
+The phases are `waiting` before `opensAt`, `sources_open` in `[opensAt, sourceDeadline)`, then either `responses_open` in `[sourceDeadline, responseDeadline)` if at least three sources were accepted or terminal `insufficient_sources` otherwise. At or after `responseDeadline`, a successful response stage becomes `complete`. All transitions are based on trusted time before processing an event or read. A worker should wake at the named boundaries; a delayed worker cannot extend a stage. An insufficient-source activity never enters the response stage or reveals its sources to the group.
+
+During `sources_open`, each participant may make one accepted `submit_source` with payload `{ "value": ... }` matching `sourceMedium`. The actor's canonical participant ID also identifies that source for assignment; no separate artifact ID is supplied. The source pool is fixed at `sourceDeadline`. There is no edit, removal, or late source. Only a source contributor may request an offer or submit a response.
+
+During `responses_open`, `request_offer` has empty payload. Its first accepted event saves an ordered pair of other contributors' source IDs for that requester. The requester sees those two source values in the same order. A later request with a new event ID returns `existing`, records that ID for replay, and returns the saved pair; an exact retry of either recorded ID returns `replayed`. The offer is not recalculated after a refresh or restart. Requests from different people use the host's authoritative event order, so an earlier saved offer can affect a later one. An invalid request changes neither offers nor the event-ID ledger.
+
+The required `policy:balanced_artifacts_exact32@1` ranks every other contributor's source by `(exposure count, score, numeric source ID)` ascending and selects the first two. Exposure count is the number of saved offers that already contain that source ID. Let `M = 2^32`, `r` be the numeric `roundId`, `u` the numeric requester ID, and `a` the numeric source ID. All arithmetic is exact unsigned integer arithmetic:
+
+```text
+x = ((r × 73856093) mod M) XOR ((u × 19349663) mod M) XOR ((a × 83492791) mod M)
+score = x XOR (x >> 16)
+```
+
+`XOR` is bitwise XOR on unsigned 32-bit words and `>>` is a zero-filling shift. The score is an unsigned 32-bit integer. JSON numbers must not represent these IDs; implementations need exact handling above `2^53`. This specializes the [experimentally specified policy](../../experiments/policy-portability/contract.md) to one source per contributor, using that contributor's ID as the source ID. A host missing the exact policy token returns `unsupported` before creating the instance.
+
+A contributor with a saved offer may make one accepted `submit_response` with payload `{ "source": sourceId, "value": text }`. `source` must be one of their two saved offer IDs. A response is stored as `{ "actor": contributorId, "source": sourceId, "value": text }`; multiple contributors may choose the same source. A second response from the same contributor is rejected. At the response deadline, the activity completes even if some contributors did not request offers or respond. `tick` from `system` has empty payload and is accepted even if the phase is unchanged. These four event types—`submit_source`, `request_offer`, `submit_response`, and `tick`—are the only ones in this contract.
+
+Every participant and the organizer sees `{ "phase", "sourceCount", "responseCount" }`. A participant also sees their accepted source as `ownSource`, their saved ordered pair as `offer` containing `{actor, value}` records, and their accepted response as `ownResponse`. Before `complete`, no one sees another person's source except through their own two-source offer; no one sees another person's response, including the organizer. At `complete`, everyone additionally sees `sources` in accepted source order and `responses` in accepted response order. In `insufficient_sources`, no group `sources` or `responses` fields appear; contributors retain only their own source. The host must enforce these projections at every read, cached view, and notification boundary.
+
+The package does not define voting, scoring captions, selecting a winner, source moderation, media-file transfer, reminders, or replacement of missing contributors. An `image_ref` host must verify the reference and its access rights; the reference-model examples cannot prove actual image storage.
+
+## Versioning and validation
+
+Hosts compare the full contract token, including `@1`; they never silently substitute a different version. The package schema is [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12) and checks structure only. Cross-field checks—such as required capabilities and `steps` matching participant bounds—and runtime behavior are defined here and exercised by the [examples and conformance cases](conformance/README.md). A package that fails structural or cross-field validation is `invalid_package`, distinct from a valid package whose requirements are `unsupported` by a host.
+
+Run `python3 format/0.3/check.py` from the repository root for the reference-model consistency check. The [0.3 two-host trial](../../validation/0.3/README.md) runs the same text packages through independent Python and Node.js HTTP services with separate SQLite stores, deadline workers, and authenticated views. Both pass all 15 conformance cases plus concurrency, restart, privacy, and worker probes. This establishes narrow local agreement for the checked-in text packages, not image storage, arbitrary package import, or production deployment. The [design notes](design-notes.md) compare this named behavior and exact policy with the earlier composition experiment.

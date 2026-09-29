@@ -1,66 +1,89 @@
 # Harmonomicon
 
-Harmonomicon studies the rules that give shape to human group activities and develops a **programming-language-independent activity package** that more than one software host could interpret. The name takes **Harmon-** from Harmonia. Host-specific code may still implement the package or extend difficult cases; the package itself should not require the host's programming language.
+![Harmonomicon pixel logo with the Harmonia symbol above the wordmark](assets/harmonomicon-logo.svg)
 
-The research includes activities that people can run without software. The proposed standard concerns what a mediating app presents, schedules, records, assigns, reveals, and communicates. Physical actions enter that app only through supported inputs or reported events.
+Harmonomicon is testing a common format for group activities that people do through an app. An **activity package** describes one activity so different apps can run it. It tells the app what to show, when people can act, what each person can see, and how the activity moves from one step to the next.
 
-## Working scope
+Think of an icebreaker in a group chat, a collaborative drawing game on a website, or a daily creative prompt sent by an app. The app might send a prompt, collect contributions, pass a turn, or reveal a result. An activity package puts those instructions and rules together so they can be reused.
 
-An activity is in scope when two or more people participate under explicit instructions, roles, turns, prompts, timing, or other rules that shape their interaction. A person or software may guide it. Activities that need no software are in scope.
+Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-Three levels are recorded separately:
+## A simple example: one question for a group
 
-- **Occasion:** a dinner party, birthday party, kindergarten session, workshop, or ongoing group. An occasion may contain several activities.
-- **Activity:** a runnable set of rules, such as Pass the Parcel, a conversation round, or a collaborative drawing exchange.
-- **Mechanism:** a reusable part of an activity, such as passing an object, rotating partners, assigning a prompt, waiting for a timer, or revealing a result.
+Imagine an organizer starts a check-in for eight people in an app. At the start, the app asks everyone, “What made you smile today?” Each person can send one text answer. Answers stay private while people write. At 7 p.m., the app shows the answers to the group, even if some people did not reply.
 
-A recurring individual prompt belongs in the survey when a group relationship changes the activity—for example through shared viewing, responses, accountability, or aggregation.
+The package would describe the activity in terms like these:
 
-## Research passes
+| Part | What this activity says |
+|---|---|
+| Who takes part | The organizer and the invited participants |
+| What people do | Answer one question with text |
+| When it happens | Start at the chosen time; reveal at 7 p.m. |
+| Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
+| What happens if someone misses it | The reveal still happens at 7 p.m. |
 
-1. **Observation format:** define a compact card that captures the complete runnable procedure, variants, source evidence, and possible software role. Calibrate it on a simple activity.
-2. **Breadth survey:** collect examples across social hosting, celebrations, early-childhood activities, conversation, creation, feedback, collective thinking, games, rituals, and other families discovered along the way. Sample across live/asynchronous and in-person/remote settings.
-3. **Mechanism survey:** compare the algorithms across cards. Identify repeated mechanisms and important counterexamples, including what happens when people arrive late, miss a turn, decline, or contribute too little.
-4. **Contract experiments:** express unlike activities using a candidate portable package and host contract. Try more than one host implementation where possible. Revise the contract where the examples expose a real mismatch.
+An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [candidate 0.3 package](format/0.3/examples/group-check-in.json) describes this check-in.
 
-The initial card is an observation tool, not the future plugin schema. An activity may need only a host cue sheet; another may need software to assign work, preserve private contributions, or schedule a reveal.
+## A richer example: image caption contest
 
-The portability goal and its open design questions are recorded in [Portable activity packages](research/portable-activity-packages.md).
+Imagine a group caption contest run in an app. Instead of everyone captioning the same picture, participants first upload several images. The app then gives each image contributor two images uploaded by other people. They choose one and write a caption. More than one person may caption the same image.
 
-## Pass 1 artifacts
+The activity has a few stages:
 
-- [Activity card template](research/activity-card-template.md)
-- [Pass the Parcel calibration card](research/activities/pass-the-parcel.md)
+1. Participants upload one image each before the image deadline.
+2. After the image deadline, if at least three images are available, the app offers each contributor two images from other people. It favors images that have been offered fewer times.
+3. Each contributor chooses one offered image and submits a caption. Captions stay private during this stage.
+4. At the caption deadline, the app reveals the image-caption pairs. Participants can vote for a favorite caption, and the app shows the result when voting closes.
 
-## Pass 2 working map
+The package would say when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how voting works. It would also say what happens if fewer than three images arrive, or if someone never submits a caption. In the current candidate, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A later contract could define a different recovery rule. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
-- [Breadth survey](research/breadth-survey.md): source-backed candidate activities, grouped by the kind of interaction they structure. This is a sampling map for deciding which algorithms to document in depth, not a complete inventory.
+The [0.3 image-caption package](format/0.3/examples/image-caption-circle.json) defines image collection, two-source offers, linked text captions, and reveal. Voting and winner selection are later targets. The current local validation hosts handle text sources only, so this image package remains unrun.
 
-## Pass 3 mechanism survey
+Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
 
-- [Mechanism survey](research/mechanism-survey.md): compact algorithms for eleven source-backed cards, repeated mechanisms, exception gaps, and boundary findings for a portable format.
-- [Activity cards](research/activities/): full procedures and evidence for the contrasting examples, including physical, social, creative, care, and digital activities.
+## What goes in a package?
 
-## Pass 4 contract experiment
+An activity package brings together:
 
-- [Experimental contract and conformance cases](experiments/README.md): JSON activity definitions interpreted independently by JavaScript and Python, with expected event traces and capability checks.
-- [Findings](experiments/findings.md): what the traces establish, choices made only for the experiment, and gaps before a public standard.
-- [Named-mechanism comparison](experiments/named-mechanisms/README.md): smaller app-defined handoff and collection patterns tested in JavaScript and Python, including a digital Parcel experiment.
-- [Offer-flow experiment](experiments/offer-flows/README.md): two-recipient relay and [Cover and Response](research/activities/cover-and-response.md), tested for race order, fallback, allocation, visibility, and cross-language process restart.
-- [Composition experiment](experiments/composition/README.md): stage plans using shared operations for the relay, Cover and Response, and a held-out Drawception skip-and-requeue case; the [findings](experiments/composition/findings.md) compare definition and interpreter costs.
-- [Creative-practice experiment revisit](experiments/creative-practice-revisit/README.md): runs the existing interpreters against privacy, daily-history, and repeated-progress diagnostic traces from the newer game-jam and journaling survey.
-- [Ongoing-activity experiment](experiments/ongoing-activities/README.md): tests a proposed mediated jam session and contrasting private/public daily practice with independent JavaScript and Python interpreters.
-- [Assignment-policy portability experiment](experiments/policy-portability/README.md): specifies one versioned offer algorithm and checks large IDs, ties, replay, unsupported versions, and restart in JavaScript, Python, and Ruby.
-- [Contract synthesis](research/contract-synthesis.md): provisional direction for a first package envelope and the remaining host-level validation gate.
+- **Directions for people:** what the activity is, how to join, and what to do at each step.
+- **Settings:** details an organizer can choose, such as a prompt, group size, or deadline.
+- **Roles and actions:** who may submit, whose turn it is, and who can see the reveal.
+- **Timing and visibility:** when actions are allowed and who can see each contribution.
+- **Rules for interruptions:** what happens when someone is late, absent, or retries. Other responses to interruption can be added through later behavior contracts.
+- **App requirements:** features such as a clock, private views, or support for particular media.
+- **Example runs:** sample actions and expected results that an app can use to check its implementation.
 
-## Focused digital research extension
+The app that runs a package is called a **host**. It provides accounts, storage, scheduling, messages, and screens. It also carries out the rules the package names. The host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-- [Digital activity stress cases](research/digital-activity-stress-cases.md): Drawception's asynchronous recovery, Moodle Workshop's phases and allocations, Board Game Arena's automated auction, and a clearly marked proposed two-recipient relay.
-- [Game jams, group journaling, and parallel creative practice](research/creative-jams-and-shared-practice.md): source-backed game-jam and daily-practice variants, including Jamuary, with ten compact activity cards and a comparison to current protocol experiments.
+## Candidate 0.3 format
 
-## Evidence rules
+The [candidate 0.3 format](format/0.3/README.md) is a JSON format for an activity package. Each package includes directions for people, participation limits, source and rights information, the app features it needs, and a versioned set of rules that the host runs. An app can run a package when it supports those exact rules and features.
 
-- Link to the source of each documented rule. Prefer instructions from people or organizations that actually run or publish the activity.
-- Separate documented rules, observed variants, and proposed software interpretations.
-- Record missing rules as open questions; do not silently invent a canonical version.
-- Paraphrase source material and keep enough detail to run the activity.
+It defines four sets of rules. **Timed collection** accepts private submissions during one window and reveals them at its close. **Sequential handoff** passes a contribution from one participant to the next. **Repeated collection** opens a fixed series of windows and retains each window's history, with private, immediate-share, or after-close views. **Offered response** collects sources, gives each contributor two other sources using an exact assignment rule, accepts a linked response, and reveals the results. The [group check-in](format/0.3/examples/group-check-in.json), [Pass a line](format/0.3/examples/pass-a-line.json), [private daily writing circle](format/0.3/examples/daily-private-practice.json), and [paired story response](format/0.3/examples/paired-story-response.json) show these rules.
+
+The [package schema](format/0.3/package.schema.json) describes the JSON structure. The [format document](format/0.3/README.md) specifies what hosts must do with it, and the [conformance cases](format/0.3/conformance/README.md) give sample actions and expected participant views. From the repository root, run `python3 format/0.3/check.py` to check the examples and cases with the reference model.
+
+The four rules passed a [two-host local trial](validation/0.3/README.md) using the same text packages in separate Python and Node.js services with independent storage and workers. The candidate does not yet cover actual image storage, notifications, voting, migration of an activity in progress, or public deployment.
+
+## Roadmap
+
+The [format roadmap](ROADMAP.md) tracks what each candidate defines, what has been tested, and the gate for the next advance.
+
+## Research
+
+- [Activity cards](research/activities/) describe individual activities, including offline practices studied for possible digital adaptations. The [card template](research/activity-card-template.md) shows what each description records.
+- [Breadth survey](research/breadth-survey.md) maps group activities from many settings as source material for digital versions.
+- [Mechanism survey](research/mechanism-survey.md) compares recurring rules such as turns, assignments, deadlines, and reveals.
+- [Digital activity cases](research/digital-activity-stress-cases.md) examine queues, missed turns, and complex rules run by software.
+- [Game jams and shared creative practice](research/creative-jams-and-shared-practice.md) cover group projects, journaling, and recurring prompts.
+- [Portable activity packages](research/portable-activity-packages.md) and [contract synthesis](research/contract-synthesis.md) record the open design questions and the current direction.
+
+## Experiments
+
+- [First contract experiment](experiments/README.md) defines several unlike activities and checks their behavior in JavaScript and Python; its [findings](experiments/findings.md) explain the limits.
+- [Named mechanisms](experiments/named-mechanisms/README.md) test compact rules for handoffs and collections.
+- [Offer flows](experiments/offer-flows/README.md) test a two-person relay and Cover and Response, including deadlines, retries, and saved offers.
+- [Composition](experiments/composition/README.md) tests whether shared operations can describe different activities.
+- [Creative-practice revisit](experiments/creative-practice-revisit/README.md) checks the earlier experiments against game-jam and journaling cases.
+- [Ongoing activities](experiments/ongoing-activities/README.md) test project progress and repeated private or public practice.
+- [Assignment-policy portability](experiments/policy-portability/README.md) specifies one offer rule precisely and checks it in JavaScript, Python, and Ruby.

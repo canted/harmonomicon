@@ -1,0 +1,51 @@
+{
+  "package": "../examples/group-check-in.json",
+  "capabilities": ["identity@1", "serial_events@1", "durable_state@1", "private_views@1", "clock@1", "text@1"],
+  "contracts": ["timed_collection@1"],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": ["a", "b"],
+    "opensAt": 10,
+    "closesAt": 20
+  },
+  "events": [
+    {
+      "event": {"eventId": "open", "type": "tick", "actor": "system", "at": 10, "payload": {}},
+      "outcome": "accepted",
+      "views": [
+        {"actor": "a", "expect": {"phase": "open", "submissionCount": 0}}
+      ]
+    },
+    {
+      "event": {"eventId": "answer-a", "type": "submit", "actor": "a", "at": 12, "payload": {"value": "A warm cup of tea"}},
+      "outcome": "accepted",
+      "views": [
+        {"actor": "a", "expect": {"phase": "open", "submissionCount": 1, "own": {"actor": "a", "value": "A warm cup of tea"}}},
+        {"actor": "b", "expect": {"phase": "open", "submissionCount": 1}},
+        {"actor": "host", "expect": {"phase": "open", "submissionCount": 1}}
+      ]
+    },
+    {
+      "event": {"eventId": "answer-a", "type": "submit", "actor": "a", "at": 13, "payload": {"value": "A warm cup of tea"}},
+      "outcome": "replayed"
+    },
+    {
+      "event": {"eventId": "answer-b", "type": "submit", "actor": "b", "at": 20, "payload": {"value": "A good book"}},
+      "outcome": "rejected",
+      "views": [
+        {"actor": "a", "expect": {"phase": "closed", "submissionCount": 1, "own": {"actor": "a", "value": "A warm cup of tea"}, "entries": [{"actor": "a", "value": "A warm cup of tea"}]}},
+        {"actor": "b", "expect": {"phase": "closed", "submissionCount": 1, "entries": [{"actor": "a", "value": "A warm cup of tea"}]}},
+        {"actor": "host", "expect": {"phase": "closed", "submissionCount": 1, "entries": [{"actor": "a", "value": "A warm cup of tea"}]}}
+      ]
+    },
+    {
+      "event": {"eventId": "answer-a", "type": "submit", "actor": "a", "at": 21, "payload": {"value": "A warm cup of tea"}},
+      "outcome": "replayed"
+    },
+    {
+      "event": {"eventId": "answer-a", "type": "submit", "actor": "a", "at": 22, "payload": {"value": "Changed answer"}},
+      "outcome": "rejected"
+    }
+  ]
+}
