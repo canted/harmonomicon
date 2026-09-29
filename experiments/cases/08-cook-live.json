@@ -1,0 +1,90 @@
+{
+  "definition": "../definitions/cook-along.json",
+  "capabilities": [
+    "events",
+    "media"
+  ],
+  "events": [
+    {
+      "type": "choose",
+      "actor": "host",
+      "at": 0,
+      "payload": {
+        "mode": "live"
+      }
+    },
+    {
+      "type": "async_share",
+      "actor": "a",
+      "at": 0,
+      "payload": {
+        "artifact": "wrong-mode"
+      }
+    },
+    {
+      "type": "live_share",
+      "actor": "a",
+      "at": 0,
+      "payload": {
+        "artifact": "dish-a"
+      }
+    },
+    {
+      "type": "close",
+      "actor": "host",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "live_share",
+      "actor": "b",
+      "at": 0,
+      "payload": {
+        "artifact": "too-late"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "host"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "done",
+      "mode": "live",
+      "deadline": null,
+      "results": {
+        "a": "dish-a"
+      },
+      "late_policy": null
+    },
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "a": {
+        "phase": "done",
+        "mode": "live",
+        "deadline": null,
+        "results": {
+          "a": "dish-a"
+        },
+        "late_policy": null
+      },
+      "host": {
+        "phase": "done",
+        "mode": "live",
+        "deadline": null,
+        "results": {
+          "a": "dish-a"
+        },
+        "late_policy": null
+      }
+    }
+  }
+}

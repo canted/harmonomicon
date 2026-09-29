@@ -1,0 +1,93 @@
+{
+  "definition": "../definitions/daily-photo-prompt.json",
+  "capabilities": [
+    "events",
+    "clock",
+    "media",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "open_day",
+      "actor": "clock",
+      "at": 100,
+      "payload": {
+        "day": 1,
+        "deadline": 1000
+      }
+    },
+    {
+      "type": "post",
+      "actor": "alice",
+      "at": 900,
+      "payload": {
+        "artifact": "photo-a1"
+      }
+    },
+    {
+      "type": "post",
+      "actor": "bob",
+      "at": 1100,
+      "payload": {
+        "artifact": "photo-b1"
+      }
+    },
+    {
+      "type": "open_day",
+      "actor": "clock",
+      "at": 1500,
+      "payload": {
+        "day": 2,
+        "deadline": 2000
+      }
+    },
+    {
+      "type": "post",
+      "actor": "bob",
+      "at": 2100,
+      "payload": {
+        "artifact": "photo-b2"
+      }
+    }
+  ],
+  "viewActors": [
+    "alice",
+    "bob"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "open",
+      "day": 2,
+      "next_day": 3,
+      "deadline": 2000,
+      "posts": {
+        "bob": "photo-b2"
+      },
+      "late": {
+        "bob": true
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "views": {
+      "alice": {
+        "day": 2
+      },
+      "bob": {
+        "day": 2,
+        "posts": {
+          "bob": "photo-b2"
+        },
+        "late": {
+          "bob": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "format": "activity-named-mechanisms/0.1",
+  "id": "digital-parcel",
+  "kind": "handoff",
+  "requires": [
+    "events",
+    "access_control"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant",
+    "c": "participant"
+  },
+  "config": {
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "start": "a",
+    "steps": 3,
+    "mode": "unlock",
+    "reveal": "each",
+    "items": [
+      "prompt-one",
+      "prompt-two",
+      "final-prize"
+    ]
+  },
+  "content": {
+    "title": "Digital Parcel",
+    "steps": [
+      "The current holder opens one digital layer.",
+      "The app passes the right to open the next layer."
+    ],
+    "source": "Experimental digital translation inspired by Pass the Parcel; not a documented traditional variant"
+  }
+}

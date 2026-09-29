@@ -1,0 +1,272 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "cook-along",
+  "requires": [
+    "events",
+    "media"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant"
+  },
+  "initial": {
+    "phase": "setup",
+    "mode": null,
+    "deadline": null,
+    "results": {},
+    "late_policy": null
+  },
+  "transitions": [
+    {
+      "on": "choose",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "setup"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "event.payload.mode"
+          },
+          "right": "live"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "live"
+        },
+        {
+          "op": "set",
+          "path": "mode",
+          "value": "live"
+        }
+      ]
+    },
+    {
+      "on": "choose",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "setup"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "event.payload.mode"
+          },
+          "right": "separate"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "separate"
+        },
+        {
+          "op": "set",
+          "path": "mode",
+          "value": "separate"
+        },
+        {
+          "op": "set",
+          "path": "deadline",
+          "value": {
+            "ref": "event.payload.deadline"
+          }
+        },
+        {
+          "op": "set",
+          "path": "late_policy",
+          "value": "accept"
+        }
+      ]
+    },
+    {
+      "on": "live_share",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "live"
+        },
+        {
+          "op": "lacks_key",
+          "left": {
+            "ref": "state.results"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "put",
+          "path": "results",
+          "value": {
+            "ref": "event.payload.artifact"
+          },
+          "key": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    },
+    {
+      "on": "async_share",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "separate"
+        },
+        {
+          "op": "lacks_key",
+          "left": {
+            "ref": "state.results"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "put",
+          "path": "results",
+          "value": {
+            "ref": "event.payload.artifact"
+          },
+          "key": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    },
+    {
+      "on": "close",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "live"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "done"
+        }
+      ]
+    },
+    {
+      "on": "close",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "separate"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "done"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "mode",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "deadline",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "results",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "late_policy",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    }
+  ],
+  "content": {
+    "title": "Cook Along Challenge",
+    "sourceCard": "../../research/activities/cook-along-challenge.md",
+    "setup": "Agree on a recipe, send instructions, and choose a live time or separate-cooking deadline.",
+    "steps": [
+      "Obtain ingredients.",
+      "Cook together on a call, or cook separately.",
+      "Share the result live or by the agreed deadline."
+    ],
+    "completion": "The group finishes after sharing results; the organizer decides closure.",
+    "source": "https://thefamilydinnerproject.org/fun_content/cook-along-challenge/"
+  }
+}

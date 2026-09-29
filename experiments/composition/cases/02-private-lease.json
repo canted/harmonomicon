@@ -1,0 +1,16 @@
+{
+  "capabilities": ["events", "media", "access_control"],
+  "events": [
+    {"type":"claim","actor":"a","at":0,"payload":{}},
+    {"type":"claim","actor":"b","at":1,"payload":{}},
+    {"type":"submit","actor":"b","at":2,"payload":{"media":"image","artifact":"wrong"}}
+  ],
+  "viewActors": ["a", "b", "c"],
+  "expected": {
+    "outcomes": ["accepted", "rejected", "rejected"],
+    "state": {"phase":"leased","stage":0,"assignees":["a"],"skips":0},
+    "views": {"a":{"input":{"actor":"system","media":"text","artifact":"A cat dances"},"media":"image"},
+              "b":{"phase":"leased","stage":0}}
+  },
+  "forbid": ["views.b.input", "views.c.input", "views.a.chain"]
+}

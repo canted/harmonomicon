@@ -1,0 +1,22 @@
+{
+  "definition": "../definitions/cover-response.json",
+  "capabilities": ["events", "clock", "media", "access_control"],
+  "events": [
+    {"type":"submit_cover","actor":"1","at":10,"payload":{"coverId":101,"artifact":"image-1"}},
+    {"type":"submit_cover","actor":"2","at":20,"payload":{"coverId":102,"artifact":"image-2"}},
+    {"type":"submit_cover","actor":"3","at":30,"payload":{"coverId":103,"artifact":"image-3"}},
+    {"type":"submit_cover","actor":"4","at":40,"payload":{"coverId":104,"artifact":"image-4"}},
+    {"type":"tick","actor":"system","at":100,"payload":{}},
+    {"type":"request_offer","actor":"4","at":101,"payload":{}},
+    {"type":"request_offer","actor":"3","at":102,"payload":{}},
+    {"type":"request_offer","actor":"2","at":103,"payload":{}},
+    {"type":"request_offer","actor":"1","at":104,"payload":{}}
+  ],
+  "viewActors": ["1", "2", "3", "4"],
+  "checkpointAt": 7,
+  "expected": {
+    "outcomes": ["accepted","accepted","accepted","accepted","accepted","accepted","accepted","accepted","accepted"],
+    "state": {"phase":"collecting_responses","offers":{"1":{"options":[103,104]},"2":{"options":[103,101]},"3":{"options":[104,102]},"4":{"options":[102,101]}}}
+  },
+  "invariants": ["each_offer_has_two_other_covers", "no_results_before_complete"]
+}

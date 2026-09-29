@@ -1,0 +1,83 @@
+{
+  "definition": "../definitions/cook-along.json",
+  "capabilities": [
+    "events",
+    "media"
+  ],
+  "events": [
+    {
+      "type": "choose",
+      "actor": "host",
+      "at": 0,
+      "payload": {
+        "mode": "separate",
+        "deadline": 5000
+      }
+    },
+    {
+      "type": "async_share",
+      "actor": "b",
+      "at": 5500,
+      "payload": {
+        "artifact": "dish-b"
+      }
+    },
+    {
+      "type": "async_share",
+      "actor": "b",
+      "at": 5600,
+      "payload": {
+        "artifact": "duplicate"
+      }
+    },
+    {
+      "type": "async_share",
+      "actor": "a",
+      "at": 4500,
+      "payload": {
+        "artifact": "dish-a"
+      }
+    },
+    {
+      "type": "close",
+      "actor": "host",
+      "at": 0,
+      "payload": {}
+    }
+  ],
+  "viewActors": [
+    "a"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "done",
+      "mode": "separate",
+      "deadline": 5000,
+      "results": {
+        "b": "dish-b",
+        "a": "dish-a"
+      },
+      "late_policy": "accept"
+    },
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "views": {
+      "a": {
+        "phase": "done",
+        "mode": "separate",
+        "deadline": 5000,
+        "results": {
+          "b": "dish-b",
+          "a": "dish-a"
+        },
+        "late_policy": "accept"
+      }
+    }
+  }
+}

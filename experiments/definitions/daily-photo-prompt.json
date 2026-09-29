@@ -1,0 +1,254 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "daily-photo-prompt",
+  "requires": [
+    "events",
+    "clock",
+    "media",
+    "access_control"
+  ],
+  "actors": {
+    "clock": "system",
+    "alice": "participant",
+    "bob": "participant"
+  },
+  "initial": {
+    "phase": "waiting",
+    "day": 0,
+    "next_day": 1,
+    "deadline": 0,
+    "posts": {},
+    "late": {}
+  },
+  "transitions": [
+    {
+      "on": "open_day",
+      "by": [
+        "system"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.next_day"
+          },
+          "right": {
+            "ref": "event.payload.day"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "open"
+        },
+        {
+          "op": "set",
+          "path": "day",
+          "value": {
+            "ref": "event.payload.day"
+          }
+        },
+        {
+          "op": "add",
+          "path": "next_day",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "path": "deadline",
+          "value": {
+            "ref": "event.payload.deadline"
+          }
+        },
+        {
+          "op": "set",
+          "path": "posts",
+          "value": {}
+        },
+        {
+          "op": "set",
+          "path": "late",
+          "value": {}
+        }
+      ]
+    },
+    {
+      "on": "post",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "open"
+        },
+        {
+          "op": "lacks_key",
+          "left": {
+            "ref": "state.posts"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "lte",
+          "left": {
+            "ref": "event.at"
+          },
+          "right": {
+            "ref": "state.deadline"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "put",
+          "path": "posts",
+          "value": {
+            "ref": "event.payload.artifact"
+          },
+          "key": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "put",
+          "path": "late",
+          "value": false,
+          "key": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    },
+    {
+      "on": "post",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "open"
+        },
+        {
+          "op": "lacks_key",
+          "left": {
+            "ref": "state.posts"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "gt",
+          "left": {
+            "ref": "event.at"
+          },
+          "right": {
+            "ref": "state.deadline"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "put",
+          "path": "posts",
+          "value": {
+            "ref": "event.payload.artifact"
+          },
+          "key": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "put",
+          "path": "late",
+          "value": true,
+          "key": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "day",
+      "by": [
+        "system",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "posts",
+      "by": [
+        "system"
+      ],
+      "if": []
+    },
+    {
+      "field": "late",
+      "by": [
+        "system"
+      ],
+      "if": []
+    },
+    {
+      "field": "posts",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "has_key",
+          "left": {
+            "ref": "state.posts"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    },
+    {
+      "field": "late",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "has_key",
+          "left": {
+            "ref": "state.posts"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    }
+  ],
+  "content": {
+    "title": "Daily photo prompt pattern",
+    "sourceCard": "../../research/activities/bereal-daily-post.md",
+    "setup": "Participants use a camera-capable device and connect as friends in the host.",
+    "steps": [
+      "Respond to the daily notification with a photo.",
+      "A post after the response window is marked late.",
+      "After posting, view friends’ posts."
+    ],
+    "completion": "Each day is a separate occurrence.",
+    "source": "https://help.bereal.com/hc/en-us/articles/7350386715165--Time-to-BeReal"
+  }
+}

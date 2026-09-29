@@ -1,0 +1,220 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "pass-the-parcel",
+  "requires": [
+    "events"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant",
+    "c": "participant"
+  },
+  "initial": {
+    "phase": "passing",
+    "layers": 2,
+    "holder": null,
+    "opened": [],
+    "participants": {
+      "a": true,
+      "b": true,
+      "c": true
+    }
+  },
+  "transitions": [
+    {
+      "on": "stop",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "passing"
+        },
+        {
+          "op": "has_key",
+          "left": {
+            "ref": "state.participants"
+          },
+          "right": {
+            "ref": "event.payload.holder"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "stopped"
+        },
+        {
+          "op": "set",
+          "path": "holder",
+          "value": {
+            "ref": "event.payload.holder"
+          }
+        }
+      ]
+    },
+    {
+      "on": "unwrap",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "stopped"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.holder"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "gt",
+          "left": {
+            "ref": "state.layers"
+          },
+          "right": 1
+        }
+      ],
+      "do": [
+        {
+          "op": "append",
+          "path": "opened",
+          "value": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "add",
+          "path": "layers",
+          "value": -1
+        },
+        {
+          "op": "set",
+          "path": "holder",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "passing"
+        }
+      ]
+    },
+    {
+      "on": "unwrap",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "stopped"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.holder"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.layers"
+          },
+          "right": 1
+        }
+      ],
+      "do": [
+        {
+          "op": "append",
+          "path": "opened",
+          "value": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "add",
+          "path": "layers",
+          "value": -1
+        },
+        {
+          "op": "set",
+          "path": "holder",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "done"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "layers",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "holder",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "opened",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    }
+  ],
+  "content": {
+    "title": "Pass the Parcel",
+    "sourceCard": "../../research/activities/pass-the-parcel.md",
+    "setup": "Wrap a prize in layers, arrange a circle, and provide music.",
+    "steps": [
+      "Pass the parcel while music plays.",
+      "When the host stops the music, its holder unwraps one layer.",
+      "Repeat until the center is revealed."
+    ],
+    "completion": "The last layer is removed.",
+    "source": "https://urc.org.uk/wp-content/uploads/2025/01/Holiday-club-book-Clubhouse-2025-online.pdf"
+  }
+}

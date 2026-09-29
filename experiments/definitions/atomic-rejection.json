@@ -1,0 +1,54 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "atomic-rejection",
+  "requires": [
+    "events"
+  ],
+  "actors": {
+    "host": "host"
+  },
+  "initial": {
+    "phase": "ready",
+    "counter": "not-a-number"
+  },
+  "transitions": [
+    {
+      "on": "try",
+      "by": [
+        "host"
+      ],
+      "if": [],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "changed"
+        },
+        {
+          "op": "add",
+          "path": "counter",
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host"
+      ],
+      "if": []
+    }
+  ],
+  "content": {
+    "title": "Atomic rejection probe",
+    "sourceCard": "../contract.md",
+    "setup": "Interpreter semantics probe.",
+    "steps": [
+      "Attempt a transition whose second action is invalid."
+    ],
+    "completion": "State remains unchanged.",
+    "source": "Synthetic conformance case; no activity source"
+  }
+}

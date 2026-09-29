@@ -1,0 +1,74 @@
+{
+  "definition": "../definitions/exquisite-corpse.json",
+  "capabilities": [
+    "events"
+  ],
+  "events": [
+    {
+      "type": "submit",
+      "actor": "a",
+      "at": 0,
+      "payload": {
+        "section": "head-art",
+        "guide": "line-1",
+        "next": "b"
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "c",
+      "at": 0,
+      "payload": {
+        "section": "wrong",
+        "guide": "x",
+        "next": "a"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "b",
+    "c",
+    "host"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "drawing",
+      "current": "b",
+      "count": 1,
+      "sections": [
+        "head-art"
+      ],
+      "guide": "line-1",
+      "participants": {
+        "a": true,
+        "b": true,
+        "c": true
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "a": {
+        "phase": "drawing",
+        "current": "b"
+      },
+      "b": {
+        "phase": "drawing",
+        "current": "b",
+        "guide": "line-1"
+      },
+      "c": {
+        "phase": "drawing",
+        "current": "b"
+      },
+      "host": {
+        "phase": "drawing",
+        "current": "b"
+      }
+    }
+  }
+}

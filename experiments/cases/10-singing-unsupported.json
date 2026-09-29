@@ -1,0 +1,14 @@
+{
+  "definition": "../definitions/synchronous-singing.json",
+  "capabilities": [
+    "events"
+  ],
+  "events": [],
+  "viewActors": [],
+  "expected": {
+    "status": "unsupported",
+    "missing": [
+      "low_latency_audio"
+    ]
+  }
+}

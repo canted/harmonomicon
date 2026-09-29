@@ -1,0 +1,19 @@
+{
+  "format": "activity-offer-flows/0.1",
+  "id": "cover-response-slice",
+  "kind": "cover_response",
+  "requires": ["events", "clock", "media", "access_control"],
+  "actors": {"system": "system", "host": "host", "1": "participant", "2": "participant", "3": "participant", "4": "participant"},
+  "config": {
+    "roundId": 42,
+    "participants": ["1", "2", "3", "4"],
+    "minimumCovers": 3,
+    "coverDeadline": 100,
+    "responseDeadline": 200,
+    "responseMedia": ["audio", "text"]
+  },
+  "content": {
+    "title": "Cover and Response: contract slice",
+    "source": "Constructed digital activity documented in research/activities/cover-and-response.md"
+  }
+}

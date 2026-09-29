@@ -1,0 +1,22 @@
+{
+  "definition": "../definitions/two-offer-relay.json",
+  "capabilities": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "events": [
+    {"type":"open","actor":"system","at":0,"payload":{"deadline":100}},
+    {"type":"timeout","actor":"system","at":100,"payload":{"step":0,"attempt":0}},
+    {"type":"submit","actor":"a","at":100,"payload":{"step":0,"attempt":0,"media":"image","artifact":"late-a","requestId":"late-a"}},
+    {"type":"open","actor":"system","at":100,"payload":{"deadline":200}},
+    {"type":"submit","actor":"c","at":130,"payload":{"step":0,"attempt":1,"media":"image","artifact":"drawing-c","requestId":"fallback-c"}}
+  ],
+  "viewActors": ["a", "b", "c", "e", "system"],
+  "checkpointAt": 2,
+  "expected": {
+    "outcomes": ["accepted", "accepted", "rejected", "accepted", "accepted"],
+    "state": {"phase":"ready","step":1,"attempt":0,"chain":[
+      {"actor":"system","media":"text","artifact":"A cat dances"},
+      {"actor":"c","media":"image","artifact":"drawing-c"}
+    ]},
+    "views": {"a":{"phase":"ready","step":1},"system":{"offers":[]}}
+  },
+  "forbid": ["views.a.input", "views.e.chain"]
+}

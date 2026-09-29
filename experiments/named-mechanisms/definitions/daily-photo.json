@@ -1,0 +1,33 @@
+{
+  "format": "activity-named-mechanisms/0.1",
+  "id": "daily-photo",
+  "kind": "collection",
+  "requires": [
+    "events",
+    "clock",
+    "media",
+    "access_control"
+  ],
+  "actors": {
+    "system": "system",
+    "alice": "participant",
+    "bob": "participant"
+  },
+  "config": {
+    "participants": [
+      "alice",
+      "bob"
+    ],
+    "schedule": "daily",
+    "viewGate": "after_own",
+    "latePolicy": "mark"
+  },
+  "content": {
+    "title": "Daily Photo",
+    "steps": [
+      "Respond to a shared daily prompt.",
+      "After posting, view group submissions."
+    ],
+    "source": "Behavioral pattern from BeReal Help Center; not a BeReal implementation"
+  }
+}

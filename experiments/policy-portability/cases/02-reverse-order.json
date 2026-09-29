@@ -1,0 +1,26 @@
+{
+  "capabilities": ["policy:balanced_artifacts_exact32@1"],
+  "covers": [
+    {"id":"104","owner":"4"}, {"id":"103","owner":"3"},
+    {"id":"102","owner":"2"}, {"id":"101","owner":"1"}
+  ],
+  "requests": [
+    {"requestId":"__proto__","recipient":"4"},
+    {"requestId":"r3","recipient":"3"},
+    {"requestId":"r2","recipient":"2"},
+    {"requestId":"r1","recipient":"1"},
+    {"requestId":"__proto__","recipient":"4"}
+  ],
+  "checkpointAt": 2,
+  "expected": {
+    "status":"ok",
+    "state":{"offers":{"1":["103","104"],"2":["103","101"],"3":["104","102"],"4":["102","101"]},"requestLedger":{"__proto__":"4","r3":"3","r2":"2","r1":"1"}},
+    "outcomes":[
+      {"status":"accepted","options":["102","101"]},
+      {"status":"accepted","options":["104","102"]},
+      {"status":"accepted","options":["103","101"]},
+      {"status":"accepted","options":["103","104"]},
+      {"status":"replayed","options":["102","101"]}
+    ]
+  }
+}

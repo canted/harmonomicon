@@ -1,0 +1,94 @@
+{
+  "definition": "../definitions/exquisite-corpse.json",
+  "capabilities": [
+    "events"
+  ],
+  "events": [
+    {
+      "type": "submit",
+      "actor": "a",
+      "at": 0,
+      "payload": {
+        "section": "head-art",
+        "guide": "line-1",
+        "next": "b"
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "b",
+      "at": 0,
+      "payload": {
+        "section": "body-art",
+        "guide": "line-2",
+        "next": "c"
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "c",
+      "at": 0,
+      "payload": {
+        "section": "feet-art"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "c",
+    "host"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "revealed",
+      "current": null,
+      "count": 3,
+      "sections": [
+        "head-art",
+        "body-art",
+        "feet-art"
+      ],
+      "guide": "",
+      "participants": {
+        "a": true,
+        "b": true,
+        "c": true
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "views": {
+      "a": {
+        "phase": "revealed",
+        "current": null,
+        "sections": [
+          "head-art",
+          "body-art",
+          "feet-art"
+        ]
+      },
+      "c": {
+        "phase": "revealed",
+        "current": null,
+        "sections": [
+          "head-art",
+          "body-art",
+          "feet-art"
+        ]
+      },
+      "host": {
+        "phase": "revealed",
+        "current": null,
+        "sections": [
+          "head-art",
+          "body-art",
+          "feet-art"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "definition": "../definitions/daily-photo.json",
+  "capabilities": [
+    "events",
+    "clock",
+    "media",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "open",
+      "actor": "system",
+      "at": 100,
+      "payload": {
+        "occurrence": 1,
+        "deadline": 1000
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "alice",
+      "at": 900,
+      "payload": {
+        "artifact": "photo-a1"
+      }
+    },
+    {
+      "type": "open",
+      "actor": "system",
+      "at": 1500,
+      "payload": {
+        "occurrence": 2,
+        "deadline": 2000
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "bob",
+      "at": 2100,
+      "payload": {
+        "artifact": "photo-b2"
+      }
+    }
+  ],
+  "viewActors": [
+    "alice",
+    "bob"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "open",
+      "occurrence": 2,
+      "nextOccurrence": 3,
+      "deadline": 2000,
+      "posts": {
+        "bob": "photo-b2"
+      },
+      "late": {
+        "bob": true
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "views": {
+      "alice": {
+        "phase": "open",
+        "occurrence": 2
+      },
+      "bob": {
+        "phase": "open",
+        "occurrence": 2,
+        "posts": {
+          "bob": "photo-b2"
+        },
+        "late": {
+          "bob": true
+        }
+      }
+    }
+  }
+}

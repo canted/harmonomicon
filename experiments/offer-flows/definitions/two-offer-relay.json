@@ -1,0 +1,19 @@
+{
+  "format": "activity-offer-flows/0.1",
+  "id": "two-offer-picture-telephone",
+  "kind": "competitive_relay",
+  "requires": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "actors": {"system": "system", "a": "participant", "b": "participant", "c": "participant", "d": "participant", "e": "participant", "f": "participant"},
+  "config": {
+    "initial": {"actor": "system", "media": "text", "artifact": "A cat dances"},
+    "mediaByStep": ["image", "text"],
+    "routes": [
+      [["a", "b"], ["c", "d"]],
+      [["e", "f"]]
+    ]
+  },
+  "content": {
+    "title": "Two-offer picture telephone",
+    "source": "Proposed digital Eat Poop You Cat variant in research/digital-activity-stress-cases.md; not a rule of the physical game or Drawception"
+  }
+}

@@ -1,0 +1,353 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "critical-response",
+  "requires": [
+    "events",
+    "access_control"
+  ],
+  "actors": {
+    "facilitator": "host",
+    "maker": "maker",
+    "r1": "responder",
+    "r2": "responder"
+  },
+  "initial": {
+    "phase": "meaning",
+    "pending_requester": null,
+    "pending_topic": null,
+    "consent": null,
+    "opinions": []
+  },
+  "transitions": [
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "meaning"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "maker_questions"
+        }
+      ]
+    },
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "maker_questions"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "neutral_questions"
+        }
+      ]
+    },
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "neutral_questions"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "opinions"
+        }
+      ]
+    },
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "opinions"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.pending_requester"
+          },
+          "right": null
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "done"
+        }
+      ]
+    },
+    {
+      "on": "request",
+      "by": [
+        "responder"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "opinions"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.pending_requester"
+          },
+          "right": null
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "pending_requester",
+          "value": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "set",
+          "path": "pending_topic",
+          "value": {
+            "ref": "event.payload.topic"
+          }
+        }
+      ]
+    },
+    {
+      "on": "decide",
+      "by": [
+        "maker"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "opinions"
+        },
+        {
+          "op": "ne",
+          "left": {
+            "ref": "state.pending_requester"
+          },
+          "right": null
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "event.payload.allow"
+          },
+          "right": false
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "pending_requester",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "pending_topic",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "consent",
+          "value": null
+        }
+      ]
+    },
+    {
+      "on": "decide",
+      "by": [
+        "maker"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "opinions"
+        },
+        {
+          "op": "ne",
+          "left": {
+            "ref": "state.pending_requester"
+          },
+          "right": null
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "event.payload.allow"
+          },
+          "right": true
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "consent",
+          "value": true
+        }
+      ]
+    },
+    {
+      "on": "deliver",
+      "by": [
+        "responder"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "opinions"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.pending_requester"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.consent"
+          },
+          "right": true
+        }
+      ],
+      "do": [
+        {
+          "op": "append",
+          "path": "opinions",
+          "value": {
+            "ref": "event.payload.opinion"
+          }
+        },
+        {
+          "op": "set",
+          "path": "pending_requester",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "pending_topic",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "consent",
+          "value": null
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host",
+        "maker",
+        "responder"
+      ],
+      "if": []
+    },
+    {
+      "field": "pending_requester",
+      "by": [
+        "host",
+        "maker",
+        "responder"
+      ],
+      "if": []
+    },
+    {
+      "field": "pending_topic",
+      "by": [
+        "host",
+        "maker",
+        "responder"
+      ],
+      "if": []
+    },
+    {
+      "field": "consent",
+      "by": [
+        "host",
+        "maker",
+        "responder"
+      ],
+      "if": []
+    },
+    {
+      "field": "opinions",
+      "by": [
+        "host",
+        "maker",
+        "responder"
+      ],
+      "if": []
+    }
+  ],
+  "content": {
+    "title": "Critical Response Process",
+    "sourceCard": "../../research/activities/critical-response-process.md",
+    "setup": "Present a work in progress and identify the maker, responders, and facilitator.",
+    "steps": [
+      "Responders state what had meaning.",
+      "The maker asks questions and responders answer.",
+      "Responders ask neutral questions and the maker answers.",
+      "A responder asks permission before stating an opinion; the maker may decline."
+    ],
+    "completion": "The facilitator concludes the four steps.",
+    "source": "https://lizlerman.com/wp-content/uploads/2020/04/Critical-Response-Process-in-Brief_CRP-one-pager_updated-2020_03_24.pdf"
+  }
+}

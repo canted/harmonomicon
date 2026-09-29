@@ -1,0 +1,63 @@
+{
+  "definition": "../definitions/digital-parcel.json",
+  "capabilities": [
+    "events",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "advance",
+      "actor": "a",
+      "at": 0,
+      "payload": {
+        "next": "b"
+      }
+    },
+    {
+      "type": "advance",
+      "actor": "c",
+      "at": 0,
+      "payload": {
+        "next": "a"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "b"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "active",
+      "current": "b",
+      "index": 1,
+      "entries": [
+        "prompt-one"
+      ],
+      "guide": ""
+    },
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "a": {
+        "phase": "active",
+        "current": "b",
+        "index": 1,
+        "entries": [
+          "prompt-one"
+        ]
+      },
+      "b": {
+        "phase": "active",
+        "current": "b",
+        "index": 1,
+        "entries": [
+          "prompt-one"
+        ]
+      }
+    }
+  }
+}

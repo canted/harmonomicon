@@ -1,0 +1,21 @@
+{
+  "capabilities": ["policy:balanced_artifacts_exact32@1"],
+  "covers": [
+    {"id":"18446744073709551614","owner":"18446744073709551615"},
+    {"id":"0","owner":"1"},
+    {"id":"4294967296","owner":"2"}
+  ],
+  "requests": [
+    {"requestId":"max","recipient":"18446744073709551615"},
+    {"requestId":"overflow","recipient":"18446744073709551616"},
+    {"requestId":"leading-zero","recipient":"01"}
+  ],
+  "expected": {
+    "status":"ok",
+    "outcomes":[
+      {"status":"accepted","options":["0","4294967296"]},
+      {"status":"rejected"},
+      {"status":"rejected"}
+    ]
+  }
+}

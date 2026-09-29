@@ -1,0 +1,106 @@
+{
+  "definition": "../definitions/pass-the-parcel.json",
+  "capabilities": [
+    "events"
+  ],
+  "events": [
+    {
+      "type": "unwrap",
+      "actor": "a",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "stop",
+      "actor": "host",
+      "at": 0,
+      "payload": {
+        "holder": "b"
+      }
+    },
+    {
+      "type": "unwrap",
+      "actor": "a",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "unwrap",
+      "actor": "b",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "stop",
+      "actor": "host",
+      "at": 0,
+      "payload": {
+        "holder": "c"
+      }
+    },
+    {
+      "type": "unwrap",
+      "actor": "c",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "stop",
+      "actor": "host",
+      "at": 0,
+      "payload": {
+        "holder": "a"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "host"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "done",
+      "layers": 0,
+      "holder": null,
+      "opened": [
+        "b",
+        "c"
+      ],
+      "participants": {
+        "a": true,
+        "b": true,
+        "c": true
+      }
+    },
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "a": {
+        "phase": "done",
+        "layers": 0,
+        "holder": null,
+        "opened": [
+          "b",
+          "c"
+        ]
+      },
+      "host": {
+        "phase": "done",
+        "layers": 0,
+        "holder": null,
+        "opened": [
+          "b",
+          "c"
+        ]
+      }
+    }
+  }
+}

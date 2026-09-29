@@ -1,0 +1,32 @@
+{
+  "definition": "../definitions/atomic-rejection.json",
+  "capabilities": [
+    "events"
+  ],
+  "events": [
+    {
+      "type": "try",
+      "actor": "host",
+      "at": 0,
+      "payload": {}
+    }
+  ],
+  "viewActors": [
+    "host"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "ready",
+      "counter": "not-a-number"
+    },
+    "outcomes": [
+      "rejected"
+    ],
+    "views": {
+      "host": {
+        "phase": "ready"
+      }
+    }
+  }
+}

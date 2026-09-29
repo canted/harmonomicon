@@ -1,0 +1,25 @@
+{
+  "capabilities": ["events", "media", "access_control"],
+  "events": [
+    {"type":"claim","actor":"a","at":0,"payload":{}},
+    {"type":"skip","actor":"a","at":1,"payload":{}},
+    {"type":"claim","actor":"b","at":2,"payload":{}},
+    {"type":"submit","actor":"b","at":3,"payload":{"media":"image","artifact":"drawing-b"}},
+    {"type":"claim","actor":"c","at":4,"payload":{}},
+    {"type":"submit","actor":"c","at":5,"payload":{"media":"text","artifact":"A fox dances"}}
+  ],
+  "viewActors": ["a", "b", "c", "d", "system"],
+  "expected": {
+    "outcomes": ["accepted", "accepted", "accepted", "accepted", "accepted", "accepted"],
+    "state": {"phase":"done","stage":2,"skips":1,"chain":[
+      {"actor":"system","media":"text","artifact":"A cat dances"},
+      {"actor":"b","media":"image","artifact":"drawing-b"},
+      {"actor":"c","media":"text","artifact":"A fox dances"}
+    ]},
+    "views": {"d":{"phase":"done","chain":[
+      {"actor":"system","media":"text","artifact":"A cat dances"},
+      {"actor":"b","media":"image","artifact":"drawing-b"},
+      {"actor":"c","media":"text","artifact":"A fox dances"}
+    ]}}
+  }
+}

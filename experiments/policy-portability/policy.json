@@ -1,0 +1,7 @@
+{
+  "format": "activity-policy-probe/0.1",
+  "policy": "balanced_artifacts_exact32@1",
+  "requires": ["policy:balanced_artifacts_exact32@1"],
+  "basePlan": "../composition/definitions/cover-response.json",
+  "source": "Experimental exact-integer version of Cover and Response's offer ranking; the surrounding composed plan is unchanged"
+}

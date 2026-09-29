@@ -1,0 +1,22 @@
+{
+  "definition":"public-practice.json",
+  "capabilities":["events","clock","media","access_control"],
+  "events":[
+    {"type":"open_day","actor":"system","at":0,"payload":{"day":1,"deadline":100}},
+    {"type":"submit_day","actor":"alice","at":20,"payload":{"artifact":"recording-day-one"}},
+    {"type":"close_day","actor":"system","at":100,"payload":{}},
+    {"type":"open_day","actor":"system","at":101,"payload":{"day":2,"deadline":200}},
+    {"type":"submit_day","actor":"bob","at":120,"payload":{"artifact":"recording-day-two"}},
+    {"type":"close_day","actor":"system","at":200,"payload":{}}
+  ],
+  "viewActors":["alice","bob","host"],
+  "checkpoints":[
+    {"through":2,"expected":{"views":{"bob":{"history":{"1":{"entries":{"alice":{"actor":"alice","artifact":"recording-day-one"}}}}}}}}
+  ],
+  "expected":{
+    "status":"ok",
+    "outcomes":["accepted","accepted","accepted","accepted","accepted","accepted"],
+    "state":{"phase":"waiting","day":2,"history":{"1":{"status":{"alice":"complete","bob":"missed"}},"2":{"status":{"alice":"missed","bob":"complete"}}}},
+    "views":{"alice":{"history":{"1":{"entries":{"alice":{"actor":"alice","artifact":"recording-day-one"}}},"2":{"entries":{"bob":{"actor":"bob","artifact":"recording-day-two"}}}}},"bob":{"history":{"1":{"entries":{"alice":{"actor":"alice","artifact":"recording-day-one"}}},"2":{"entries":{"bob":{"actor":"bob","artifact":"recording-day-two"}}}}}}
+  }
+}

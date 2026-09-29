@@ -1,0 +1,21 @@
+{
+  "definition": "../definitions/cover-response.json",
+  "capabilities": ["events", "clock", "media", "access_control"],
+  "events": [
+    {"type":"submit_cover","actor":"1","at":10,"payload":{"coverId":101,"artifact":"image-1"}},
+    {"type":"submit_cover","actor":"2","at":20,"payload":{"coverId":102,"artifact":"image-2"}},
+    {"type":"submit_cover","actor":"3","at":30,"payload":{"coverId":103,"artifact":"image-3"}},
+    {"type":"tick","actor":"system","at":100,"payload":{}},
+    {"type":"request_offer","actor":"1","at":101,"payload":{}},
+    {"type":"choose_cover","actor":"1","at":102,"payload":{"coverId":102}},
+    {"type":"tick","actor":"system","at":200,"payload":{}},
+    {"type":"submit_response","actor":"1","at":201,"payload":{"responseId":"too-late","media":"audio","artifact":"audio-late"}}
+  ],
+  "viewActors": ["1", "2"],
+  "checkpointAt": 6,
+  "expected": {
+    "outcomes": ["accepted","accepted","accepted","accepted","accepted","accepted","accepted","rejected"],
+    "state": {"phase":"complete","responses":{}},
+    "views": {"1":{"phase":"complete","results":[]},"2":{"phase":"complete","results":[]}}
+  }
+}

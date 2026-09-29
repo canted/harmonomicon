@@ -1,0 +1,20 @@
+{
+  "format": "activity-composition/0.1",
+  "id": "two-offer-relay-composed",
+  "requires": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "actors": {"system":"system","a":"participant","b":"participant","c":"participant","d":"participant","e":"participant","f":"participant"},
+  "bindings": {"open":"assign","submit":"commit","timeout":"expire"},
+  "initialChain": [{"actor":"system","media":"text","artifact":"A cat dances"}],
+  "stages": [
+    {"id":"drawing","type":"work","idlePhase":"ready","activePhase":"open",
+     "assignment":{"policy":"fixed_recipients","routes":[["a","b"],["c","d"]]},
+     "commit":{"mode":"first","media":"image","target":"chain","requestId":true,"stepAttempt":true}},
+    {"id":"caption","type":"work","idlePhase":"ready","activePhase":"open",
+     "assignment":{"policy":"fixed_recipients","routes":[["e","f"]]},
+     "commit":{"mode":"first","media":"text","target":"chain","requestId":true,"stepAttempt":true}}
+  ],
+  "donePhase":"done",
+  "stalledPhase":"stalled",
+  "reveal":{"chain":"on_done"},
+  "source":"Proposed digital Eat Poop You Cat variant; see research/digital-activity-stress-cases.md"
+}

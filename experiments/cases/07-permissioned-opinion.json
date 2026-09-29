@@ -1,0 +1,147 @@
+{
+  "definition": "../definitions/critical-response.json",
+  "capabilities": [
+    "events",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "request",
+      "actor": "r1",
+      "at": 0,
+      "payload": {
+        "topic": "color"
+      }
+    },
+    {
+      "type": "advance",
+      "actor": "facilitator",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "advance",
+      "actor": "facilitator",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "advance",
+      "actor": "facilitator",
+      "at": 0,
+      "payload": {}
+    },
+    {
+      "type": "request",
+      "actor": "r1",
+      "at": 0,
+      "payload": {
+        "topic": "color"
+      }
+    },
+    {
+      "type": "deliver",
+      "actor": "r1",
+      "at": 0,
+      "payload": {
+        "opinion": "too blue"
+      }
+    },
+    {
+      "type": "decide",
+      "actor": "maker",
+      "at": 0,
+      "payload": {
+        "allow": false
+      }
+    },
+    {
+      "type": "request",
+      "actor": "r2",
+      "at": 0,
+      "payload": {
+        "topic": "scale"
+      }
+    },
+    {
+      "type": "decide",
+      "actor": "maker",
+      "at": 0,
+      "payload": {
+        "allow": true
+      }
+    },
+    {
+      "type": "deliver",
+      "actor": "r1",
+      "at": 0,
+      "payload": {
+        "opinion": "wrong speaker"
+      }
+    },
+    {
+      "type": "deliver",
+      "actor": "r2",
+      "at": 0,
+      "payload": {
+        "opinion": "opinion-two"
+      }
+    },
+    {
+      "type": "advance",
+      "actor": "facilitator",
+      "at": 0,
+      "payload": {}
+    }
+  ],
+  "viewActors": [
+    "maker",
+    "r1"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "done",
+      "pending_requester": null,
+      "pending_topic": null,
+      "consent": null,
+      "opinions": [
+        "opinion-two"
+      ]
+    },
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "views": {
+      "maker": {
+        "phase": "done",
+        "pending_requester": null,
+        "pending_topic": null,
+        "consent": null,
+        "opinions": [
+          "opinion-two"
+        ]
+      },
+      "r1": {
+        "phase": "done",
+        "pending_requester": null,
+        "pending_topic": null,
+        "consent": null,
+        "opinions": [
+          "opinion-two"
+        ]
+      }
+    }
+  }
+}

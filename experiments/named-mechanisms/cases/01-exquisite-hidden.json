@@ -1,0 +1,69 @@
+{
+  "definition": "../definitions/digital-exquisite-corpse.json",
+  "capabilities": [
+    "events",
+    "media",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "advance",
+      "actor": "a",
+      "at": 0,
+      "payload": {
+        "item": "head",
+        "guide": "mark",
+        "next": "b"
+      }
+    },
+    {
+      "type": "advance",
+      "actor": "c",
+      "at": 0,
+      "payload": {
+        "item": "wrong",
+        "guide": "x",
+        "next": "a"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "b",
+    "c"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "active",
+      "current": "b",
+      "index": 1,
+      "entries": [
+        "head"
+      ],
+      "guide": "mark"
+    },
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "a": {
+        "phase": "active",
+        "current": "b",
+        "index": 1
+      },
+      "b": {
+        "phase": "active",
+        "current": "b",
+        "index": 1,
+        "guide": "mark"
+      },
+      "c": {
+        "phase": "active",
+        "current": "b",
+        "index": 1
+      }
+    }
+  }
+}

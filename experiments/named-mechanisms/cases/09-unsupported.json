@@ -1,0 +1,16 @@
+{
+  "definition": "../definitions/daily-photo.json",
+  "capabilities": [
+    "events",
+    "clock",
+    "access_control"
+  ],
+  "events": [],
+  "viewActors": [],
+  "expected": {
+    "status": "unsupported",
+    "missing": [
+      "media"
+    ]
+  }
+}

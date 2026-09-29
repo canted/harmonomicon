@@ -1,0 +1,15 @@
+{
+  "definition": "../definitions/two-offer-relay.json",
+  "capabilities": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "events": [
+    {"type":"open","actor":"system","at":0,"payload":{"deadline":100}},
+    {"type":"submit","actor":"a","at":20,"payload":{"step":0,"attempt":0,"media":"image","artifact":"drawing-a","requestId":"__proto__"}},
+    {"type":"submit","actor":"a","at":21,"payload":{"step":0,"attempt":0,"media":"image","artifact":"drawing-a","requestId":"__proto__"}}
+  ],
+  "viewActors": ["a", "system"],
+  "checkpointAt": 2,
+  "expected": {
+    "outcomes": ["accepted","accepted","replayed"],
+    "state": {"phase":"ready","step":1,"acceptedRequests":{"__proto__":{"actor":"a","step":0,"attempt":0,"media":"image","artifact":"drawing-a"}}}
+  }
+}

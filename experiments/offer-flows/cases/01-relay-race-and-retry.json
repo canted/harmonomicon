@@ -1,0 +1,28 @@
+{
+  "definition": "../definitions/two-offer-relay.json",
+  "capabilities": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "events": [
+    {"type":"open","actor":"system","at":0,"payload":{"deadline":100}},
+    {"type":"submit","actor":"a","at":50,"payload":{"step":0,"attempt":0,"media":"image","artifact":"drawing-a","requestId":"r1"}},
+    {"type":"submit","actor":"b","at":50,"payload":{"step":0,"attempt":0,"media":"image","artifact":"drawing-b","requestId":"r2"}},
+    {"type":"submit","actor":"a","at":51,"payload":{"step":0,"attempt":0,"media":"image","artifact":"drawing-a","requestId":"r1"}},
+    {"type":"submit","actor":"a","at":52,"payload":{"step":0,"attempt":0,"media":"image","artifact":"altered-drawing","requestId":"r1"}},
+    {"type":"open","actor":"system","at":60,"payload":{"deadline":150}},
+    {"type":"submit","actor":"e","at":70,"payload":{"step":1,"attempt":0,"media":"text","artifact":"A dancing dog","requestId":"r3"}}
+  ],
+  "viewActors": ["a", "b", "e", "system"],
+  "checkpointAt": 3,
+  "expected": {
+    "outcomes": ["accepted", "accepted", "rejected", "replayed", "rejected", "accepted", "accepted"],
+    "state": {"phase":"done","step":2,"attempt":0,"chain":[
+      {"actor":"system","media":"text","artifact":"A cat dances"},
+      {"actor":"a","media":"image","artifact":"drawing-a"},
+      {"actor":"e","media":"text","artifact":"A dancing dog"}
+    ],"acceptedRequests":{"r1":{"actor":"a","step":0,"attempt":0,"media":"image","artifact":"drawing-a"},"r3":{"actor":"e","step":1,"attempt":0,"media":"text","artifact":"A dancing dog"}}},
+    "views": {"b":{"phase":"done","step":2,"chain":[
+      {"actor":"system","media":"text","artifact":"A cat dances"},
+      {"actor":"a","media":"image","artifact":"drawing-a"},
+      {"actor":"e","media":"text","artifact":"A dancing dog"}
+    ]}}
+  }
+}

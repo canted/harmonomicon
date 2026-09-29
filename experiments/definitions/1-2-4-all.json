@@ -1,0 +1,165 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "1-2-4-all",
+  "requires": [
+    "events",
+    "groups"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant",
+    "c": "participant",
+    "d": "participant"
+  },
+  "initial": {
+    "phase": "solo",
+    "groups": {}
+  },
+  "transitions": [
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "solo"
+        }
+      ],
+      "do": [
+        {
+          "op": "partition",
+          "path": "groups",
+          "value": {
+            "ref": "event.payload.groups"
+          },
+          "sizes": [
+            2
+          ]
+        },
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "pairs"
+        }
+      ]
+    },
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "pairs"
+        }
+      ],
+      "do": [
+        {
+          "op": "partition",
+          "path": "groups",
+          "value": {
+            "ref": "event.payload.groups"
+          },
+          "sizes": [
+            4
+          ]
+        },
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "quartets"
+        }
+      ]
+    },
+    {
+      "on": "advance",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "quartets"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "groups",
+          "value": {}
+        },
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "all"
+        }
+      ]
+    },
+    {
+      "on": "finish",
+      "by": [
+        "host"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "all"
+        }
+      ],
+      "do": [
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "done"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "groups",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    }
+  ],
+  "content": {
+    "title": "1-2-4-All",
+    "sourceCard": "../../research/activities/1-2-4-all.md",
+    "setup": "The host states a shared challenge and prepares space for pairs and quartets.",
+    "steps": [
+      "Reflect alone.",
+      "Share and build in pairs.",
+      "Join pairs into quartets to refine ideas.",
+      "Return to the whole group and share selected ideas."
+    ],
+    "completion": "The full-group sharing concludes.",
+    "source": "https://www.liberatingstructures.com/1-2-4-all"
+  }
+}

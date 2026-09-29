@@ -1,0 +1,35 @@
+{
+  "format": "activity-named-mechanisms/0.1",
+  "id": "digital-exquisite-corpse",
+  "kind": "handoff",
+  "requires": [
+    "events",
+    "media",
+    "access_control"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant",
+    "c": "participant"
+  },
+  "config": {
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "start": "a",
+    "steps": 3,
+    "mode": "contribute",
+    "reveal": "end"
+  },
+  "content": {
+    "title": "Digital Exquisite Corpse",
+    "steps": [
+      "Draw a section and pass only guide marks.",
+      "Reveal all sections after the last contribution."
+    ],
+    "source": "Derived digital translation of the National Gallery of Art drawing activity"
+  }
+}

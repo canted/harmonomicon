@@ -1,0 +1,227 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "exquisite-corpse",
+  "requires": [
+    "events"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant",
+    "c": "participant"
+  },
+  "initial": {
+    "phase": "drawing",
+    "current": "a",
+    "count": 0,
+    "sections": [],
+    "guide": "",
+    "participants": {
+      "a": true,
+      "b": true,
+      "c": true
+    }
+  },
+  "transitions": [
+    {
+      "on": "submit",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "drawing"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.current"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "lt",
+          "left": {
+            "ref": "state.count"
+          },
+          "right": 2
+        },
+        {
+          "op": "has_key",
+          "left": {
+            "ref": "state.participants"
+          },
+          "right": {
+            "ref": "event.payload.next"
+          }
+        },
+        {
+          "op": "ne",
+          "left": {
+            "ref": "event.actor"
+          },
+          "right": {
+            "ref": "event.payload.next"
+          }
+        }
+      ],
+      "do": [
+        {
+          "op": "append",
+          "path": "sections",
+          "value": {
+            "ref": "event.payload.section"
+          }
+        },
+        {
+          "op": "set",
+          "path": "guide",
+          "value": {
+            "ref": "event.payload.guide"
+          }
+        },
+        {
+          "op": "add",
+          "path": "count",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "path": "current",
+          "value": {
+            "ref": "event.payload.next"
+          }
+        }
+      ]
+    },
+    {
+      "on": "submit",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "drawing"
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.current"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        },
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.count"
+          },
+          "right": 2
+        }
+      ],
+      "do": [
+        {
+          "op": "append",
+          "path": "sections",
+          "value": {
+            "ref": "event.payload.section"
+          }
+        },
+        {
+          "op": "add",
+          "path": "count",
+          "value": 1
+        },
+        {
+          "op": "set",
+          "path": "phase",
+          "value": "revealed"
+        },
+        {
+          "op": "set",
+          "path": "current",
+          "value": null
+        },
+        {
+          "op": "set",
+          "path": "guide",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "current",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    },
+    {
+      "field": "guide",
+      "by": [
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.current"
+          },
+          "right": {
+            "ref": "event.actor"
+          }
+        }
+      ]
+    },
+    {
+      "field": "sections",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": [
+        {
+          "op": "eq",
+          "left": {
+            "ref": "state.phase"
+          },
+          "right": "revealed"
+        }
+      ]
+    }
+  ],
+  "content": {
+    "title": "Exquisite Corpse, drawing",
+    "sourceCard": "../../research/activities/exquisite-corpse-drawing.md",
+    "setup": "Fold a sheet into sections and choose a passing route.",
+    "steps": [
+      "Draw only in your section.",
+      "Hide your drawing except for connecting marks, then pass the sheet.",
+      "After all sections, unfold and reveal the image."
+    ],
+    "completion": "Every section has a contribution and the drawing is unfolded.",
+    "source": "https://www.nga.gov/stories/articles/exquisite-corpse-kerry-james-marshall-and-friends"
+  }
+}

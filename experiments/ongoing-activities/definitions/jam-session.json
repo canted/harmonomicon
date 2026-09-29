@@ -1,0 +1,19 @@
+{
+  "format": "activity-ongoing/0.1",
+  "id": "proposed-mediated-jam-session",
+  "requires": ["events", "clock", "media", "access_control"],
+  "actors": {
+    "system": "system", "host": "host", "alice": "participant",
+    "bob": "participant", "cara": "participant", "dave": "participant"
+  },
+  "bindings": {
+    "tick": "tick", "register_team": "register_team", "progress_post": "post_progress",
+    "respond": "respond", "submit_final": "submit_final", "review": "review"
+  },
+  "calendar": {
+    "kind": "windows", "registrationEnds": 10, "submissionsEnd": 100,
+    "reviewsEnd": 150
+  },
+  "progressAudiences": ["team", "participants"],
+  "source": "Experimental combination of documented game-jam interactions; this all-in-one mediation is proposed"
+}

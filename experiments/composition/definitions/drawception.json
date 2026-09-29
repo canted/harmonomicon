@@ -1,0 +1,20 @@
+{
+  "format": "activity-composition/0.1",
+  "id": "picture-telephone-queue-slice",
+  "requires": ["events", "media", "access_control"],
+  "actors": {"system":"system","a":"participant","b":"participant","c":"participant","d":"participant"},
+  "bindings": {"claim":"assign","skip":"release","submit":"commit"},
+  "initialChain": [{"actor":"system","media":"text","artifact":"A cat dances"}],
+  "stages": [
+    {"id":"drawing","type":"work","idlePhase":"queued","activePhase":"leased",
+     "assignment":{"policy":"queue_lease"},
+     "commit":{"mode":"first","media":"image","target":"chain"}},
+    {"id":"caption","type":"work","idlePhase":"queued","activePhase":"leased",
+     "assignment":{"policy":"queue_lease"},
+     "commit":{"mode":"first","media":"text","target":"chain"}}
+  ],
+  "donePhase":"done",
+  "stalledPhase":"stalled",
+  "reveal":{"chain":"on_done"},
+  "source":"Drawception FAQ supports skip and requeue; queue-selection and dustcatcher thresholds remain unspecified"
+}

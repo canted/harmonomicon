@@ -1,0 +1,6 @@
+{
+  "capabilities": ["policy:balanced_artifacts_exact32@2"],
+  "covers": [],
+  "requests": [],
+  "expected": {"status":"unsupported","missing":["policy:balanced_artifacts_exact32@1"]}
+}

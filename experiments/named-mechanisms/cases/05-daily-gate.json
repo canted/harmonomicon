@@ -1,0 +1,87 @@
+{
+  "definition": "../definitions/daily-photo.json",
+  "capabilities": [
+    "events",
+    "clock",
+    "media",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "open",
+      "actor": "system",
+      "at": 100,
+      "payload": {
+        "occurrence": 1,
+        "deadline": 1000
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "alice",
+      "at": 900,
+      "payload": {
+        "artifact": "photo-a1"
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "alice",
+      "at": 950,
+      "payload": {
+        "artifact": "duplicate"
+      }
+    }
+  ],
+  "viewActors": [
+    "alice",
+    "bob",
+    "system"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "open",
+      "occurrence": 1,
+      "nextOccurrence": 2,
+      "deadline": 1000,
+      "posts": {
+        "alice": "photo-a1"
+      },
+      "late": {
+        "alice": false
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "alice": {
+        "phase": "open",
+        "occurrence": 1,
+        "posts": {
+          "alice": "photo-a1"
+        },
+        "late": {
+          "alice": false
+        }
+      },
+      "bob": {
+        "phase": "open",
+        "occurrence": 1
+      },
+      "system": {
+        "phase": "open",
+        "occurrence": 1,
+        "posts": {
+          "alice": "photo-a1"
+        },
+        "late": {
+          "alice": false
+        }
+      }
+    }
+  }
+}

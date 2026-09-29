@@ -1,0 +1,7 @@
+{
+  "definition":"private-practice.json",
+  "capabilities":["events","clock"],
+  "events":[],
+  "viewActors":["alice","bob"],
+  "expected":{"status":"unsupported","missing":["access_control"]}
+}

@@ -1,0 +1,55 @@
+{
+  "definition": "jam-session.json",
+  "capabilities": ["events", "clock", "media", "access_control"],
+  "events": [
+    {"type":"register_team","actor":"host","at":0,"payload":{"team":"alpha","members":["alice","bob"]}},
+    {"type":"register_team","actor":"host","at":0,"payload":{"team":"beta","members":["cara","dave"]}},
+    {"type":"tick","actor":"system","at":10,"payload":{}},
+    {"type":"progress_post","actor":"alice","at":20,"payload":{"id":"p1","artifact":"private-sketch","audience":"team"}},
+    {"type":"progress_post","actor":"bob","at":25,"payload":{"id":"p2","artifact":"public-screenshot","audience":"participants"}},
+    {"type":"respond","actor":"cara","at":30,"payload":{"id":"r1","postId":"p2","text":"The movement looks clear"}},
+    {"type":"respond","actor":"cara","at":31,"payload":{"id":"r2","postId":"p1","text":"Should be rejected"}},
+    {"type":"submit_final","actor":"alice","at":90,"payload":{"artifact":"alpha-game"}},
+    {"type":"review","actor":"cara","at":90,"payload":{"id":"early","team":"alpha","text":"Too early"}},
+    {"type":"tick","actor":"system","at":100,"payload":{}},
+    {"type":"progress_post","actor":"bob","at":101,"payload":{"id":"late","artifact":"late-image","audience":"participants"}},
+    {"type":"review","actor":"cara","at":110,"payload":{"id":"rev1","team":"alpha","text":"Useful feedback"}},
+    {"type":"review","actor":"alice","at":111,"payload":{"id":"own","team":"alpha","text":"Self review"}},
+    {"type":"tick","actor":"system","at":150,"payload":{}},
+    {"type":"submit_final","actor":"dave","at":151,"payload":{"artifact":"too-late-game"}}
+  ],
+  "viewActors": ["alice", "bob", "cara", "dave", "host"],
+  "checkpoints": [
+    {
+      "through": 7,
+      "expected": {
+        "state": {"phase":"making","progress":[
+          {"id":"p1","actor":"alice","team":"alpha","artifact":"private-sketch","audience":"team"},
+          {"id":"p2","actor":"bob","team":"alpha","artifact":"public-screenshot","audience":"participants"}
+        ]},
+        "views": {"cara":{"phase":"making","progress":[
+          {"id":"p2","actor":"bob","team":"alpha","artifact":"public-screenshot","audience":"participants"}
+        ],"responses":[{"id":"r1","postId":"p2","actor":"cara","text":"The movement looks clear"}]}}
+      },
+      "absentText": {"views.cara":"private-sketch"}
+    },
+    {
+      "through": 9,
+      "expected": {"views":{"alice":{"finals":{"alpha":{"team":"alpha","actor":"alice","artifact":"alpha-game"}}},"cara":{"finals":{}}}}
+    },
+    {
+      "through": 12,
+      "expected": {"state":{"phase":"review"},"views":{"cara":{"finals":{"alpha":{"team":"alpha","actor":"alice","artifact":"alpha-game"}},"reviews":[{"id":"rev1","team":"alpha","actor":"cara","text":"Useful feedback"}]},"alice":{"reviews":[]}}}
+    }
+  ],
+  "expected": {
+    "status":"ok",
+    "outcomes":["accepted","accepted","accepted","accepted","accepted","accepted","rejected","accepted","rejected","accepted","rejected","accepted","rejected","accepted","rejected"],
+    "state":{"phase":"reveal","progress":[
+      {"id":"p1","actor":"alice","team":"alpha","artifact":"private-sketch","audience":"team"},
+      {"id":"p2","actor":"bob","team":"alpha","artifact":"public-screenshot","audience":"participants"}
+    ],"reviews":[{"id":"rev1","team":"alpha","actor":"cara","text":"Useful feedback"}]},
+    "views":{"alice":{"reviews":[{"id":"rev1","team":"alpha","actor":"cara","text":"Useful feedback"}]},"dave":{"finals":{"alpha":{"team":"alpha","actor":"alice","artifact":"alpha-game"}}}}
+  },
+  "absentText":{"views.cara":"private-sketch","views.dave":"private-sketch"}
+}

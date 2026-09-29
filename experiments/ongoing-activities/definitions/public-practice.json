@@ -1,0 +1,10 @@
+{
+  "format": "activity-ongoing/0.1",
+  "id": "public-daily-practice-probe",
+  "requires": ["events", "clock", "media", "access_control"],
+  "actors": {"system": "system", "host": "host", "alice": "participant", "bob": "participant"},
+  "bindings": {"open_day": "open_day", "submit_day": "submit_day", "close_day": "close_day"},
+  "calendar": {"kind": "daily"},
+  "contentAudience": "participants",
+  "source": "Experimental public-as-posted contrast informed by Jamuary; daily deadlines are a test choice"
+}

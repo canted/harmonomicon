@@ -1,0 +1,70 @@
+{
+  "definition": "../definitions/photo-walk.json",
+  "capabilities": [
+    "events",
+    "media"
+  ],
+  "events": [
+    {
+      "type": "open",
+      "actor": "organizer",
+      "at": 0,
+      "payload": {
+        "occurrence": 1,
+        "deadline": 1000
+      }
+    },
+    {
+      "type": "submit",
+      "actor": "a",
+      "at": 1100,
+      "payload": {
+        "artifact": "walk-a"
+      }
+    }
+  ],
+  "viewActors": [
+    "a",
+    "b",
+    "organizer"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "open",
+      "occurrence": 1,
+      "nextOccurrence": 2,
+      "deadline": 1000,
+      "posts": {
+        "a": "walk-a"
+      },
+      "late": {
+        "a": true
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "accepted"
+    ],
+    "views": {
+      "a": {
+        "phase": "open",
+        "occurrence": 1
+      },
+      "b": {
+        "phase": "open",
+        "occurrence": 1
+      },
+      "organizer": {
+        "phase": "open",
+        "occurrence": 1,
+        "posts": {
+          "a": "walk-a"
+        },
+        "late": {
+          "a": true
+        }
+      }
+    }
+  }
+}

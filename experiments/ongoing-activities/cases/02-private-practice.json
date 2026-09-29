@@ -1,0 +1,24 @@
+{
+  "definition":"private-practice.json",
+  "capabilities":["events","clock","access_control"],
+  "events":[
+    {"type":"open_day","actor":"system","at":0,"payload":{"day":1,"deadline":100}},
+    {"type":"submit_day","actor":"alice","at":20,"payload":{"artifact":"private-writing-day-one"}},
+    {"type":"submit_day","actor":"bob","at":100,"payload":{"artifact":"deadline-rejected"}},
+    {"type":"close_day","actor":"system","at":100,"payload":{}},
+    {"type":"open_day","actor":"system","at":101,"payload":{"day":2,"deadline":200}},
+    {"type":"submit_day","actor":"alice","at":120,"payload":{"artifact":"private-writing-day-two"}},
+    {"type":"close_day","actor":"system","at":200,"payload":{}}
+  ],
+  "viewActors":["alice","bob","host"],
+  "checkpoints":[
+    {"through":2,"expected":{"views":{"bob":{"history":{"1":{"status":{"alice":"complete","bob":"pending"},"entries":{}}}}}},"absentText":{"views.bob":"private-writing-day-one"}}
+  ],
+  "expected":{
+    "status":"ok",
+    "outcomes":["accepted","accepted","rejected","accepted","accepted","accepted","accepted"],
+    "state":{"phase":"waiting","day":2,"history":{"1":{"status":{"alice":"complete","bob":"missed"}},"2":{"status":{"alice":"complete","bob":"missed"}}}},
+    "views":{"alice":{"history":{"1":{"entries":{"alice":{"actor":"alice","artifact":"private-writing-day-one"}}},"2":{"entries":{"alice":{"actor":"alice","artifact":"private-writing-day-two"}}}}},"bob":{"history":{"1":{"entries":{}},"2":{"entries":{}}}}}
+  },
+  "absentText":{"views.bob":"private-writing-day","views.bob.history":"deadline-rejected"}
+}

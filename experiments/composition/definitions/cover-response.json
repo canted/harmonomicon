@@ -1,0 +1,23 @@
+{
+  "format": "activity-composition/0.1",
+  "id": "cover-response-composed-slice",
+  "requires": ["events", "clock", "media", "access_control"],
+  "actors": {"system":"system","host":"host","1":"participant","2":"participant","3":"participant","4":"participant"},
+  "bindings": {"submit_cover":"collect","remove_cover":"remove","tick":"advance","request_offer":"assign","choose_cover":"choose","submit_response":"commit"},
+  "initialChain": [],
+  "finalDeadline": 200,
+  "stages": [
+    {"id":"covers","type":"collection","idlePhase":"collecting_covers","pool":"covers","idField":"coverId",
+     "artifactField":"artifact","minimum":3,"deadline":100,"removeBefore":100,"viewField":"cover","countViewField":"coverCount"},
+    {"id":"responses","type":"work","idlePhase":"collecting_responses","activePhase":"collecting_responses",
+     "assignment":{"policy":"balanced_artifacts","pool":"covers","count":2,"excludeSelf":true,
+                   "tie":"cover_offer_score_v1","roundId":42,"choiceField":"coverId",
+                   "viewField":"offeredCovers","choiceViewField":"chosenCoverId"},
+     "commit":{"mode":"per_actor","media":["audio","text"],"target":"responses",
+               "idField":"responseId","linkField":"coverId","viewField":"response"}}
+  ],
+  "donePhase":"complete",
+  "stalledPhase":"stalled",
+  "reveal":{"outputs":"on_done","collections":"owner"},
+  "source":"Constructed Cover and Response activity documented in research/activities/cover-and-response.md"
+}

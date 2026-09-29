@@ -1,0 +1,30 @@
+{
+  "capabilities": ["policy:balanced_artifacts_exact32@1"],
+  "covers": [
+    {"id":"101","owner":"1"}, {"id":"102","owner":"2"},
+    {"id":"103","owner":"3"}, {"id":"104","owner":"4"}
+  ],
+  "requests": [
+    {"requestId":"r1","recipient":"1"},
+    {"requestId":"r1","recipient":"1"},
+    {"requestId":"r1-new","recipient":"1"},
+    {"requestId":"r2","recipient":"2"},
+    {"requestId":"r3","recipient":"3"},
+    {"requestId":"r4","recipient":"4"},
+    {"requestId":"r1","recipient":"2"}
+  ],
+  "checkpointAt": 3,
+  "expected": {
+    "status":"ok",
+    "state":{"offers":{"1":["102","103"],"2":["101","104"],"3":["102","101"],"4":["103","102"]},"requestLedger":{"r1":"1","r1-new":"1","r2":"2","r3":"3","r4":"4"}},
+    "outcomes":[
+      {"status":"accepted","options":["102","103"]},
+      {"status":"replayed","options":["102","103"]},
+      {"status":"existing","options":["102","103"]},
+      {"status":"accepted","options":["101","104"]},
+      {"status":"accepted","options":["102","101"]},
+      {"status":"accepted","options":["103","102"]},
+      {"status":"rejected"}
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "definition": "../definitions/daily-photo-prompt.json",
+  "capabilities": [
+    "events",
+    "clock",
+    "media",
+    "access_control"
+  ],
+  "events": [
+    {
+      "type": "open_day",
+      "actor": "clock",
+      "at": 100,
+      "payload": {
+        "day": 1,
+        "deadline": 1000
+      }
+    },
+    {
+      "type": "post",
+      "actor": "alice",
+      "at": 900,
+      "payload": {
+        "artifact": "photo-a1"
+      }
+    },
+    {
+      "type": "post",
+      "actor": "alice",
+      "at": 950,
+      "payload": {
+        "artifact": "photo-a2"
+      }
+    }
+  ],
+  "viewActors": [
+    "alice",
+    "bob",
+    "clock"
+  ],
+  "expected": {
+    "status": "ok",
+    "state": {
+      "phase": "open",
+      "day": 1,
+      "next_day": 2,
+      "deadline": 1000,
+      "posts": {
+        "alice": "photo-a1"
+      },
+      "late": {
+        "alice": false
+      }
+    },
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "views": {
+      "alice": {
+        "day": 1,
+        "posts": {
+          "alice": "photo-a1"
+        },
+        "late": {
+          "alice": false
+        }
+      },
+      "bob": {
+        "day": 1
+      },
+      "clock": {
+        "day": 1,
+        "posts": {
+          "alice": "photo-a1"
+        },
+        "late": {
+          "alice": false
+        }
+      }
+    }
+  }
+}

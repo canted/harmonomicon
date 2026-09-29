@@ -1,0 +1,19 @@
+{
+  "definition": "../definitions/two-offer-relay.json",
+  "capabilities": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "events": [
+    {"type":"open","actor":"system","at":0,"payload":{"deadline":100}}
+  ],
+  "viewActors": ["a", "b", "c", "system"],
+  "checkpointAt": 1,
+  "expected": {
+    "outcomes": ["accepted"],
+    "state": {"phase":"open","step":0,"offers":["a","b"],"deadline":100},
+    "views": {
+      "a":{"input":{"actor":"system","media":"text","artifact":"A cat dances"},"media":"image","deadline":100},
+      "b":{"input":{"actor":"system","media":"text","artifact":"A cat dances"}},
+      "c":{"phase":"open","step":0}
+    }
+  },
+  "forbid": ["views.c.input", "views.c.chain", "views.a.chain"]
+}

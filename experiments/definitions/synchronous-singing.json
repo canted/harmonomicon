@@ -1,0 +1,38 @@
+{
+  "format": "activity-experiment/0.1",
+  "id": "synchronous-singing",
+  "requires": [
+    "events",
+    "low_latency_audio"
+  ],
+  "actors": {
+    "host": "host",
+    "a": "participant",
+    "b": "participant"
+  },
+  "initial": {
+    "phase": "ready"
+  },
+  "transitions": [],
+  "views": [
+    {
+      "field": "phase",
+      "by": [
+        "host",
+        "participant"
+      ],
+      "if": []
+    }
+  ],
+  "content": {
+    "title": "Synchronous group singing capability probe",
+    "sourceCard": "../../research/activities/call-and-response-songs.md",
+    "setup": "Arrange a leader and responding group.",
+    "steps": [
+      "The leader sings a call.",
+      "The group sings a coordinated response."
+    ],
+    "completion": "The song ends.",
+    "source": "https://www.carnegiehall.org/Education/Programs/Music-Educators-Toolbox/K-Call-and-Response-Songs"
+  }
+}

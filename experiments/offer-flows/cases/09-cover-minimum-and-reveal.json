@@ -1,0 +1,27 @@
+{
+  "definition": "../definitions/cover-response.json",
+  "capabilities": ["events", "clock", "media", "access_control"],
+  "events": [
+    {"type":"submit_cover","actor":"1","at":10,"payload":{"coverId":101,"artifact":"image-1"}},
+    {"type":"submit_cover","actor":"2","at":20,"payload":{"coverId":102,"artifact":"image-2"}},
+    {"type":"tick","actor":"system","at":100,"payload":{}},
+    {"type":"request_offer","actor":"1","at":101,"payload":{}},
+    {"type":"submit_cover","actor":"3","at":110,"payload":{"coverId":103,"artifact":"image-3"}},
+    {"type":"request_offer","actor":"1","at":111,"payload":{}},
+    {"type":"choose_cover","actor":"1","at":112,"payload":{"coverId":999}},
+    {"type":"choose_cover","actor":"1","at":113,"payload":{"coverId":102}},
+    {"type":"submit_response","actor":"1","at":114,"payload":{"responseId":"response-1","media":"video","artifact":"video-1"}},
+    {"type":"submit_response","actor":"1","at":115,"payload":{"responseId":"response-1","media":"audio","artifact":"audio-1"}},
+    {"type":"tick","actor":"system","at":200,"payload":{}}
+  ],
+  "viewActors": ["1", "2", "4", "host"],
+  "checkpointAt": 5,
+  "expected": {
+    "outcomes": ["accepted","accepted","accepted","rejected","accepted","accepted","rejected","accepted","rejected","accepted","accepted"],
+    "state": {"phase":"complete","offers":{"1":{"chosen":102}},"responses":{"1":{"coverId":102,"media":"audio","artifact":"audio-1"}}},
+    "views": {"2":{"phase":"complete","coverCount":3,"results":[
+      {"id":"response-1","actor":"1","coverId":102,"media":"audio","artifact":"audio-1"}
+    ]},"4":{"phase":"complete","coverCount":3}}
+  },
+  "forbid": ["views.4.offeredCovers", "views.2.offeredCovers"]
+}

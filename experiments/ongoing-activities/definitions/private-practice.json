@@ -1,0 +1,10 @@
+{
+  "format": "activity-ongoing/0.1",
+  "id": "private-daily-practice-probe",
+  "requires": ["events", "clock", "access_control"],
+  "actors": {"system": "system", "host": "host", "alice": "participant", "bob": "participant"},
+  "bindings": {"open_day": "open_day", "submit_day": "submit_day", "close_day": "close_day"},
+  "calendar": {"kind": "daily"},
+  "contentAudience": "author",
+  "source": "Experimental private-work/public-status contrast informed by 750 Words; artifact verification is outside this interpreter"
+}

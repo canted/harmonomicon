@@ -1,0 +1,21 @@
+{
+  "definition": "../definitions/two-offer-relay.json",
+  "capabilities": ["events", "clock", "media", "access_control", "atomic_step_commit"],
+  "events": [
+    {"type":"open","actor":"system","at":0,"payload":{"deadline":100}},
+    {"type":"timeout","actor":"system","at":100,"payload":{"step":0,"attempt":0}},
+    {"type":"open","actor":"system","at":100,"payload":{"deadline":200}},
+    {"type":"timeout","actor":"system","at":200,"payload":{"step":0,"attempt":1}},
+    {"type":"open","actor":"system","at":201,"payload":{"deadline":300}}
+  ],
+  "viewActors": ["a", "c", "system"],
+  "checkpointAt": 3,
+  "expected": {
+    "outcomes": ["accepted", "accepted", "accepted", "accepted", "rejected"],
+    "state": {"phase":"stalled","step":0,"attempt":2,"offers":[],"chain":[
+      {"actor":"system","media":"text","artifact":"A cat dances"}
+    ]},
+    "views": {"a":{"phase":"stalled","step":0},"system":{"phase":"stalled"}}
+  },
+  "forbid": ["views.a.chain", "views.c.input"]
+}

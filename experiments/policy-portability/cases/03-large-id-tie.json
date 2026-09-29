@@ -1,0 +1,21 @@
+{
+  "capabilities": ["policy:balanced_artifacts_exact32@1"],
+  "covers": [
+    {"id":"9007199254740997","owner":"9007199254740995"},
+    {"id":"9007199254740993","owner":"9007199254740999"},
+    {"id":"1","owner":"9007199254740998"}
+  ],
+  "requests": [
+    {"requestId":"big","recipient":"9007199254740995"},
+    {"requestId":"big","recipient":"9007199254740995"}
+  ],
+  "checkpointAt": 1,
+  "expected": {
+    "status":"ok",
+    "state":{"offers":{"9007199254740995":["1","9007199254740993"]},"requestLedger":{"big":"9007199254740995"}},
+    "outcomes":[
+      {"status":"accepted","options":["1","9007199254740993"]},
+      {"status":"replayed","options":["1","9007199254740993"]}
+    ]
+  }
+}
