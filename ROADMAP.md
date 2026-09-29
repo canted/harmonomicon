@@ -35,6 +35,12 @@ The [coverage audit](COVERAGE.md) identified an ongoing journal or creative spac
 
 The [coverage audit](COVERAGE.md#coverage-decisions) still identifies facilitated phases, turn recovery, and media/selection as broad untested families. The next candidate will be chosen from those gaps, and publication will depend on the gates below rather than a particular 0.x number.
 
+## Next candidate: guided rounds
+
+The [mechanism survey](research/mechanism-survey.md) describes timed phase changes and changing group partitions in 1-2-4-All and other facilitated activities. The [coverage audit](COVERAGE.md) shows that the six current contracts cannot express this as one mediated session. The next candidate is provisionally 0.7: a bounded `guided_rounds@1` contract with a fixed sequence of timed prompts, a validated participant partition for each round, optional one-per-person text contributions, and explicit private, within-group, or after-round group visibility. Group assignments are bound at instance creation; the host does not invent a matching algorithm. A human may still guide the activity, but only software-observable timers, submissions, and views are normative.
+
+The 0.7 gate is a schema and examples for a staged group discussion and a simple multi-round icebreaker, traces for phase boundaries, changing partitions, group privacy, missing contributions, retries, and invalid assignments, then independent host agreement through workers, durable storage, and authenticated views. Facilitator-controlled permission for each opinion, live audio synchrony, physical performance, and arbitrary branching are outside this contract. The 0.6 behavior set and 0.4 exchange rules remain in force.
+
 ## Advancement rule for a candidate
 
 A candidate is **defined** when its normative document, machine-readable schema, example packages, and conformance cases agree on inputs, outcomes, boundaries, and participant views. It is **reference checked** when those cases pass a reference model and invalid cross-field combinations are rejected. It is **two-host validated** when independent implementations load the same packages and produce the specified outcomes through real storage, scheduling, and access boundaries. Localhost services are sufficient for that gate; public web deployment is a separate operational test.
