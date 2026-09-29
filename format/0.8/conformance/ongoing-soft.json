@@ -1,0 +1,450 @@
+{
+  "package": "../examples/prompt-series-soft.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "ongoing_space@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 10
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open1",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "entries": [],
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "open"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "a1",
+        "type": "post_entry",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "occurrence": 1,
+          "audience": "group",
+          "value": "Blue"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": []
+              }
+            ],
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "open"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "wrong-number",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 12,
+        "payload": {
+          "occurrence": 2,
+          "audience": "group",
+          "value": "Too early"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "close1",
+        "type": "tick",
+        "actor": "system",
+        "at": 72000010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "between",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": []
+              }
+            ],
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "gap-comment",
+        "type": "comment",
+        "actor": "b",
+        "at": 72000011,
+        "payload": {
+          "entryId": "a1",
+          "value": "A calm blue"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "between",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "A calm blue"
+                  }
+                ]
+              }
+            ],
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "gap-entry",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 72000012,
+        "payload": {
+          "occurrence": 1,
+          "audience": "private",
+          "value": "Too late"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "open2",
+        "type": "tick",
+        "actor": "system",
+        "at": 86400010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "A calm blue"
+                  }
+                ]
+              }
+            ],
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              },
+              {
+                "number": 2,
+                "prompt": "Write a tiny scene.",
+                "phase": "open"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "b2",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 86400011,
+        "payload": {
+          "occurrence": 2,
+          "audience": "private",
+          "value": "A hidden scene"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "A calm blue"
+                  }
+                ]
+              }
+            ],
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              },
+              {
+                "number": 2,
+                "prompt": "Write a tiny scene.",
+                "phase": "open"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "A calm blue"
+                  }
+                ]
+              },
+              {
+                "id": "b2",
+                "actor": "b",
+                "occurrence": 2,
+                "audience": "private",
+                "value": "A hidden scene",
+                "comments": []
+              }
+            ],
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              },
+              {
+                "number": 2,
+                "prompt": "Write a tiny scene.",
+                "phase": "open"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "close2",
+        "type": "tick",
+        "actor": "system",
+        "at": 158400010,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "open3",
+        "type": "tick",
+        "actor": "system",
+        "at": 172800010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "A calm blue"
+                  }
+                ]
+              }
+            ],
+            "currentOccurrence": 3,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              },
+              {
+                "number": 2,
+                "prompt": "Write a tiny scene.",
+                "phase": "closed"
+              },
+              {
+                "number": 3,
+                "prompt": "Name a sound.",
+                "phase": "open"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "close3",
+        "type": "tick",
+        "actor": "system",
+        "at": 244800010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "entries": [
+              {
+                "id": "a1",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "group",
+                "value": "Blue",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "A calm blue"
+                  }
+                ]
+              }
+            ],
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "Describe a color.",
+                "phase": "closed"
+              },
+              {
+                "number": 2,
+                "prompt": "Write a tiny scene.",
+                "phase": "closed"
+              },
+              {
+                "number": 3,
+                "prompt": "Name a sound.",
+                "phase": "closed"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

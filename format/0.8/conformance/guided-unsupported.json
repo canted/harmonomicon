@@ -1,0 +1,83 @@
+{
+  "package": "../examples/small-group-synthesis.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1"
+  ],
+  "contracts": [],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "startsAt": 10,
+    "groupsByRound": [
+      [
+        {
+          "id": "s-a",
+          "members": [
+            "a"
+          ]
+        },
+        {
+          "id": "s-b",
+          "members": [
+            "b"
+          ]
+        },
+        {
+          "id": "s-c",
+          "members": [
+            "c"
+          ]
+        },
+        {
+          "id": "s-d",
+          "members": [
+            "d"
+          ]
+        }
+      ],
+      [
+        {
+          "id": "ab",
+          "members": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "id": "cd",
+          "members": [
+            "c",
+            "d"
+          ]
+        }
+      ],
+      [
+        {
+          "id": "all",
+          "members": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ]
+        }
+      ]
+    ]
+  },
+  "expectStatus": "unsupported",
+  "missing": [
+    "behavior:guided_rounds@1",
+    "clock@1"
+  ],
+  "events": []
+}

@@ -1,0 +1,162 @@
+{
+  "package": "../examples/two-offer-story-chain.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "competitive_handoff@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "startsAt": 10,
+    "routes": [
+      [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      [
+        [
+          "c",
+          "d"
+        ],
+        [
+          "a",
+          "b"
+        ]
+      ],
+      [
+        [
+          "a",
+          "d"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    ]
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "a-decline",
+        "type": "decline",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "step": 1,
+          "attempt": 1
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0,
+            "ownEntries": []
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0,
+            "ownEntries": [],
+            "offer": {
+              "step": 1,
+              "attempt": 1,
+              "deadline": 60010,
+              "input": "A mysterious package arrived at the station."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "b-step1",
+        "type": "submit",
+        "actor": "b",
+        "at": 12,
+        "payload": {
+          "step": 1,
+          "attempt": 1,
+          "value": "B wins"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "step": 2,
+            "attempt": 1,
+            "deadline": 60012,
+            "acceptedCount": 1,
+            "ownEntries": [
+              {
+                "step": 1,
+                "actor": "b",
+                "value": "B wins"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "open",
+            "step": 2,
+            "attempt": 1,
+            "deadline": 60012,
+            "acceptedCount": 1,
+            "ownEntries": [],
+            "offer": {
+              "step": 2,
+              "attempt": 1,
+              "deadline": 60012,
+              "input": "B wins"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

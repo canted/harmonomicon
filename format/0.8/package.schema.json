@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Harmonomicon activity package 0.8 candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "id",
+    "version",
+    "content",
+    "provenance",
+    "participants",
+    "requires",
+    "behavior"
+  ],
+  "properties": {
+    "format": {
+      "const": "harmonomicon.activity-package/0.8"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "language",
+        "title",
+        "summary",
+        "setup",
+        "prompt",
+        "participant",
+        "completion",
+        "access"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "setup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "participant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "completion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "credit",
+        "rights"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "original",
+            "adaptation"
+          ]
+        },
+        "credit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceUrl": {
+          "type": "string",
+          "pattern": "^https?://"
+        }
+      },
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "adaptation"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "sourceUrl"
+        ]
+      }
+    },
+    "participants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 9007199254740991
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "requires": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "identity@1",
+          "serial_events@1",
+          "durable_state@1",
+          "private_views@1",
+          "clock@1",
+          "text@1",
+          "image_ref@1",
+          "policy:balanced_artifacts_exact32@1"
+        ]
+      }
+    },
+    "behavior": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "medium",
+            "allowPromptOverride"
+          ],
+          "properties": {
+            "contract": {
+              "const": "timed_collection@1"
+            },
+            "medium": {
+              "enum": [
+                "text",
+                "image_ref"
+              ]
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "medium",
+            "steps",
+            "allowPromptOverride"
+          ],
+          "properties": {
+            "contract": {
+              "const": "sequential_handoff@1"
+            },
+            "medium": {
+              "enum": [
+                "text",
+                "image_ref"
+              ]
+            },
+            "steps": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 9007199254740991
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "medium",
+            "allowPromptOverride",
+            "intervalMs",
+            "windowMs",
+            "occurrences",
+            "visibility"
+          ],
+          "properties": {
+            "contract": {
+              "const": "repeated_collection@1"
+            },
+            "medium": {
+              "enum": [
+                "text",
+                "image_ref"
+              ]
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            },
+            "intervalMs": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "windowMs": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "occurrences": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 366
+            },
+            "visibility": {
+              "enum": [
+                "private",
+                "group_after_close",
+                "group_immediate"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "sourceMedium",
+            "allowPromptOverride",
+            "assignmentPolicy"
+          ],
+          "properties": {
+            "contract": {
+              "const": "offered_response@1"
+            },
+            "sourceMedium": {
+              "enum": [
+                "text",
+                "image_ref"
+              ]
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            },
+            "assignmentPolicy": {
+              "const": "policy:balanced_artifacts_exact32@1"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "allowPromptOverride"
+          ],
+          "properties": {
+            "contract": {
+              "const": "project_cycle@1"
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "allowPromptOverride",
+            "schedule"
+          ],
+          "properties": {
+            "contract": {
+              "const": "ongoing_space@1"
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            },
+            "schedule": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "open"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "intervalMs",
+                    "windowMs",
+                    "prompts",
+                    "statusVisibility"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "fixed_prompt_series"
+                    },
+                    "intervalMs": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "windowMs": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "prompts": {
+                      "type": "array",
+                      "minItems": 2,
+                      "maxItems": 366,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "statusVisibility": {
+                      "enum": [
+                        "none",
+                        "group"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "allowPromptOverride",
+            "rounds"
+          ],
+          "properties": {
+            "contract": {
+              "const": "guided_rounds@1"
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            },
+            "rounds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 8,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "prompt",
+                  "durationMs",
+                  "groupMin",
+                  "groupMax",
+                  "visibility"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "prompt": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "durationMs": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "groupMin": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "groupMax": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "visibility": {
+                    "enum": [
+                      "private",
+                      "group",
+                      "all_after_round"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "allowPromptOverride",
+            "steps",
+            "attemptMs"
+          ],
+          "properties": {
+            "contract": {
+              "const": "competitive_handoff@1"
+            },
+            "allowPromptOverride": {
+              "type": "boolean"
+            },
+            "steps": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 8
+            },
+            "attemptMs": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "package": "../examples/rounds-icebreaker.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "guided_rounds@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "startsAt": 10,
+    "groupsByRound": [
+      [
+        {
+          "id": "ab",
+          "members": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "id": "cd",
+          "members": [
+            "c",
+            "d"
+          ]
+        }
+      ],
+      [
+        {
+          "id": "all",
+          "members": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ]
+        }
+      ]
+    ]
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "a-pair",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "round": 1,
+          "value": "I like parks"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "round",
+            "currentRound": 1,
+            "rounds": [
+              {
+                "number": 1,
+                "id": "pairs",
+                "prompt": "Tell your partner about a place you like.",
+                "phase": "open",
+                "groups": [
+                  {
+                    "id": "ab",
+                    "members": [
+                      "a",
+                      "b"
+                    ],
+                    "submissionCount": 1,
+                    "entries": [
+                      {
+                        "group": "ab",
+                        "actor": "a",
+                        "value": "I like parks"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "cd",
+                    "members": [
+                      "c",
+                      "d"
+                    ],
+                    "submissionCount": 0,
+                    "entries": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "round",
+            "currentRound": 1,
+            "rounds": [
+              {
+                "number": 1,
+                "id": "pairs",
+                "prompt": "Tell your partner about a place you like.",
+                "phase": "open",
+                "groups": [
+                  {
+                    "id": "ab",
+                    "members": [
+                      "a",
+                      "b"
+                    ],
+                    "submissionCount": 1,
+                    "entries": []
+                  },
+                  {
+                    "id": "cd",
+                    "members": [
+                      "c",
+                      "d"
+                    ],
+                    "submissionCount": 0,
+                    "entries": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "round2",
+        "type": "tick",
+        "actor": "system",
+        "at": 90010,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "c-all",
+        "type": "submit",
+        "actor": "c",
+        "at": 90011,
+        "payload": {
+          "round": 2,
+          "value": "A likes parks"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "round",
+            "currentRound": 2,
+            "rounds": [
+              {
+                "number": 1,
+                "id": "pairs",
+                "prompt": "Tell your partner about a place you like.",
+                "phase": "closed",
+                "groups": [
+                  {
+                    "id": "ab",
+                    "members": [
+                      "a",
+                      "b"
+                    ],
+                    "submissionCount": 1,
+                    "entries": [
+                      {
+                        "group": "ab",
+                        "actor": "a",
+                        "value": "I like parks"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "cd",
+                    "members": [
+                      "c",
+                      "d"
+                    ],
+                    "submissionCount": 0,
+                    "entries": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "id": "everyone",
+                "prompt": "Write one thing you learned.",
+                "phase": "open",
+                "groups": [
+                  {
+                    "id": "all",
+                    "members": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "submissionCount": 1,
+                    "entries": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "done",
+        "type": "tick",
+        "actor": "system",
+        "at": 180010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "currentRound": null,
+            "rounds": [
+              {
+                "number": 1,
+                "id": "pairs",
+                "prompt": "Tell your partner about a place you like.",
+                "phase": "closed",
+                "groups": [
+                  {
+                    "id": "ab",
+                    "members": [
+                      "a",
+                      "b"
+                    ],
+                    "submissionCount": 1,
+                    "entries": []
+                  },
+                  {
+                    "id": "cd",
+                    "members": [
+                      "c",
+                      "d"
+                    ],
+                    "submissionCount": 0,
+                    "entries": []
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "id": "everyone",
+                "prompt": "Write one thing you learned.",
+                "phase": "closed",
+                "groups": [
+                  {
+                    "id": "all",
+                    "members": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ],
+                    "submissionCount": 1,
+                    "entries": [
+                      {
+                        "group": "all",
+                        "actor": "c",
+                        "value": "A likes parks"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

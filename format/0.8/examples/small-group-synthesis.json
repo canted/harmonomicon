@@ -1,0 +1,62 @@
+{
+  "format": "harmonomicon.activity-package/0.8",
+  "id": "org.harmonomicon.small-group-synthesis",
+  "version": "0.8.0",
+  "content": {
+    "language": "en",
+    "title": "Small group synthesis",
+    "summary": "Think alone, discuss in pairs, then share with everyone.",
+    "setup": "Invite four participants and assign a group for each round before starting.",
+    "prompt": "Join the guided discussion.",
+    "participant": "Follow the prompt for each round and add one text response if you wish.",
+    "completion": "Read the responses shared with you according to each round.",
+    "access": "This text example has timed rounds and fixed group assignments."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 4,
+    "max": 4
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "guided_rounds@1",
+    "allowPromptOverride": false,
+    "rounds": [
+      {
+        "id": "solo",
+        "prompt": "Write one thought about the question.",
+        "durationMs": 60000,
+        "groupMin": 1,
+        "groupMax": 1,
+        "visibility": "private"
+      },
+      {
+        "id": "pairs",
+        "prompt": "Compare ideas with your partner.",
+        "durationMs": 120000,
+        "groupMin": 2,
+        "groupMax": 2,
+        "visibility": "group"
+      },
+      {
+        "id": "all",
+        "prompt": "Share one synthesis with the full group.",
+        "durationMs": 180000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "all_after_round"
+      }
+    ]
+  }
+}
