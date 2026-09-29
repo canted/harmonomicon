@@ -1,0 +1,37 @@
+{
+  "format": "harmonomicon.activity-package/0.5",
+  "id": "org.harmonomicon.example.pass-a-line",
+  "version": "0.5.0",
+  "content": {
+    "language": "en",
+    "title": "Pass a line",
+    "summary": "Three people write a story one line at a time, seeing only the preceding line until the reveal.",
+    "setup": "Invite three people and choose their turn order.",
+    "prompt": "A mysterious package arrived at the door.",
+    "participant": "When it is your turn, read the starting prompt or the preceding person's line and add one line of your own.",
+    "completion": "After the third line, the app reveals the ordered story to the group.",
+    "access": "Participants need a way to read and write text. A turn has no timeout in this version, so the activity can wait indefinitely for its current participant."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 3,
+    "max": 3
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "sequential_handoff@1",
+    "medium": "text",
+    "steps": 3,
+    "allowPromptOverride": false
+  }
+}

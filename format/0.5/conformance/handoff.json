@@ -1,0 +1,220 @@
+{
+  "package": "../examples/pass-a-line.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1"
+  ],
+  "contracts": [
+    "sequential_handoff@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "route": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "early-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "payload": {
+          "value": "Too early"
+        }
+      },
+      "outcome": "rejected",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "active",
+            "step": 1,
+            "currentActor": "a",
+            "input": "A mysterious package arrived at the door."
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "active",
+            "step": 1,
+            "currentActor": "a"
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "line-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "payload": {
+          "value": "It started ticking."
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b",
+            "own": {
+              "actor": "a",
+              "value": "It started ticking."
+            }
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b",
+            "input": "It started ticking."
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b"
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b"
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "line-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 3,
+        "payload": {
+          "value": "It started ticking."
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "line-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "payload": {
+          "value": "We put it in the garden."
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "active",
+            "step": 3,
+            "currentActor": "c",
+            "input": "We put it in the garden."
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "active",
+            "step": 3,
+            "currentActor": "c",
+            "own": {
+              "actor": "a",
+              "value": "It started ticking."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "line-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 5,
+        "payload": {
+          "value": "By morning, it had grown leaves."
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "complete",
+            "step": 3,
+            "currentActor": null,
+            "own": {
+              "actor": "a",
+              "value": "It started ticking."
+            },
+            "entries": [
+              {
+                "actor": "a",
+                "value": "It started ticking."
+              },
+              {
+                "actor": "b",
+                "value": "We put it in the garden."
+              },
+              {
+                "actor": "c",
+                "value": "By morning, it had grown leaves."
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "step": 3,
+            "currentActor": null,
+            "entries": [
+              {
+                "actor": "a",
+                "value": "It started ticking."
+              },
+              {
+                "actor": "b",
+                "value": "We put it in the garden."
+              },
+              {
+                "actor": "c",
+                "value": "By morning, it had grown leaves."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
