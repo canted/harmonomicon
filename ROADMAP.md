@@ -42,6 +42,12 @@ The [mechanism survey](research/mechanism-survey.md) identified timed phases and
 
 The [coverage audit](COVERAGE.md#coverage-decisions) still identifies turn recovery and media/selection as broad untested families. The next candidate will be chosen from those gaps. Publication depends on the gates below rather than a particular 0.x number.
 
+## Next candidate: recoverable handoff
+
+The [digital activity stress cases](research/digital-activity-stress-cases.md) and [offer-flow experiment](experiments/offer-flows/findings.md) isolate a stalled asynchronous chain: the next person may never answer, while two simultaneous offers need one authoritative winner. The next candidate is provisionally 0.8. It will define a bounded `competitive_handoff@1` text contract with organizer-supplied offer pairs, a trusted deadline for each attempt, optional participant decline, automatic fallback to a second pair, one atomic accepted contribution per step, and a terminal stalled state when all attempts fail. Only the currently offered actors see the immediate input; a completed chain is revealed to the group. Assignment fairness and the actual text or image creative task remain outside the host's judgment.
+
+The 0.8 gate is a schema and package example, conformance traces for competing submissions, exact deadline races, decline, timeout/fallback, stall, privacy, replay, and invalid route setup, followed by two independent hosts passing the same cases through durable transactions, workers, and authenticated views. The 0.7 behavior set and 0.4 exchange rules remain in force. The [coverage audit](COVERAGE.md#coverage-decisions) then leaves media/selection and permissioned facilitation as the broad remaining gaps before choosing a 1.0 set.
+
 ## Advancement rule for a candidate
 
 A candidate is **defined** when its normative document, machine-readable schema, example packages, and conformance cases agree on inputs, outcomes, boundaries, and participant views. It is **reference checked** when those cases pass a reference model and invalid cross-field combinations are rejected. It is **two-host validated** when independent implementations load the same packages and produce the specified outcomes through real storage, scheduling, and access boundaries. Localhost services are sufficient for that gate; public web deployment is a separate operational test.
