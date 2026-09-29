@@ -28,6 +28,12 @@ The [game-jam and shared-practice survey](research/creative-jams-and-shared-prac
 
 The [mechanism survey](research/mechanism-survey.md) and [digital stress cases](research/digital-activity-stress-cases.md) still leave other digital patterns to assess: facilitator-controlled phase and group changes, opt-in or permissioned contribution, stalled-turn recovery, image media, and selection or voting. A coverage audit of the source-backed activity cards will decide the next slice and the 1.0 behavior set. Publication depends on the gate below, not a particular 0.x number.
 
+## Next candidate: ongoing shared space
+
+The [coverage audit](COVERAGE.md) shows that fixed repeated windows do not describe an ongoing journal or creative space: people may post several entries, choose whether each entry is private or group-visible, comment on shared entries, and continue without a mandatory daily submission. The next candidate is provisionally 0.6. It will define one `ongoing_space@1` text contract with retained entries, per-entry audience, comments, and an optional fixed prompt series with a clearly labeled soft or completion-reporting cadence. The contract will state exact enrollment, event, deadline, retry, privacy, and history rules. It will not claim local-calendar days, external media, editing/deletion, or host verification of work done outside the app.
+
+The 0.6 gate is a schema, representative packages for an unscheduled shared journal and a prompt-based practice, conformance cases that distinguish private entries from public completion signals and comments, and two independent local hosts passing the same cases through durable storage and authenticated views. The 0.5 contracts and 0.4 exchange rules remain in force. After this slice, the [coverage audit](COVERAGE.md#coverage-decisions) identifies facilitated phases, turn recovery, and media/selection as the remaining broad families to test before selecting a 1.0 behavior set.
+
 ## Advancement rule for a candidate
 
 A candidate is **defined** when its normative document, machine-readable schema, example packages, and conformance cases agree on inputs, outcomes, boundaries, and participant views. It is **reference checked** when those cases pass a reference model and invalid cross-field combinations are rejected. It is **two-host validated** when independent implementations load the same packages and produce the specified outcomes through real storage, scheduling, and access boundaries. Localhost services are sufficient for that gate; public web deployment is a separate operational test.

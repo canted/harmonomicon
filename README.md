@@ -67,7 +67,7 @@ The [conformance cases](format/0.5/conformance/README.md) give sample actions an
 
 ## Roadmap
 
-The [format roadmap](ROADMAP.md) tracks what each candidate defines, what has been tested, and the gate for the next advance.
+The [format roadmap](ROADMAP.md) tracks what each candidate defines and what has been tested. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
 
 ## Research
 
