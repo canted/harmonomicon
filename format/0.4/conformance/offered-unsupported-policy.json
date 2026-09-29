@@ -1,0 +1,32 @@
+{
+  "package": "../examples/paired-story-response.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "offered_response@1"
+  ],
+  "expectStatus": "unsupported",
+  "missing": [
+    "policy:balanced_artifacts_exact32@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "1",
+      "2",
+      "3"
+    ],
+    "opensAt": 10,
+    "sourceDeadline": 20,
+    "responseDeadline": 40,
+    "roundId": "42"
+  },
+  "events": []
+}

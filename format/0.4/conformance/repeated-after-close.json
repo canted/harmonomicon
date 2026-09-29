@@ -1,0 +1,164 @@
+{
+  "package": "../examples/daily-reveal.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "repeated_collection@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 10
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "a-writing",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "occurrence": 1,
+          "value": "The mountain path"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ],
+                "own": {
+                  "actor": "a",
+                  "value": "The mountain path"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "reveal",
+        "type": "tick",
+        "actor": "system",
+        "at": 72000010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "between",
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "entries": [
+                  {
+                    "actor": "a",
+                    "value": "The mountain path"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "between",
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "entries": [
+                  {
+                    "actor": "a",
+                    "value": "The mountain path"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

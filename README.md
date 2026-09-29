@@ -22,7 +22,7 @@ The package would describe the activity in terms like these:
 | Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
 | What happens if someone misses it | The reveal still happens at 7 p.m. |
 
-An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [candidate 0.3 package](format/0.3/examples/group-check-in.json) describes this check-in.
+An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [candidate 0.4 package](format/0.4/examples/group-check-in.json) describes this check-in.
 
 ## A richer example: image caption contest
 
@@ -37,7 +37,7 @@ The activity has a few stages:
 
 The package would say when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how voting works. It would also say what happens if fewer than three images arrive, or if someone never submits a caption. In the current candidate, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A later contract could define a different recovery rule. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
-The [0.3 image-caption package](format/0.3/examples/image-caption-circle.json) defines image collection, two-source offers, linked text captions, and reveal. Voting and winner selection are later targets. The current local validation hosts handle text sources only, so this image package remains unrun.
+The [0.4 image-caption package](format/0.4/examples/image-caption-circle.json) defines image collection, two-source offers, linked text captions, and reveal. Voting and winner selection are later targets. The current local validation hosts can import the image package, but they report that they cannot run it because they do not store images.
 
 Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
 
@@ -55,15 +55,15 @@ An activity package brings together:
 
 The app that runs a package is called a **host**. It provides accounts, storage, scheduling, messages, and screens. It also carries out the rules the package names. The host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-## Candidate 0.3 format
+## Candidate 0.4 format
 
-The [candidate 0.3 format](format/0.3/README.md) is a JSON format for an activity package. Each package includes directions for people, participation limits, source and rights information, the app features it needs, and a versioned set of rules that the host runs. An app can run a package when it supports those exact rules and features.
+The [candidate 0.4 format](format/0.4/README.md) describes each activity in JSON: directions for people, participation limits, source and rights information, app features it needs, and a named set of rules for the host to run. The [package schema](format/0.4/package.schema.json) describes the structure. A host checks the exact rule and feature versions before it starts an activity.
 
-It defines four sets of rules. **Timed collection** accepts private submissions during one window and reveals them at its close. **Sequential handoff** passes a contribution from one participant to the next. **Repeated collection** opens a fixed series of windows and retains each window's history, with private, immediate-share, or after-close views. **Offered response** collects sources, gives each contributor two other sources using an exact assignment rule, accepts a linked response, and reveals the results. The [group check-in](format/0.3/examples/group-check-in.json), [Pass a line](format/0.3/examples/pass-a-line.json), [private daily writing circle](format/0.3/examples/daily-private-practice.json), and [paired story response](format/0.3/examples/paired-story-response.json) show these rules.
+It currently defines four sets of rules. **Timed collection** accepts private submissions during one window and reveals them at its close. **Sequential handoff** passes a contribution from one participant to the next. **Repeated collection** opens a fixed series of windows and retains each window's history, with private, immediate-share, or after-close views. **Offered response** collects sources, gives each contributor two other sources using an exact assignment rule, accepts a linked response, and reveals the results. The [group check-in](format/0.4/examples/group-check-in.json), [Pass a line](format/0.4/examples/pass-a-line.json), [private daily writing circle](format/0.4/examples/daily-private-practice.json), and [paired story response](format/0.4/examples/paired-story-response.json) show these rules.
 
-The [package schema](format/0.3/package.schema.json) describes the JSON structure. The [format document](format/0.3/README.md) specifies what hosts must do with it, and the [conformance cases](format/0.3/conformance/README.md) give sample actions and expected participant views. From the repository root, run `python3 format/0.3/check.py` to check the examples and cases with the reference model.
+Candidate 0.4 also explains how to move a package between apps. One host can import a package, report which rules and features it supports, and export the exact package for another host. The activity's ID and version identify its content; changing that content requires a new version. The package contains data rather than code tied to one server language.
 
-The four rules passed a [two-host local trial](validation/0.3/README.md) using the same text packages in separate Python and Node.js services with independent storage and workers. The candidate does not yet cover actual image storage, notifications, voting, migration of an activity in progress, or public deployment.
+The [conformance cases](format/0.4/conformance/README.md) give sample actions and expected participant views. The [two-host local trial](validation/0.4/README.md) imported the same text packages into independent Python and Node.js services, ran all 15 cases, and transferred a newly authored package between the services. It does not yet cover actual image storage, notifications, voting, migration of an activity in progress, or public deployment.
 
 ## Roadmap
 
