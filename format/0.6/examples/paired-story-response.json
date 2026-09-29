@@ -1,0 +1,39 @@
+{
+  "format": "harmonomicon.activity-package/0.6",
+  "id": "org.harmonomicon.example.paired-story-response",
+  "version": "0.6.0",
+  "content": {
+    "language": "en",
+    "title": "Paired story response",
+    "summary": "Participants post short story openings, receive two other openings, and write a continuation for one.",
+    "setup": "Invite at least three participants and choose a source opening, source deadline, response deadline, and round ID.",
+    "prompt": "Write a one-sentence story opening.",
+    "participant": "Post one opening before the source deadline. If enough openings arrive, request two others and continue one before the response deadline.",
+    "completion": "At the response deadline, submitted sources and linked responses become visible to the group. Missing responses do not delay the reveal.",
+    "access": "Participants need text entry and reading access. Saved offers may differ by request order; responses are revealed at the response deadline."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 3,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1"
+  ],
+  "behavior": {
+    "contract": "offered_response@1",
+    "sourceMedium": "text",
+    "allowPromptOverride": false,
+    "assignmentPolicy": "policy:balanced_artifacts_exact32@1"
+  }
+}
