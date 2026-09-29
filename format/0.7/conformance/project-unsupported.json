@@ -1,0 +1,46 @@
+{
+  "package": "../examples/small-team-jam.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1"
+  ],
+  "contracts": [],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "teams": [
+      {
+        "id": "red",
+        "members": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "id": "blue",
+        "members": [
+          "c",
+          "d"
+        ]
+      }
+    ],
+    "opensAt": 10,
+    "submissionDeadline": 30,
+    "reviewDeadline": 50
+  },
+  "expectStatus": "unsupported",
+  "missing": [
+    "behavior:project_cycle@1",
+    "clock@1"
+  ],
+  "events": []
+}

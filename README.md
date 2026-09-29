@@ -22,7 +22,7 @@ The package would describe the activity in terms like these:
 | Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
 | What happens if someone misses it | The reveal still happens at 7 p.m. |
 
-An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [candidate 0.6 package](format/0.6/examples/group-check-in.json) describes this check-in.
+An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [candidate 0.7 package](format/0.7/examples/group-check-in.json) describes this check-in.
 
 ## A richer example: image caption contest
 
@@ -37,7 +37,7 @@ The activity has a few stages:
 
 The package would say when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how voting works. It would also say what happens if fewer than three images arrive, or if someone never submits a caption. In the current candidate, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A later contract could define a different recovery rule. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
-The [0.6 image-caption package](format/0.6/examples/image-caption-circle.json) defines image collection, two-source offers, linked text captions, and reveal. Voting and winner selection are later targets. The current local validation hosts can import the image package, but they report that they cannot run it because they do not store images.
+The [0.7 image-caption package](format/0.7/examples/image-caption-circle.json) defines image collection, two-source offers, linked text captions, and reveal. Voting and winner selection are later targets. The current local validation hosts can import the image package, but they report that they cannot run it because they do not store images.
 
 Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
 
@@ -55,15 +55,15 @@ An activity package brings together:
 
 The app that runs a package is called a **host**. It provides accounts, storage, scheduling, messages, and screens. It also carries out the rules the package names. The host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-## Candidate 0.6 format
+## Candidate 0.7 format
 
-The [candidate 0.6 format](format/0.6/README.md) describes each activity in JSON: directions for people, participation limits, source and rights information, app features it needs, and a named set of rules for the host to run. The [package schema](format/0.6/package.schema.json) describes the structure. A host checks the exact rule and feature versions before starting an activity.
+The [candidate 0.7 format](format/0.7/README.md) describes each activity in JSON: directions for people, participation limits, source and rights information, app features it needs, and a named set of rules for the host to run. The [package schema](format/0.7/package.schema.json) describes the structure. A host checks exact rule and feature versions before starting an activity.
 
-It currently defines six sets of rules. **Timed collection** gathers private submissions for a deadline reveal. **Sequential handoff** passes a contribution to the next participant. **Repeated collection** runs a fixed series of windows. **Offered response** gives contributors two sources to choose from before they respond. **Project cycle** lets fixed teams share progress, submit final work, and review one another. **Ongoing space** keeps a shared notebook or prompt series where entries can be private or group-visible, shared entries can receive comments, and completion status can be shown without revealing private text. The [group check-in](format/0.6/examples/group-check-in.json), [Pass a line](format/0.6/examples/pass-a-line.json), [private daily writing circle](format/0.6/examples/daily-private-practice.json), [paired story response](format/0.6/examples/paired-story-response.json), [small team jam](format/0.6/examples/small-team-jam.json), and [shared notebook](format/0.6/examples/shared-notebook.json) are example packages.
+It currently defines seven sets of rules. **Timed collection** gathers private submissions for a deadline reveal. **Sequential handoff** passes a contribution to the next participant. **Repeated collection** runs a fixed series of windows. **Offered response** gives contributors two sources to choose from before they respond. **Project cycle** lets fixed teams share progress, submit final work, and review one another. **Ongoing space** keeps a shared notebook or prompt series with private entries, comments, and optional completion status. **Guided rounds** run timed prompts with changing participant groups and clear rules for when each group's text becomes visible. The [group check-in](format/0.7/examples/group-check-in.json), [Pass a line](format/0.7/examples/pass-a-line.json), [private daily writing circle](format/0.7/examples/daily-private-practice.json), [paired story response](format/0.7/examples/paired-story-response.json), [small team jam](format/0.7/examples/small-team-jam.json), [shared notebook](format/0.7/examples/shared-notebook.json), and [small group synthesis](format/0.7/examples/small-group-synthesis.json) are example packages.
 
 Packages can move between apps. A host can import a package, report the rule and feature versions it supports, and export the same package for another host. The activity's ID and version identify its content; changing that content requires a new version. The package contains data rather than code tied to one server language.
 
-The [conformance cases](format/0.6/conformance/README.md) give sample actions and expected participant views. The [two-host local trial](validation/0.6/README.md) imported the same text packages into independent Python and Node.js services, ran all 22 cases, and transferred a newly authored package between them. It does not yet cover actual image storage, notifications, voting, local-calendar recurrence, migration of an activity in progress, or public deployment.
+The [conformance cases](format/0.7/conformance/README.md) give sample actions and expected participant views. The [two-host local trial](validation/0.7/README.md) imported the same text packages into independent Python and Node.js services, ran all 26 cases, and transferred a newly authored package between them. It does not yet cover image storage, notifications, voting, facilitator judgment, migration of an activity in progress, or public deployment.
 
 ## Roadmap
 

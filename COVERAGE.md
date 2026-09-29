@@ -1,10 +1,10 @@
 # Activity coverage toward 1.0
 
-This audit compares the [25 source-backed and constructed activity cards](research/activities/) with the [0.6 candidate](format/0.6/README.md). A match means a package can express a **digitally mediated rule slice** of the card, not that software reproduces the whole social, artistic, physical, or human-facilitated practice. The cards remain the record of the real procedure. “Partial” names a rule still missing for a closer digital version; it is not an instruction to invent that rule for the original activity.
+This audit compares the [25 source-backed and constructed activity cards](research/activities/) with the [0.7 candidate](format/0.7/README.md). A match means a package can express a **digitally mediated rule slice** of the card, not that software reproduces the whole social, artistic, physical, or human-facilitated practice. The cards remain the record of the real procedure. “Partial” names a rule still missing for a closer digital version; it is not an instruction to invent that rule for the original activity.
 
-| Activity card | 0.6 digital slice | Missing for a closer digital version |
+| Activity card | 0.7 digital slice | Missing for a closer digital version |
 |---|---|---|
-| [1-2-4-All](research/activities/1-2-4-all.md) | Prompt and timed collection. | Timed phase sequence, changing pair/quartet partitions, staged sharing. |
+| [1-2-4-All](research/activities/1-2-4-all.md) | Timed prompts, solo/pair/quartet/full-group partitions, and after-round text sharing. | Human synthesis, facilitator adjustment, and spoken discussion remain outside app observation. |
 | [750 Words month challenge](research/activities/750-words-month-challenge.md) | Private recurring entries and group-visible completion status. | Local-calendar days, word threshold, monthly aggregate and source-specific consequences. |
 | [BeReal daily post](research/activities/bereal-daily-post.md) | Repeated prompt and status. | Image storage, late-post branch, post-to-view gate, local-day timing. |
 | [Gaia Project faction auction](research/activities/bga-gaia-project-faction-auction.md) | Collection of preferences could be timed. | Its exact game-specific auction and scoring algorithm; this would be a separately versioned policy, not a universal default. |
@@ -15,8 +15,8 @@ This audit compares the [25 source-backed and constructed activity cards](resear
 | [Day One shared journal](research/activities/day-one-shared-journal.md) | An ongoing text space with comments and per-entry private or group sharing. | Media, reactions, approval or changing membership, and the source product’s full sharing controls. |
 | [Drawception picture telephone](research/activities/drawception-picture-telephone.md) | Concealed sequential handoff. | Alternating image/text media, queue lease, skip/requeue, bounded turns. |
 | [Exquisite Corpse drawing](research/activities/exquisite-corpse-drawing.md) | Text handoff and final reveal. | Drawing media and limited guide-mark view. Paper folding is a physical variant beyond app control. |
-| [Focusmate paired coworking](research/activities/focusmate-coworking.md) | A timed prompt and check-in can be adapted. | Two-person live session with intention and closing report; presence is a host/media capability. |
-| [Freeze Scenes](research/activities/freeze-scenes.md) | Prompt and countdown cue. | Parallel group planning and common reveal cue; the physical scene remains human-observed. |
+| [Focusmate paired coworking](research/activities/focusmate-coworking.md) | Two-person timed rounds can prompt an intention and closing report. | Live presence and video remain host/media capabilities, not proven by the package. |
+| [Freeze Scenes](research/activities/freeze-scenes.md) | Timed group rounds can guide parallel planning and a shared reveal cue. | The physical scene and performance remain human-observed. |
 | [Fukuwarai](research/activities/fukuwarai.md) | Directions only. | Physical piece placement and asymmetric sight, or a separately designed digital spatial game. |
 | [Global Game Jam](research/activities/global-game-jam.md) | `project_cycle@1` covers fixed teams, progress, final submission, and later review in a proposed digital variant. | Team formation, file/media uploads, optional showcases, and local-site practices. GGJ itself is not globally competitive. |
 | [Gratitude Spies](research/activities/gratitude-spies.md) | Prompt and timed closing collection. | Private target assignment and later disclosure; real-world observation remains human. |
@@ -32,11 +32,11 @@ This audit compares the [25 source-backed and constructed activity cards](resear
 
 ## Coverage decisions
 
-The current six contracts establish timed submission, hidden handoff, fixed recurrence, source-to-response assignment, fixed-team project progress/review, and an ongoing text space with optional prompt cadence. These are **six behavior families**, not a claim that six cards are fully reproduced. The table shows why a count of runnable packages alone would overstate coverage: media, schedule, authority, and recovery rules often change the activity.
+The current seven contracts establish timed submission, hidden handoff, fixed recurrence, source-to-response assignment, fixed-team project progress/review, an ongoing text space with optional prompt cadence, and timed guided rounds with changing groups. These are **seven behavior families**, not a claim that any card is fully reproduced. The table shows why a count of runnable packages alone would overstate coverage: media, schedule, authority, and recovery rules often change the activity.
 
 The remaining **widely reused digital families** to test before choosing a 1.0 set are:
 
-1. **Facilitated phase and audience changes:** timed or facilitator-reported phase changes, changing groups, role-specific rights, and per-contribution permission. This affects 1-2-4-All, Critical Response, Focusmate adaptations, Freeze Scenes, and parts of Moodle Workshop.
+1. **Permissioned facilitation:** a maker or participant explicitly approves a particular response before it becomes visible, with role-specific rights and a facilitator-controlled phase where the source procedure requires it. This affects Critical Response and parts of Moodle Workshop. The fixed timed groups in `guided_rounds@1` do not grant these permissions.
 2. **Turn recovery:** a queue, skip or timeout, reassignment, and one accepted contribution. This affects Drawception-like digital chains and stalled handoffs.
 3. **Portable media and selection:** a host-controlled image reference with real storage and access checks, plus exact voting/review aggregation rules when an activity selects a result. This affects photo prompts, caption games, and ranked jams.
 

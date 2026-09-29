@@ -1,0 +1,282 @@
+{
+  "package": "../examples/prompt-series-status.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "ongoing_space@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 10
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open1",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "a-private",
+        "type": "post_entry",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "occurrence": 1,
+          "audience": "private",
+          "value": "My private writing"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "entries": [],
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "What stayed with you today?",
+                "phase": "open",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "entries": [],
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "What stayed with you today?",
+                "phase": "open",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "close1",
+        "type": "tick",
+        "actor": "system",
+        "at": 72000010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "between",
+            "entries": [],
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "What stayed with you today?",
+                "phase": "closed",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "open2",
+        "type": "tick",
+        "actor": "system",
+        "at": 86400010,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "b-group",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 86400011,
+        "payload": {
+          "occurrence": 2,
+          "audience": "group",
+          "value": "Shared reflection"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "a-private",
+                "actor": "a",
+                "occurrence": 1,
+                "audience": "private",
+                "value": "My private writing",
+                "comments": []
+              },
+              {
+                "id": "b-group",
+                "actor": "b",
+                "occurrence": 2,
+                "audience": "group",
+                "value": "Shared reflection",
+                "comments": []
+              }
+            ],
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "What stayed with you today?",
+                "phase": "closed",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "prompt": "What changed your mind?",
+                "phase": "open",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "close2",
+        "type": "tick",
+        "actor": "system",
+        "at": 158400010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "entries": [
+              {
+                "id": "b-group",
+                "actor": "b",
+                "occurrence": 2,
+                "audience": "group",
+                "value": "Shared reflection",
+                "comments": []
+              }
+            ],
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "prompt": "What stayed with you today?",
+                "phase": "closed",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "prompt": "What changed your mind?",
+                "phase": "closed",
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "missed"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

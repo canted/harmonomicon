@@ -1,6 +1,6 @@
 # Format roadmap
 
-Harmonomicon has candidate format versions, not a published standard. This roadmap records what each candidate defines, what has been tested, and what evidence is needed to advance it. Version numbers beyond 0.6 are provisional; a later candidate gets its number when its scope is settled.
+Harmonomicon has candidate format versions, not a published standard. This roadmap records what each candidate defines, what has been tested, and what evidence is needed to advance it. Version numbers beyond 0.7 are provisional; a later candidate gets its number when its scope is settled.
 
 ## Three different versions
 
@@ -20,8 +20,9 @@ A host must explicitly support the format and every behavior and capability a pa
 | [0.4](format/0.4/README.md) | Carries forward the four behavior contracts and adds package exchange: capability discovery, validated import, exact `(id, version)` identity, digest, export, and instance binding to one stored version. | Fifteen [reference cases](format/0.4/conformance/README.md) pass. In the [two-host trial](validation/0.4/README.md), both hosts import the text examples, pass the activity cases and existing runtime probes, and transfer and run a newly authored package across Python and Node.js, including immutable versions and restart. | Met for the specified JSON subset and local hosts. The image package can be imported but cannot run on text-only hosts. Media storage, voting, team streams, delivery, and public deployment remain outside this result. |
 | [0.5](format/0.5/README.md) | Carries forward exchange and the four prior contracts; adds `project_cycle@1` for fixed teams, private or group progress posts, comments, one final per team, a review window, and delayed review reveal. | Eighteen [reference cases](format/0.5/conformance/README.md) and the [two-host local trial](validation/0.5/README.md) pass, including team privacy, concurrent final submissions, deadline workers, replay, restart, and package transfer. | Met for checked-in text packages and local services. Team formation, mutable membership, actual media, ratings, notifications, and deployment remain outside this result. |
 | [0.6](format/0.6/README.md) | Carries forward exchange and five prior contracts; adds `ongoing_space@1` for retained private or shared text entries, comments, an optional fixed prompt series, and optional group-visible completion status. | Twenty-two [reference cases](format/0.6/conformance/README.md) and the [two-host local trial](validation/0.6/README.md) pass, including deadline jumps, private views, concurrent append, replay, restart, and package transfer. | Met for checked-in text packages and local services. Local-calendar recurrence, edits/deletion, media, notifications, and deployment remain outside this result. |
+| [0.7](format/0.7/README.md) | Carries forward exchange and six prior contracts; adds `guided_rounds@1` for fixed timed prompts, validated changing group partitions, optional one-per-person text, and private, within-group, or after-round views. | Twenty-six [reference cases](format/0.7/conformance/README.md) and the [two-host local trial](validation/0.7/README.md) pass, including worker jumps, invalid partitions, concurrent submissions, pair privacy, replay, restart, and package transfer. | Met for checked-in text packages and local services. Manual phase authority, permission gates, media, turn recovery, and deployment remain outside this result. |
 
-Package exchange and six activity contracts are now defined and locally validated for text. The caption-contest example in the [README](README.md#a-richer-example-image-caption-contest) still needs image media support, voting, and result rules. No version is assigned to that later work until its scope and conformance tests are chosen.
+Package exchange and seven activity contracts are now defined and locally validated for text. The caption-contest example in the [README](README.md#a-richer-example-image-caption-contest) still needs image media support, voting, and result rules. No version is assigned to that later work until its scope and conformance tests are chosen.
 
 ## Project-cycle boundary
 
@@ -35,11 +36,11 @@ The [coverage audit](COVERAGE.md) identified an ongoing journal or creative spac
 
 The [coverage audit](COVERAGE.md#coverage-decisions) still identifies facilitated phases, turn recovery, and media/selection as broad untested families. The next candidate will be chosen from those gaps, and publication will depend on the gates below rather than a particular 0.x number.
 
-## Next candidate: guided rounds
+## Guided-rounds boundary
 
-The [mechanism survey](research/mechanism-survey.md) describes timed phase changes and changing group partitions in 1-2-4-All and other facilitated activities. The [coverage audit](COVERAGE.md) shows that the six current contracts cannot express this as one mediated session. The next candidate is provisionally 0.7: a bounded `guided_rounds@1` contract with a fixed sequence of timed prompts, a validated participant partition for each round, optional one-per-person text contributions, and explicit private, within-group, or after-round group visibility. Group assignments are bound at instance creation; the host does not invent a matching algorithm. A human may still guide the activity, but only software-observable timers, submissions, and views are normative.
+The [mechanism survey](research/mechanism-survey.md) identified timed phases and changing groups as a gap in the earlier contracts. Candidate 0.7 defines a fixed sequence of timed prompts with validated group partitions and three audience choices. Its [contract](format/0.7/README.md), [cases](format/0.7/conformance/README.md), and [two-host trial](validation/0.7/README.md) establish a digital text slice under local conditions. Facilitator-controlled permission, early manual advancement, real-world performance, and low-latency live audio remain outside it.
 
-The 0.7 gate is a schema and examples for a staged group discussion and a simple multi-round icebreaker, traces for phase boundaries, changing partitions, group privacy, missing contributions, retries, and invalid assignments, then independent host agreement through workers, durable storage, and authenticated views. Facilitator-controlled permission for each opinion, live audio synchrony, physical performance, and arbitrary branching are outside this contract. The 0.6 behavior set and 0.4 exchange rules remain in force.
+The [coverage audit](COVERAGE.md#coverage-decisions) still identifies turn recovery and media/selection as broad untested families. The next candidate will be chosen from those gaps. Publication depends on the gates below rather than a particular 0.x number.
 
 ## Advancement rule for a candidate
 
