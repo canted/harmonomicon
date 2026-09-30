@@ -51,7 +51,7 @@ function render(diagram) {
   }).join('');
   const nodes = layout.nodes.map(node => {
     const x = node.x-node.width/2+offsetX, y = node.y+offsetY-node.height/2;
-    return `<rect x="${x}" y="${y}" width="${node.width}" height="${node.height}" rx="8" fill="${diagramFill(node)}"/><text x="${node.x+offsetX}" y="${node.y+offsetY+7}" text-anchor="middle" fill="#000000" font-family="Arial,sans-serif" font-size="${NODE_FONT_SIZE}" font-weight="700">${escape(node.title)}</text>`;
+    return `<rect x="${x}" y="${y}" width="${node.width}" height="${node.height}" rx="8" fill="${diagramFill(node)}"/><text x="${node.x+offsetX}" y="${node.y+offsetY+5}" text-anchor="middle" fill="#000000" font-family="Arial,sans-serif" font-size="${NODE_FONT_SIZE}" font-weight="700">${escape(node.title)}</text>`;
   }).join('');
   const title = titleLines.map((line,index) => `<text x="20" y="${38+index*28}" fill="#000000" font-family="Arial,sans-serif" font-size="28" font-weight="700">${escape(line)}</text>`).join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escape(diagram.title)} package flow" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">

@@ -1,11 +1,11 @@
 /** Compact top-to-bottom geometry shared by the inspector and README previews. */
-export const NODE_FONT_SIZE = 21;
+export const NODE_FONT_SIZE = 16;
 export const EDGE_FONT_SIZE = 14;
-export const NODE_HEIGHT = 61;
+export const NODE_HEIGHT = 56;
 
 function nodeWidth(title) {
-  // Arial bold at 21px averages about 10.5px per character for these labels.
-  return Math.max(90, Math.ceil(title.length * 10.5 + 40));
+  // Arial bold at 16px averages about 8px per character for these labels.
+  return Math.max(80, Math.ceil(title.length * 8 + 40));
 }
 
 export function edgeLabelWidth(label) {
@@ -19,7 +19,7 @@ export function layoutDiagram(diagram) {
   const mainX = 20 + mainWidth / 2;
   const placed = new Map();
   main.forEach((node,index) => {
-    placed.set(node.id,{...node,x:mainX,y:20+NODE_HEIGHT/2+index*(NODE_HEIGHT+70),width:nodeWidth(node.title),height:NODE_HEIGHT});
+    placed.set(node.id,{...node,x:mainX,y:20+NODE_HEIGHT/2+index*(NODE_HEIGHT+60),width:nodeWidth(node.title),height:NODE_HEIGHT});
   });
   const byId = new Map(diagram.nodes.map(node => [node.id,node]));
   const branchEdges = diagram.edges.filter(edge => byId.get(edge.target)?.row !== 0);
