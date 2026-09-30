@@ -5,7 +5,11 @@ export function stepLines(step) {
   if (step.actors) lines.push(`Actors: ${{participants:'participants',turn:'current participant',others:'other participants'}[step.actors] ?? step.actors}`);
   for (const [name,field] of Object.entries(step.fields ?? {})) {
     let value = field.type;
-    if (field.options) value += ': ' + field.options.join(' · ');
+    if (field.options) {
+      const label = name === field.type ? name : `${name} (${field.type})`;
+      lines.push(`${label}: ${field.options.join(' · ')} · ${field.visibility}`);
+      continue;
+    }
     if (field.count !== undefined) value += ` (${field.count} items)`;
     if (field.indexOf) value += ` → ${field.indexOf}`;
     lines.push(`${name}: ${value} · ${field.visibility}`);
