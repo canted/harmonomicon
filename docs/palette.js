@@ -9,8 +9,15 @@ export const palette = Object.freeze({
   white: '#ffffff'
 });
 
+/** Mix with white in sRGB; purple needs 15% to meet 4.5:1 against black. */
+export function lighten(hex, amount = 0.10) {
+  return '#' + hex.slice(1).match(/../g).map(channel =>
+    Math.round(parseInt(channel,16)*(1-amount)+255*amount).toString(16).padStart(2,'0')).join('');
+}
+
 /** Colors depend only on declared nesting and sequence position. */
 export function diagramFill(node) {
   const stages = [palette.blue, palette.cyan, palette.yellow, palette.green, palette.purple, palette.pink];
-  return stages[node.column % stages.length];
+  const color = stages[node.column % stages.length];
+  return lighten(color, color === palette.purple ? 0.15 : 0.10);
 }

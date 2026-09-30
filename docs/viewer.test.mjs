@@ -109,3 +109,16 @@ test('shared renderer escapes package strings and never turns choices into flow 
   const svg = renderSvg(diagram);
   assert.ok(svg.includes('&lt;script&gt;')); assert.ok(!svg.includes('<script>'));
 });
+
+
+test('black text on every diagram stage fill meets WCAG AA 4.5:1', async () => {
+  const {diagramFill} = await import('./palette.js');
+  for (let column=0;column<6;column++) {
+    const hex = diagramFill({column});
+    const rgb = hex.slice(1).match(/../g).map(channel => parseInt(channel,16)/255)
+      .map(value => value<=0.04045 ? value/12.92 : ((value+0.055)/1.055)**2.4);
+    const luminance = rgb[0]*0.2126 + rgb[1]*0.7152 + rgb[2]*0.0722;
+    const ratio = (luminance+0.05)/0.05;
+    assert.ok(ratio>=4.5, `${hex}: ${ratio.toFixed(2)}:1`);
+  }
+});
