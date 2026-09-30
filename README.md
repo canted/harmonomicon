@@ -87,3 +87,4 @@ The [format roadmap](ROADMAP.md) records the candidate evidence and the candidat
 - [Creative-practice revisit](experiments/creative-practice-revisit/README.md) checks the earlier experiments against game-jam and journaling cases.
 - [Ongoing activities](experiments/ongoing-activities/README.md) test project progress and repeated private or public practice.
 - [Assignment-policy portability](experiments/policy-portability/README.md) specifies one offer rule precisely and checks it in JavaScript, Python, and Ruby.
+- [Simple digital pattern audit](experiments/format-0.12-coverage-challenge/README.md) tries eight source-backed procedures against format 0.12, including exact failure witnesses and a runnable timed-room package.

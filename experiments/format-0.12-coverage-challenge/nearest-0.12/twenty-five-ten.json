@@ -1,0 +1,79 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.nearest-twenty-five-ten",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Nearest 0.12 attempt: 25/10 Crowdsourcing",
+    "summary": "Five timed group rounds in place of card exchange and numeric scoring.",
+    "setup": "Invite the specified group and set the required activity values.",
+    "prompt": "Create an idea card, pass it through five private ratings, then surface high-scoring cards.",
+    "participant": "Use the available 0.12 action when prompted. This example intentionally lacks some source rules.",
+    "completion": "The selected 0.12 contract determines completion; consult the audit for the missing target rules.",
+    "access": "This is a research approximation. Do not present it as a faithful implementation of the source activity."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Henri Lipmanowicz and Keith McCandless, Liberating Structures",
+    "rights": "Original research approximation wording; the source activity is separately credited and linked.",
+    "sourceUrl": "https://www.liberatingstructures.com/25-10-crowdsourcing/"
+  },
+  "participants": {
+    "min": 15,
+    "max": 15
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "guided_rounds@1",
+    "allowPromptOverride": false,
+    "rounds": [
+      {
+        "id": "rating-one",
+        "prompt": "Consider one idea card.",
+        "durationMs": 60000,
+        "groupMin": 15,
+        "groupMax": 15,
+        "visibility": "group"
+      },
+      {
+        "id": "rating-two",
+        "prompt": "Consider the next idea card.",
+        "durationMs": 60000,
+        "groupMin": 15,
+        "groupMax": 15,
+        "visibility": "group"
+      },
+      {
+        "id": "rating-three",
+        "prompt": "Consider the next idea card.",
+        "durationMs": 60000,
+        "groupMin": 15,
+        "groupMax": 15,
+        "visibility": "group"
+      },
+      {
+        "id": "rating-four",
+        "prompt": "Consider the next idea card.",
+        "durationMs": 60000,
+        "groupMin": 15,
+        "groupMax": 15,
+        "visibility": "group"
+      },
+      {
+        "id": "rating-five",
+        "prompt": "Consider the final idea card.",
+        "durationMs": 60000,
+        "groupMin": 15,
+        "groupMax": 15,
+        "visibility": "group"
+      }
+    ]
+  }
+}

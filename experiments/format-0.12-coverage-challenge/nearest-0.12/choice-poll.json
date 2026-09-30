@@ -1,0 +1,38 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.nearest-choice-poll",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Nearest 0.12 attempt: Choice poll",
+    "summary": "A text collection in place of an option poll.",
+    "setup": "Invite the specified group and set the required activity values.",
+    "prompt": "Choose exactly one option: red, blue, or green.",
+    "participant": "Use the available 0.12 action when prompted. This example intentionally lacks some source rules.",
+    "completion": "The selected 0.12 contract determines completion; consult the audit for the missing target rules.",
+    "access": "This is a research approximation. Do not present it as a faithful implementation of the source activity."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Moodle Choice activity",
+    "rights": "Original research approximation wording; the source activity is separately credited and linked.",
+    "sourceUrl": "https://docs.moodle.org/405/en/Choice_module"
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "timed_collection@1",
+    "medium": "text",
+    "allowPromptOverride": false
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.nearest-story-by-sentence",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Nearest 0.12 attempt: Story by Sentence",
+    "summary": "A handoff in place of cumulative timed story turns.",
+    "setup": "Invite the specified group and set the required activity values.",
+    "prompt": "Continue one group story during your one-minute turn.",
+    "participant": "Use the available 0.12 action when prompted. This example intentionally lacks some source rules.",
+    "completion": "The selected 0.12 contract determines completion; consult the audit for the missing target rules.",
+    "access": "This is a research approximation. Do not present it as a faithful implementation of the source activity."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "The Family Dinner Project",
+    "rights": "Original research approximation wording; the source activity is separately credited and linked.",
+    "sourceUrl": "https://thefamilydinnerproject.org/fun_content/story-by-sentence/"
+  },
+  "participants": {
+    "min": 4,
+    "max": 4
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "sequential_handoff@1",
+    "medium": "text",
+    "steps": 4,
+    "allowPromptOverride": false
+  }
+}

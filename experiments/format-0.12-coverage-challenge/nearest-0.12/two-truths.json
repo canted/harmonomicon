@@ -1,0 +1,38 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.nearest-two-truths",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Nearest 0.12 attempt: Two Truths and a Tall Tale",
+    "summary": "A text collection in place of hidden-answer rounds.",
+    "setup": "Invite the specified group and set the required activity values.",
+    "prompt": "One speaker supplies two true statements and one invented statement; other participants guess which is invented.",
+    "participant": "Use the available 0.12 action when prompted. This example intentionally lacks some source rules.",
+    "completion": "The selected 0.12 contract determines completion; consult the audit for the missing target rules.",
+    "access": "This is a research approximation. Do not present it as a faithful implementation of the source activity."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "The Family Dinner Project",
+    "rights": "Original research approximation wording; the source activity is separately credited and linked.",
+    "sourceUrl": "https://thefamilydinnerproject.org/4week-program/support/games-and-activities/"
+  },
+  "participants": {
+    "min": 3,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "timed_collection@1",
+    "medium": "text",
+    "allowPromptOverride": false
+  }
+}

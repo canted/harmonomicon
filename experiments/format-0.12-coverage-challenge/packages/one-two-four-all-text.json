@@ -1,0 +1,79 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.one-two-four-all-text",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "1-2-4-All: timed text coordination",
+    "summary": "A fixed online group moves from solo reflection to pairs, quartets, and full-group sharing.",
+    "setup": "Invite eight participants, choose a challenge, and assign every solo, pair, quartet, and full-group partition before the instance starts.",
+    "prompt": "Work on the shared challenge chosen by the organizer.",
+    "participant": "Follow the prompt and group shown for each timed stage. Text submission is optional and limited to one per stage; conversation may also happen outside the activity view.",
+    "completion": "The timed sequence ends after full-group sharing. The app does not select which ideas are important.",
+    "access": "The app displays stage prompts and group membership. Private reflection stays private; pair and quartet text is visible within that group; final-stage text is visible to the full group as it is posted."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Inspired by 1-2-4-All, developed by Henri Lipmanowicz and Keith McCandless (Liberating Structures).",
+    "rights": "Original example package wording for a research audit; source practice is separately credited and linked.",
+    "sourceUrl": "https://www.liberatingstructures.com/1-2-4-all/"
+  },
+  "participants": {
+    "min": 8,
+    "max": 8
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "guided_rounds@1",
+    "allowPromptOverride": true,
+    "rounds": [
+      {
+        "id": "intro",
+        "prompt": "Read the shared challenge and prepare to reflect.",
+        "durationMs": 60000,
+        "groupMin": 8,
+        "groupMax": 8,
+        "visibility": "private"
+      },
+      {
+        "id": "solo",
+        "prompt": "Reflect on the challenge alone.",
+        "durationMs": 60000,
+        "groupMin": 1,
+        "groupMax": 1,
+        "visibility": "private"
+      },
+      {
+        "id": "pairs",
+        "prompt": "Share and build on ideas with your partner.",
+        "durationMs": 120000,
+        "groupMin": 2,
+        "groupMax": 2,
+        "visibility": "group"
+      },
+      {
+        "id": "quartets",
+        "prompt": "Bring the two pairs together and refine ideas.",
+        "durationMs": 300000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "group"
+      },
+      {
+        "id": "all",
+        "prompt": "Share ideas that the full group should hear.",
+        "durationMs": 420000,
+        "groupMin": 8,
+        "groupMax": 8,
+        "visibility": "group"
+      }
+    ]
+  }
+}

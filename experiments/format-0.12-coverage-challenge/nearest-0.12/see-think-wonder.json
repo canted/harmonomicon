@@ -1,0 +1,63 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.nearest-see-think-wonder",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Nearest 0.12 attempt: See, Think, Wonder",
+    "summary": "Timed stages in place of facilitator-paced response prompts.",
+    "setup": "Invite the specified group and set the required activity values.",
+    "prompt": "Observe a shared object, discuss what it suggests, and raise questions.",
+    "participant": "Use the available 0.12 action when prompted. This example intentionally lacks some source rules.",
+    "completion": "The selected 0.12 contract determines completion; consult the audit for the missing target rules.",
+    "access": "This is a research approximation. Do not present it as a faithful implementation of the source activity."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Project Zero, Harvard Graduate School of Education",
+    "rights": "Original research approximation wording; the source activity is separately credited and linked.",
+    "sourceUrl": "https://www.pz.harvard.edu/resources/see-think-wonder"
+  },
+  "participants": {
+    "min": 4,
+    "max": 4
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "guided_rounds@1",
+    "allowPromptOverride": false,
+    "rounds": [
+      {
+        "id": "observe",
+        "prompt": "Describe what you notice.",
+        "durationMs": 60000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "group"
+      },
+      {
+        "id": "interpret",
+        "prompt": "Share an interpretation.",
+        "durationMs": 60000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "group"
+      },
+      {
+        "id": "wonder",
+        "prompt": "Share a question.",
+        "durationMs": 60000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "group"
+      }
+    ]
+  }
+}

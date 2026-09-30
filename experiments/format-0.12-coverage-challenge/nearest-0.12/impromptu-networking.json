@@ -1,0 +1,79 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.audit.nearest-impromptu-networking",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Nearest 0.12 attempt: Impromptu Networking",
+    "summary": "Fixed group rounds in place of partner changes at transitions.",
+    "setup": "Invite the specified group and set the required activity values.",
+    "prompt": "Meet a new partner in each discussion round.",
+    "participant": "Use the available 0.12 action when prompted. This example intentionally lacks some source rules.",
+    "completion": "The selected 0.12 contract determines completion; consult the audit for the missing target rules.",
+    "access": "This is a research approximation. Do not present it as a faithful implementation of the source activity."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Henri Lipmanowicz and Keith McCandless, Liberating Structures",
+    "rights": "Original research approximation wording; the source activity is separately credited and linked.",
+    "sourceUrl": "https://www.liberatingstructures.com/impromptu-networking/"
+  },
+  "participants": {
+    "min": 4,
+    "max": 4
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "guided_rounds@1",
+    "allowPromptOverride": false,
+    "rounds": [
+      {
+        "id": "intro",
+        "prompt": "Consider the gathering challenge.",
+        "durationMs": 180000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "group"
+      },
+      {
+        "id": "pair-one",
+        "prompt": "Discuss with a partner.",
+        "durationMs": 300000,
+        "groupMin": 2,
+        "groupMax": 2,
+        "visibility": "group"
+      },
+      {
+        "id": "pair-two",
+        "prompt": "Discuss with a new partner.",
+        "durationMs": 300000,
+        "groupMin": 2,
+        "groupMax": 2,
+        "visibility": "group"
+      },
+      {
+        "id": "pair-three",
+        "prompt": "Discuss with another new partner.",
+        "durationMs": 300000,
+        "groupMin": 2,
+        "groupMax": 2,
+        "visibility": "group"
+      },
+      {
+        "id": "all",
+        "prompt": "Share with the whole group.",
+        "durationMs": 180000,
+        "groupMin": 4,
+        "groupMax": 4,
+        "visibility": "group"
+      }
+    ]
+  }
+}
