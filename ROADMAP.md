@@ -37,3 +37,5 @@ The [0.12 specification](format/0.12/README.md) freezes the envelope, exact toke
 ## Future advancement rule
 
 A later release should start from a specific uncovered digital mechanism in the [coverage audit](COVERAGE.md), define its exact behavior or capability token and package compatibility, add schema/examples/conformance cases, and repeat independent app host validation. Likely separate extensions are local-calendar scheduling, open participation queues, post-to-view gates, alternating media, project media, and multi-criterion grading. Their order and version numbers are not fixed by 0.12. Existing `@1` token semantics and `(id, version)` package content must remain immutable; incompatible rules need new tokens or a new format identifier.
+
+The [hidden-answer comparison](experiments/hidden-answer-composition/README.md) is an advancement probe, not a selected extension: a narrow definition and a composed plan agree on a Two Truths trace, and the composed plan also runs a related List Game. The contract choice remains open until independent app-host agreement and cost across less similar activities are tested.

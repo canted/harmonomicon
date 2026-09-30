@@ -1,0 +1,10 @@
+{
+  "representation": "composed",
+  "contract": "linear_turn_plan@draft",
+  "operations": [
+    {"op": "roster_turns@draft", "order": "enrollment", "cycles": 1},
+    {"op": "publish_with_hidden_answer@draft", "itemCount": 3, "answerType": "item_index"},
+    {"op": "collect_responses@draft", "actorSet": "other_participants", "responseType": "item_index", "perActor": 1, "visibility": "own_until_reveal"},
+    {"op": "reveal_and_advance@draft", "authority": "speaker", "missingResponses": "omit"}
+  ]
+}

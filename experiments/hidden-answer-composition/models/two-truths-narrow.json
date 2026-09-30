@@ -1,0 +1,10 @@
+{
+  "representation": "narrow",
+  "contract": "hidden_answer_guess@draft",
+  "speakerOrder": "enrollment",
+  "statementCount": 3,
+  "answerType": "item_index",
+  "guessType": "item_index",
+  "guessLimit": 1,
+  "revealAuthority": "speaker"
+}
