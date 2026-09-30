@@ -2,7 +2,7 @@
 
 This document defines the ten exact behavior tokens accepted by the [0.12 package format](README.md). A package selects exactly one contract. Shared event, time, replay, capability, and exchange rules are in the format document. The [schema](package.schema.json) validates structure; these rules define what an app host must do. All actor and media views described here are access-control requirements at read, cache, notification, and byte-read boundaries, not only screen suggestions.
 
-References to example packages point to [this release](examples/). A narrower statement in a contract overrides a shared rule for that contract; otherwise the [shared 0.12 rules](README.md) apply.
+References to example packages point to [this candidate](examples/). A narrower statement in a contract overrides a shared rule for that contract; otherwise the [shared 0.12 rules](README.md) apply.
 
 
 ## `timed_collection@1`

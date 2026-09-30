@@ -8,7 +8,7 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current limit:** Format 0.12 lets apps exchange packages for ten predefined kinds of activity. A package cannot yet combine their rules into a new sequence. For example, an app that supports a timed collection and a handoff cannot run a package that joins them unless its programmers add a new complete behavior. Letting package authors assemble reusable rules is an unfinished part of Harmonomicon.
+**Current limit:** Candidate 0.12 lets apps exchange packages for ten predefined kinds of activity. A package cannot yet combine their rules into a new sequence. For example, an app that supports a timed collection and a handoff cannot run a package that joins them unless its programmers add a new complete behavior. Composable packages are the [1.0 goal](ROADMAP.md#goal-for-10).
 
 ## A simple example: one question for a group
 
@@ -61,7 +61,7 @@ An activity package brings together:
 
 The app that runs a package is called an **app host**. It provides accounts, storage, scheduling, messages, and screens. It also carries out the rules the package names. The app host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-## Format 0.12
+## Candidate 0.12 format
 
 The [candidate 0.12 format](format/0.12/README.md) describes each activity in JSON: directions for people, participation limits, source and rights information, app features it needs, and a named set of rules for the app host to run. The [package schema](format/0.12/package.schema.json) describes the structure; the [behavior contracts](format/0.12/contracts.md) and [image rules](format/0.12/media.md) define what an app host does. An app host checks exact rule and feature versions before starting an activity.
 
@@ -77,7 +77,7 @@ The [activity package inspector](docs/README.md) renders a 0.12 package as an in
 
 ## Roadmap
 
-The [format roadmap](ROADMAP.md) records the candidate evidence and the candidate 0.12 validation. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
+The [format roadmap](ROADMAP.md) records the candidate evidence and the requirements for 1.0, including composable packages. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
 
 ## Research
 
