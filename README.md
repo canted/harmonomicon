@@ -24,6 +24,8 @@ The package would describe the activity in terms like these:
 
 An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [0.12 package](format/0.12/examples/group-check-in.json) describes this check-in.
 
+![Static package blueprint for the check-in: waiting, open, then closed at the configured deadline](docs/previews/check-in.svg)
+
 ## A richer example: image caption contest
 
 Imagine a group caption contest run in an app. Instead of everyone captioning the same picture, participants first upload several images. The app then gives each image contributor two images uploaded by other people. They choose one and write a caption. More than one person may caption the same image.
@@ -38,6 +40,8 @@ The activity has a few stages:
 The package says when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how votes are counted. It also says what happens if fewer than three images arrive or someone never submits a caption. In format 0.12, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A later contract could define a different recovery rule. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
 The [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) defines image collection, two-source offers, linked text captions, voting, and a result. Both local validation app hosts run it with stored PNG images and audience-controlled access.
+
+![Static package blueprint for the image caption contest: source collection, responses, voting, and an insufficient-source branch](docs/previews/caption-contest.svg)
 
 Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
 
@@ -64,6 +68,10 @@ It defines ten sets of rules. **Timed collection** gathers private submissions f
 Images can be stored as content-hash references that the app host authorizes when someone reads the bytes. Packages can move between apps. An app host can import a package, report the rule and feature versions it supports, and export the same package for another app host. The activity's ID and version identify its content; changing that content requires a new version. The package contains data rather than code tied to one server language.
 
 The [conformance cases](format/0.12/conformance/README.md) give sample actions and expected participant views. The [local trial with two app hosts](validation/0.12/README.md) imported the same text and image packages into independent Python and Node.js services, ran all 41 cases, and transferred a newly authored package between them. Image support currently covers a bounded PNG subset. The local trial does not cover other media types, notifications, human judgment of feedback, multi-criterion ratings, migration of an activity in progress, or public deployment.
+
+## Package inspector
+
+The [activity package inspector](docs/README.md) renders a 0.12 package as an interactive diagram. It ships with these two examples and can open another package JSON file locally. The static diagrams above display directly in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages; the repository file view does not run its JavaScript.
 
 ## Roadmap
 

@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test viewer.test.mjs",
+    "sync-examples": "node sync-examples.mjs",
+    "previews": "node generate-previews.mjs"
+  }
+}

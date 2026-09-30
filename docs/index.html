@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Activity package inspector · Harmonomicon</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-mark" aria-hidden="true"><span></span></div>
+    <div><a class="brand" href="./">HARMONOMICON</a><div class="brand-sub">Activity package inspector · format 0.12</div></div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">READ A PACKAGE</p>
+      <h1 id="page-title">See what the app does.</h1>
+      <p>Open any Harmonomicon 0.12 package to inspect its phases, actions, audience views, and app requirements. This is a blueprint of the package. Dates, people, and outcomes belong to a particular instance.</p>
+    </section>
+
+    <section class="load-panel" aria-labelledby="load-title">
+      <div><h2 id="load-title">Choose a package</h2><p>Start with a repository example or open a JSON file from your computer.</p></div>
+      <div class="load-controls">
+        <label class="field"><span>Example</span><select id="example-select"><option value="group-check-in">One-question check-in</option><option value="image-caption-vote">Image caption contest</option></select></label>
+        <span class="or" aria-hidden="true">or</span>
+        <label class="file-control"><input id="file-input" type="file" accept=".json,application/json"><span>Open package JSON</span></label>
+      </div>
+    </section>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <section class="package-heading" aria-labelledby="package-title">
+      <div><p class="eyebrow">PACKAGE BLUEPRINT</p><h2 id="package-title">Loading…</h2><p id="package-summary"></p></div>
+      <div class="identity"><span id="package-contract" class="contract-badge"></span><span id="package-identity"></span></div>
+    </section>
+
+    <section class="workspace" aria-label="Package diagram and inspector">
+      <div class="diagram-panel">
+        <div class="panel-heading"><div><h3>Behavior flow</h3><p>Choose a stage to inspect its rules.</p></div><div class="diagram-tools"><button type="button" id="fit-button" title="Fit the whole diagram">Fit</button><button type="button" id="png-button" title="Save a static image of the diagram">Save PNG</button></div></div>
+        <div id="diagram" role="img" aria-label="Interactive graph of the package phases"></div>
+        <p class="graph-fallback" id="graph-fallback" hidden>The diagram library could not load. The stage list and inspector remain available below.</p>
+        <div class="legend"><span><i class="swatch phase"></i> Stage</span><span><i class="swatch terminal"></i> Terminal</span><span><i class="swatch branch"></i> Exception</span><span>Arrows name the transition</span></div>
+        <div class="stage-list"><h4>Stages</h4><div id="stage-buttons" role="group" aria-label="Select a stage"></div></div>
+      </div>
+      <aside class="inspector" aria-labelledby="inspector-title">
+        <p class="eyebrow">SELECTED STAGE</p><h3 id="inspector-title">—</h3><p id="inspector-subtitle" class="inspector-subtitle"></p><p id="inspector-description"></p>
+        <div id="inspector-sections"></div>
+      </aside>
+    </section>
+
+    <section class="layers" aria-labelledby="layers-title"><div><p class="eyebrow">WHAT YOU ARE LOOKING AT</p><h2 id="layers-title">Six parts of a portable activity</h2></div><div class="layer-grid">
+      <div><b>Package</b><span id="layer-prompt"></span></div>
+      <div><b>Participants</b><span id="layer-participants"></span></div>
+      <div><b>Instance setup</b><span id="layer-setup"></span></div>
+      <div><b>Events</b><span id="layer-events"></span></div>
+      <div><b>Views</b><span id="layer-views"></span></div>
+      <div><b>App requirements</b><span id="layer-requires"></span></div>
+    </div></section>
+
+    <p class="boundary">This visualization summarizes the selected 0.12 behavior contract. It does not run an instance, certify an app host, or infer rules from human-facing instructions. The normative rules are in the repository’s <code>format/0.12</code> specification.</p>
+  </main>
+  <footer>Harmonomicon · Activity package format 0.12</footer>
+  <script src="vendor/cytoscape.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
