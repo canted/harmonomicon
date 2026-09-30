@@ -1,12 +1,8 @@
 import {buildDiagram} from './model.js';
-import {palette, diagramFill} from './palette.js';
+import {diagramFill} from './palette.js';
 import {layoutDiagram, edgeLabelWidth, NODE_FONT_SIZE, EDGE_FONT_SIZE} from './diagram-layout.js';
 
 const $ = id => document.getElementById(id);
-const examples = {
-  'group-check-in':'examples/group-check-in.json',
-  'image-caption-vote':'examples/image-caption-vote.json'
-};
 let current = null;
 let graph = null;
 let graphOriginX = 0;
@@ -35,12 +31,12 @@ function selectStage(id, focus = true) {
   if (!stage) return;
   setText('inspector-title',stage.title);
   setText('inspector-subtitle',stage.subtitle || '');
-  setText('inspector-description',stage.description || 'Select another stage to compare what changes.');
+  setText('inspector-description',stage.description || 'This step has no prompt property.');
   const panel = $('inspector-sections'); panel.replaceChildren();
-  addDetail(panel,'Instance setup',stage.setup);
-  addDetail(panel,'Allowed events',stage.events);
-  addDetail(panel,'Audience view',stage.view);
-  addDetail(panel,'Rules and boundaries',stage.rules);
+  addDetail(panel,'JSON location',[stage.pointer]);
+  for (const [key,value] of stage.properties) addDetail(panel,key,[typeof value === 'string' ? value : JSON.stringify(value)]);
+  const raw = document.createElement('pre'); raw.textContent = JSON.stringify(stage.step,null,2);
+  panel.append(raw);
   for (const button of $('stage-buttons').querySelectorAll('button')) {
     button.setAttribute('aria-pressed',String(button.dataset.stage === id));
   }
@@ -50,7 +46,7 @@ function selectStage(id, focus = true) {
     node.addClass('selected');
     if (focus) {
       const viewport = $('diagram-scroll');
-      viewport.scrollTo({left:Math.max(0,node.renderedPosition().x-viewport.clientWidth/2),behavior:'smooth'});
+      viewport.scrollTo({left:Math.max(0,node.renderedPosition().x-viewport.clientWidth/2),top:Math.max(0,node.renderedPosition().y-viewport.clientHeight/2),behavior:'smooth'});
     }
   }
 }
@@ -59,7 +55,7 @@ function renderGraph(diagram) {
   const fallback = $('graph-fallback');
   if (typeof window.cytoscape !== 'function') {
     fallback.hidden = false;
-    $('diagram').setAttribute('aria-label','Graph unavailable; use the stage list below');
+    $('diagram').setAttribute('aria-label','Graph unavailable; use the step list below');
     return;
   }
   fallback.hidden = true;
@@ -67,11 +63,10 @@ function renderGraph(diagram) {
   $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, layout.width)}px`;
   $('diagram').style.height = `${layout.height}px`;
   graphOriginX = Math.max(0, ($('diagram-scroll').clientWidth - layout.width) / 2);
-  $('diagram-scroll').scrollLeft = 0;
-  const byId = new Map(layout.nodes.map(node => [node.id,node]));
+  $('diagram-scroll').scrollTo({left:0,top:0});
   const elements = [
     ...layout.nodes.map(node => ({data:{id:node.id,label:node.title,fill:diagramFill(node),width:node.width,height:node.height},position:{x:node.x,y:node.y}})),
-    ...diagram.edges.map(edge => ({data:{id:edge.id,source:edge.source,target:edge.target,label:edge.label,kind:byId.get(edge.target).row === 0 ? 'main' : 'branch',labelOffsetX:24+edgeLabelWidth(edge.label)/2}}))
+    ...diagram.edges.map(edge => ({data:{id:edge.id,source:edge.source,target:edge.target,label:edge.label,kind:edge.kind === 'nested' ? 'branch' : 'main',labelOffsetX:24+edgeLabelWidth(edge.label)/2}}))
   ];
   graph = window.cytoscape({
     container:$('diagram'), elements, layout:{name:'preset',fit:false},
@@ -83,13 +78,13 @@ function renderGraph(diagram) {
     ]
   });
   graph.on('tap','node',event => selectStage(event.target.id()));
-  graph.ready(() => { graph.zoom(1); graph.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollLeft = 0; });
+  graph.ready(() => { graph.zoom(1); graph.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollTo({left:0,top:0}); });
 }
 function render(diagram) {
   current = diagram;
   setText('package-title',diagram.title);
   setText('package-summary',diagram.summary);
-  setText('package-contract',diagram.contract);
+  setText('package-contract',diagram.format);
   setText('package-identity',`${diagram.id} · ${diagram.version}`);
   const buttons = $('stage-buttons'); buttons.replaceChildren();
   for (const stage of diagram.nodes) {
@@ -100,10 +95,10 @@ function render(diagram) {
     buttons.append(button);
   }
   setText('layer-prompt',diagram.prompt);
-  setText('layer-participants',`${diagram.participants.min}–${diagram.participants.max} participants; organizer separate`);
-  setText('layer-setup',unique(diagram.nodes.flatMap(n=>n.setup)).join(' · ') || 'Actor bindings and contract setup at creation');
-  setText('layer-events',unique(diagram.nodes.flatMap(n=>n.events)).join(' · ') || 'See the selected stage');
-  setText('layer-views','Each actor receives the contract’s audience-filtered view; select a stage for details.');
+  setText('layer-participants',`${diagram.participants.min}–${diagram.participants.max} participants`);
+  setText('layer-setup',diagram.content.setup ?? 'Not declared');
+  setText('layer-events',unique(diagram.nodes.map(n=>n.subtitle)).join(' · '));
+  setText('layer-views',diagram.content.access ?? 'Not declared');
   setText('layer-requires',diagram.requires.join(' · '));
   renderGraph(diagram);
   selectStage(diagram.nodes[0].id, false);
@@ -112,15 +107,15 @@ function openPackage(pkg,label) {
   try {
     const diagram = buildDiagram(pkg);
     render(diagram);
-    setStatus(`${label} loaded. The viewer summarizes known 0.12 rules; it is not a package conformance validator.`);
+    setStatus(`${label} loaded. The diagram shows declared runbook structure; it does not execute or validate operation rules.`);
   } catch (error) {
     setStatus(error instanceof Error ? error.message : 'Could not read this package.',true);
   }
 }
-async function loadExample(key) {
+async function loadExample(file) {
   try {
     setStatus('Loading example…');
-    const response = await fetch(examples[key]);
+    const response = await fetch(file);
     if (!response.ok) throw new Error(`Example could not be loaded (${response.status}).`);
     openPackage(await response.json(),'Example');
   } catch (error) {
@@ -135,7 +130,7 @@ $('file-input').addEventListener('change',async event=>{
   try { openPackage(JSON.parse(await file.text()),file.name); }
   catch { setStatus('The selected file is not valid JSON.',true); }
 });
-$('fit-button').addEventListener('click',()=>{ graph?.zoom(1); graph?.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollLeft = 0; });
+$('fit-button').addEventListener('click',()=>{ graph?.zoom(1); graph?.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollTo({left:0,top:0}); });
 $('png-button').addEventListener('click',()=>{
   if (!graph) { setStatus('The graph library is unavailable; PNG export is disabled.',true); return; }
   const anchor=document.createElement('a');
@@ -143,4 +138,17 @@ $('png-button').addEventListener('click',()=>{
   anchor.download=`${current?.id?.split('.').pop() || 'activity'}-diagram.png`;
   anchor.click();
 });
-loadExample('group-check-in');
+async function loadCatalog() {
+  try {
+    const response = await fetch('examples.json');
+    if (!response.ok) throw new Error('Could not load example catalog.');
+    const catalog = await response.json();
+    const select = $('example-select'); select.replaceChildren();
+    for (const entry of catalog) {
+      const option = document.createElement('option'); option.value = entry.file; option.textContent = entry.title;
+      select.append(option);
+    }
+    if (catalog.length) await loadExample(catalog[0].file);
+  } catch { setStatus('Could not load examples. You can still open a local package JSON file.',true); }
+}
+loadCatalog();

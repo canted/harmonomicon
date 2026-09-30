@@ -26,11 +26,7 @@ The package would describe the activity in terms like these:
 
 The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.13 package](format/0.13/examples/check-in.json) if it supports those operations.
 
-```mermaid
-flowchart TD
-    A[Collect private answers] -->|Everyone answers or one hour passes| B[Reveal answers to the group]
-    B --> C[Complete]
-```
+![Runbook structure generated from the check-in package: answer then reveal](docs/previews/check-in.svg)
 
 ## A richer example: image caption contest
 
@@ -46,8 +42,6 @@ The activity has a few stages:
 The package says when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how votes are counted. It also says what happens if fewer than three images arrive or someone never submits a caption. In format 0.12, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A future runbook could select a different recovery step. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
 The earlier [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) runs this through one predefined behavior, with stored PNG images and audience-controlled access. Expressing its image assignments and voting as reusable runbook steps is part of the remaining work. Candidate 0.13 does not yet run this caption contest.
-
-![Static package blueprint for the image caption contest: source collection, responses, voting, and an insufficient-source branch](docs/previews/caption-contest.svg)
 
 Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
 
@@ -79,7 +73,7 @@ The [earlier 0.12 candidate](format/0.12/README.md) contains ten complete activi
 
 ## Package inspector
 
-The [activity package inspector](docs/README.md) renders a 0.12 package as an interactive diagram. It ships with the earlier check-in and caption examples and can open another 0.12 package JSON file locally. It does not yet render 0.13 runbooks. The caption diagram above displays directly in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages; the repository file view does not run its JavaScript.
+The [activity package inspector](docs/README.md) renders candidate 0.13 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages.
 
 ## Roadmap
 

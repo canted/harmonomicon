@@ -1,0 +1,26 @@
+[
+  {
+    "file": "examples/check-in.json",
+    "title": "Group check-in"
+  },
+  {
+    "file": "examples/choice-poll.json",
+    "title": "Choose a group outing"
+  },
+  {
+    "file": "examples/list-game.json",
+    "title": "List Game"
+  },
+  {
+    "file": "examples/see-think-wonder.json",
+    "title": "See, Think, Wonder"
+  },
+  {
+    "file": "examples/timed-story.json",
+    "title": "Timed cumulative story"
+  },
+  {
+    "file": "examples/two-truths.json",
+    "title": "Two Truths and a Tall Tale"
+  }
+]

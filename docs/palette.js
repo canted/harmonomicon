@@ -9,10 +9,8 @@ export const palette = Object.freeze({
   white: '#ffffff'
 });
 
-/** Solid fills for stages; exception and terminal colors stay consistent. */
+/** Colors depend only on declared nesting and sequence position. */
 export function diagramFill(node) {
-  if (['insufficient', 'stalled'].includes(node.id)) return palette.pink;
-  if (['complete', 'closed'].includes(node.id)) return palette.purple;
-  const stages = [palette.blue, palette.cyan, palette.yellow, palette.green];
+  const stages = [palette.blue, palette.cyan, palette.yellow, palette.green, palette.purple, palette.pink];
   return stages[node.column % stages.length];
 }

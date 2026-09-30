@@ -10,3 +10,5 @@
 .workspace,.diagram-panel,.inspector{min-width:0}
 .diagram-scroll{width:100%;max-width:100%}
 @media(max-width:900px){.workspace{grid-template-columns:minmax(0,1fr)}}
+
+.inspector pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; }

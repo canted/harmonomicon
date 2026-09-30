@@ -1,8 +1,10 @@
 # Activity package inspector
 
-A static, browser-based first pass at rendering Harmonomicon 0.12 packages. It uses [Cytoscape.js](https://js.cytoscape.org/) for the interactive graph and a small contract-specific model in [`model.js`](model.js) for stage labels and details. No server or account is required. The bundled library is pinned to 3.34.3 under its [MIT license](vendor/LICENSE.cytoscape).
+A static browser viewer for candidate 0.13 activity packages. It loads package JSON and renders `runbook.steps` in array order. Nested `steps` appear to the side. Selecting a node shows its operation, JSON location, all settings, and the original step JSON.
 
-The viewer ships with the two README examples and accepts a local JSON file for any of the ten defined 0.12 behavior contracts. Select a stage in the graph or the accessible stage list to inspect its events, setup, views, and boundaries. The graph can be saved as PNG. The two static SVG previews in [`previews/`](previews/) are generated from the same model for display in the repository README.
+There are no activity templates, contract-specific phases, or inferred waiting/completion nodes. Node labels are the declared step IDs. **next** connects siblings in the same array; **steps** connects a parent to its nested body. These are structural links, not a runtime trace: repeated participant turns are not expanded, and arrows do not imply extra close conditions, outcomes, or events. Operation semantics remain in the [specification](../format/0.13/operations.md).
+
+The example catalog is generated from every JSON file in `format/0.13/examples/`. New examples require no viewer code changes. Local package files can also be opened without adding them to the catalog. Unknown operation names can be inspected as data; the viewer does not claim to execute them or validate conformance.
 
 ## Run locally
 
@@ -12,27 +14,14 @@ From the repository root:
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000/docs/`. The server is needed to fetch the bundled examples; the **Open package JSON** control also accepts files from your computer. Nothing is uploaded to a server by this viewer.
+Open `http://localhost:8000/docs/`. Cytoscape is bundled locally. GitHub Pages can serve the same folder; GitHub’s repository file view displays the generated SVG previews but does not run the interactive viewer.
 
-## GitHub display
-
-GitHub renders the checked-in SVG previews in the repository README. Its repository file view does not execute this interactive JavaScript application. To host the interactive viewer from the same repository, publish the `docs/` folder with [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) after the repository has a remote and is pushed. In repository **Settings → Pages**, choose **Deploy from a branch**, the main branch, and `/docs`. This project has not configured or activated Pages.
-
-## Scope
-
-This is a **package blueprint**, not an instance simulator or full schema validator. It shows contract phases and representative allowed actions. The package does not include the real participants, actual deadline values, chosen group partitions, event history, or resulting audience views. Those belong to instance setup and execution. The diagram uses contract-specific templates; unknown formats and behavior tokens fail explicitly. It does not infer extra rules from `content` text. Read the normative [0.12 format](../format/0.12/README.md) and [behavior contracts](../format/0.12/contracts.md) for exact implementation requirements.
-
-The first pass summarizes repeated occurrences and handoff steps as loops or ranges, rather than drawing hundreds of identical nodes. It does not currently accept an instance or event trace. The viewer checks basic identifying fields before drawing but does **not** replace the repository's reference validator.
-
-## Maintain and check
-
-From the repository root:
+## Refresh examples and previews
 
 ```sh
 node docs/sync-examples.mjs
 node docs/generate-previews.mjs
 node --test docs/viewer.test.mjs
-python3 format/0.12/check.py
 ```
 
-Run the first two commands when either bundled example or its diagram model changes. The test checks that all twenty example packages produce graphs, the two bundled samples match the normative examples, and the two README flows retain their central visibility and branch rules.
+Synchronization copies source JSON unchanged, generates the catalog from package titles, and removes stale bundled examples. Preview generation uses the same model and layout as the viewer. Tests verify that arbitrary step IDs, operations, ordering, nesting, and settings come from JSON.

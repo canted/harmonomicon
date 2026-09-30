@@ -10,20 +10,20 @@
 <body>
   <header class="site-header">
     <div class="brand-mark" aria-hidden="true"><span></span></div>
-    <div><a class="brand" href="./">HARMONOMICON</a><div class="brand-sub">Activity package inspector · format 0.12</div></div>
+    <div><a class="brand" href="./">HARMONOMICON</a><div class="brand-sub">Activity package inspector · format 0.13</div></div>
   </header>
 
   <main>
     <section class="intro" aria-labelledby="page-title">
       <p class="eyebrow">READ A PACKAGE</p>
       <h1 id="page-title">See what the app does.</h1>
-      <p>Open any Harmonomicon 0.12 package to inspect its phases, actions, audience views, and app requirements. This is a blueprint of the package. Dates, people, and outcomes belong to a particular instance.</p>
+      <p>Open any Harmonomicon 0.13 package to inspect its ordered runbook steps, nested sequences, settings, and app requirements. This is a blueprint of the package. Dates, people, and outcomes belong to a particular instance.</p>
     </section>
 
     <section class="load-panel" aria-labelledby="load-title">
       <div><h2 id="load-title">Choose a package</h2><p>Start with a repository example or open a JSON file from your computer.</p></div>
       <div class="load-controls">
-        <label class="field"><span>Example</span><select id="example-select"><option value="group-check-in">One-question check-in</option><option value="image-caption-vote">Image caption contest</option></select></label>
+        <label class="field"><span>Example</span><select id="example-select"></select></label>
         <span class="or" aria-hidden="true">or</span>
         <label class="file-control"><input id="file-input" type="file" accept=".json,application/json"><span>Open package JSON</span></label>
       </div>
@@ -37,14 +37,14 @@
 
     <section class="workspace" aria-label="Package diagram and inspector">
       <div class="diagram-panel">
-        <div class="panel-heading"><div><h3>Behavior flow</h3><p>Choose a stage to inspect its rules.</p></div><div class="diagram-tools"><button type="button" id="fit-button" title="Return to the start of the diagram">Start</button><button type="button" id="png-button" title="Save a static image of the diagram">Save PNG</button></div></div>
-        <div class="diagram-scroll" id="diagram-scroll"><div id="diagram" role="img" aria-label="Interactive graph of the package phases"></div></div>
-        <p class="graph-fallback" id="graph-fallback" hidden>The diagram library could not load. The stage list and inspector remain available below.</p>
-        <div class="legend"><span><i class="swatch phase"></i> Stage</span><span><i class="swatch terminal"></i> Terminal</span><span><i class="swatch branch"></i> Exception</span><span>Arrows name the transition</span></div>
-        <div class="stage-list"><h4>Stages</h4><div id="stage-buttons" role="group" aria-label="Select a stage"></div></div>
+        <div class="panel-heading"><div><h3>Runbook structure</h3><p>Choose a step to inspect its JSON.</p></div><div class="diagram-tools"><button type="button" id="fit-button" title="Return to the start of the diagram">Start</button><button type="button" id="png-button" title="Save a static image of the diagram">Save PNG</button></div></div>
+        <div class="diagram-scroll" id="diagram-scroll"><div id="diagram" role="img" aria-label="Interactive graph of the declared runbook steps"></div></div>
+        <p class="graph-fallback" id="graph-fallback" hidden>The diagram library could not load. The step list and inspector remain available below.</p>
+        <div class="legend"><span>next = next step in the same array · steps = nested body</span></div>
+        <div class="stage-list"><h4>Steps</h4><div id="stage-buttons" role="group" aria-label="Select a step"></div></div>
       </div>
       <aside class="inspector" aria-labelledby="inspector-title">
-        <p class="eyebrow">SELECTED STAGE</p><h3 id="inspector-title">—</h3><p id="inspector-subtitle" class="inspector-subtitle"></p><p id="inspector-description"></p>
+        <p class="eyebrow">SELECTED STEP</p><h3 id="inspector-title">—</h3><p id="inspector-subtitle" class="inspector-subtitle"></p><p id="inspector-description"></p>
         <div id="inspector-sections"></div>
       </aside>
     </section>
@@ -53,14 +53,14 @@
       <div><b>Package</b><span id="layer-prompt"></span></div>
       <div><b>Participants</b><span id="layer-participants"></span></div>
       <div><b>Instance setup</b><span id="layer-setup"></span></div>
-      <div><b>Events</b><span id="layer-events"></span></div>
+      <div><b>Operations</b><span id="layer-events"></span></div>
       <div><b>Views</b><span id="layer-views"></span></div>
       <div><b>App requirements</b><span id="layer-requires"></span></div>
     </div></section>
 
-    <p class="boundary">This visualization summarizes the selected 0.12 behavior contract. It does not run an instance, certify an app host, or infer rules from human-facing instructions. The normative rules are in the repository’s <code>format/0.12</code> specification.</p>
+    <p class="boundary">This visualization reads the package’s runbook directly. Arrows show array order and nesting, not runtime outcomes or participant iterations. It does not run an instance, certify an app host, or infer rules from human-facing instructions. The normative rules are in the repository’s <code>format/0.13</code> specification.</p>
   </main>
-  <footer>Harmonomicon · Activity package format 0.12</footer>
+  <footer>Harmonomicon · Activity package format 0.13</footer>
   <script src="vendor/cytoscape.min.js"></script>
   <script type="module" src="app.js"></script>
 </body>

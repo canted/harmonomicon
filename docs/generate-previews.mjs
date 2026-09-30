@@ -22,7 +22,7 @@ function wrapTitle(title) {
 function render(diagram) {
   const layout = layoutDiagram(diagram);
   const titleLines = wrapTitle(diagram.title);
-  const metadata = `behavior: ${diagram.contract}`;
+  const metadata = `${diagram.format}`;
   const metadataY = titleLines.length > 1 ? 92 : 64;
   const offsetY = metadataY + 32;
   const width = Math.ceil(Math.max(layout.width, 40+Math.max(...titleLines.map(line => line.length*15)), 40+metadata.length*9));
@@ -31,7 +31,7 @@ function render(diagram) {
   const byId = new Map(layout.nodes.map(node => [node.id,node]));
   const edges = diagram.edges.map(edge => {
     const from = byId.get(edge.source), to = byId.get(edge.target);
-    const branch = to.row !== 0;
+    const branch = edge.kind === 'nested';
     let d, lx, ly, anchor, lines;
     if (branch) {
       const sx = from.x+from.width/2+offsetX, sy = from.y+offsetY;
@@ -42,7 +42,9 @@ function render(diagram) {
     } else {
       const sx = from.x+offsetX, sy = from.y+from.height/2+offsetY;
       const tx = to.x+offsetX, ty = to.y-to.height/2+offsetY-5;
-      d = `M ${sx} ${sy} L ${tx} ${ty}`;
+      d = to.column > from.column + 1
+        ? `M ${sx-from.width/2} ${from.y+offsetY} H ${sx-from.width/2-15} V ${to.y+offsetY} H ${tx-to.width/2-5}`
+        : `M ${sx} ${sy} L ${tx} ${ty}`;
       lines = [edge.label];
       lx = sx+24; ly = (sy+ty)/2+5; anchor = 'start';
     }
@@ -59,8 +61,14 @@ function render(diagram) {
 <rect width="100%" height="100%" fill="${palette.white}"/>${title}<text x="20" y="${metadataY}" fill="#000000" font-family="monospace" font-size="16">${escape(metadata)}</text>
 ${edges}${nodes}</svg>\n`;
 }
-for (const [name,target] of [['group-check-in','check-in.svg'],['image-caption-vote','caption-contest.svg']]) {
-  const pkg = JSON.parse(fs.readFileSync(path.join(here,'examples',`${name}.json`),'utf8'));
+const catalog = JSON.parse(fs.readFileSync(path.join(here,'examples.json'),'utf8'));
+const targets = new Set(catalog.map(entry => path.basename(entry.file, '.json') + '.svg'));
+for (const file of fs.readdirSync(output)) {
+  if (file.endsWith('.svg') && !targets.has(file)) fs.unlinkSync(path.join(output,file));
+}
+for (const entry of catalog) {
+  const pkg = JSON.parse(fs.readFileSync(path.join(here,entry.file),'utf8'));
+  const target = path.basename(entry.file,'.json') + '.svg';
   fs.writeFileSync(path.join(output,target),render(buildDiagram(pkg)));
   console.log(target);
 }
