@@ -1,4 +1,5 @@
 import {buildDiagram} from './model.js';
+import {palette, tint} from './palette.js';
 
 const $ = id => document.getElementById(id);
 const examples = {
@@ -45,7 +46,10 @@ function selectStage(id, focus = true) {
     graph.nodes().removeClass('selected');
     const node = graph.getElementById(id);
     node.addClass('selected');
-    if (focus) graph.animate({center:{eles:node},duration:200});
+    if (focus) {
+      const viewport = $('diagram-scroll');
+      viewport.scrollTo({left:Math.max(0,node.renderedPosition().x-viewport.clientWidth/2),behavior:'smooth'});
+    }
   }
 }
 function renderGraph(diagram) {
@@ -57,23 +61,26 @@ function renderGraph(diagram) {
     return;
   }
   fallback.hidden = true;
+  const maxColumn = Math.max(...diagram.nodes.map(node => node.column));
+  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, 450 + maxColumn * 360)}px`;
+  $('diagram-scroll').scrollLeft = 0;
   const elements = [
-    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,subtitle:n.subtitle,kind:n.id==='insufficient'||n.id==='stalled'?'branch':n.id==='complete'||n.id==='closed'?'terminal':'phase'},position:{x:125+n.column*245,y:155+n.row*155}})),
+    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,subtitle:n.subtitle,kind:n.id==='insufficient'||n.id==='stalled'?'branch':n.id==='complete'||n.id==='closed'?'terminal':'phase'},position:{x:190+n.column*360,y:180+n.row*230}})),
     ...diagram.edges.map(e => ({data:{id:e.id,source:e.source,target:e.target,label:e.label}}))
   ];
   graph = window.cytoscape({
-    container:$('diagram'), elements, layout:{name:'preset',fit:true,padding:40},
+    container:$('diagram'), elements, layout:{name:'preset',fit:true,padding:70},
     minZoom:0.25,maxZoom:2.5,
     style:[
-      {selector:'node',style:{'shape':'round-rectangle','width':180,'height':72,'background-color':'#edf4ff','border-width':2,'border-color':'#285bd2','label':'data(label)','color':'#172238','font-size':13,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':158,'text-valign':'center','text-halign':'center','padding':'8px'}},
-      {selector:'node[kind="terminal"]',style:{'background-color':'#f5f0ff','border-color':'#6842b9'}},
-      {selector:'node[kind="branch"]',style:{'background-color':'#fff3e8','border-color':'#ad6e41'}},
-      {selector:'node.selected',style:{'border-width':5,'border-color':'#172238'}},
-      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#8798b7','target-arrow-shape':'triangle','target-arrow-color':'#8798b7','arrow-scale':1.1,'label':'data(label)','font-size':10,'font-family':'Arial, sans-serif','color':'#48556d','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':3,'text-margin-y':-8}},
+      {selector:'node',style:{'shape':'round-rectangle','width':260,'height':124,'background-color':tint(palette.blue),'border-width':4,'border-color':palette.blue,'label':'data(label)','color':palette.blueDark,'font-size':26,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':230,'text-valign':'center','text-halign':'center','padding':'16px'}},
+      {selector:'node[kind="terminal"]',style:{'background-color':tint(palette.purple),'border-color':palette.purple,'color':palette.purpleDark}},
+      {selector:'node[kind="branch"]',style:{'background-color':tint(palette.pink),'border-color':palette.pink,'color':palette.pinkDark}},
+      {selector:'node.selected',style:{'border-width':8,'border-color':palette.greenDark}},
+      {selector:'edge',style:{'curve-style':'bezier','width':4,'line-color':palette.cyan,'target-arrow-shape':'triangle','target-arrow-color':palette.cyan,'arrow-scale':1.3,'label':'data(label)','font-size':20,'font-family':'Arial, sans-serif','color':palette.cyanDark,'text-rotation':'autorotate','text-background-color':palette.white,'text-background-opacity':1,'text-background-padding':6,'text-margin-y':-14}},
     ]
   });
   graph.on('tap','node',event => selectStage(event.target.id()));
-  graph.ready(() => graph.fit(undefined,40));
+  graph.ready(() => { graph.fit(undefined,70); $('diagram-scroll').scrollLeft = 0; });
 }
 function render(diagram) {
   current = diagram;
@@ -125,7 +132,7 @@ $('file-input').addEventListener('change',async event=>{
   try { openPackage(JSON.parse(await file.text()),file.name); }
   catch { setStatus('The selected file is not valid JSON.',true); }
 });
-$('fit-button').addEventListener('click',()=>graph?.fit(undefined,40));
+$('fit-button').addEventListener('click',()=>{ graph?.fit(undefined,70); $('diagram-scroll').scrollLeft = 0; });
 $('png-button').addEventListener('click',()=>{
   if (!graph) { setStatus('The graph library is unavailable; PNG export is disabled.',true); return; }
   const anchor=document.createElement('a');
