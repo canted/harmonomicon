@@ -12,6 +12,7 @@ export function stepLines(step) {
       lines.push(`${label}: ${field.options.join(' · ')} · ${field.visibility}`);
       continue;
     }
+    if (field.type === 'integer') value += ` (${field.min}–${field.max})`;
     if (field.count !== undefined) value += ` (${field.count} items)`;
     if (field.indexOf) value += ` → ${field.indexOf}`;
     lines.push(`${name}: ${value} · ${field.visibility}`);
@@ -20,6 +21,11 @@ export function stepLines(step) {
   if (step.source) lines.push(`Source: ${step.source}${step.field ? '.'+step.field : ''}`);
   if (step.policy) lines.push(`Policy: ${step.policy}`);
   if (step.perActor !== undefined) lines.push(`Items per participant: ${step.perActor}`);
+  if (step.round) lines.push(`Round: ${step.round}`);
+  if (step.offset !== undefined) lines.push(`Roster offset: ${step.offset}`);
+  if (step.op === 'rate@1') lines.push(`Rating: ${step.min}–${step.max} · private`);
+  if (step.targetCount !== undefined && step.targetCount !== null) lines.push(`Scale mean to ${step.targetCount} ratings`);
+  if (step.limit !== undefined) lines.push(`Publish ranks through ${step.limit}, including all cutoff ties`);
   const ends = [];
   if (step.close) ends.push(({all:'all eligible submissions',organizer:'organizer advances',turn:'current participant advances',deadline:'deadline'})[step.close] ?? step.close);
   if (step.op === 'append@1') { lines.push('Actor: current participant'); ends.push('text submitted'); }

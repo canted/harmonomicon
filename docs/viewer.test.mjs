@@ -8,7 +8,7 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.15/examples');
+const source = path.join(here,'../format/0.16/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -135,4 +135,16 @@ test('scheduled references and declared settings remain visible without invented
   assert.ok(svg.includes('instance setting opens_at'));
   assert.ok(svg.includes('instance setting closes_at'));
   assert.ok(!svg.includes('[object Object]'));
+});
+
+
+test('rating routes, numeric bounds, exact aggregation and cutoff settings come from package JSON', () => {
+  const pkg=read(path.join(source,'crowd-scoring.json'));
+  assert.match(stepLines(pkg.runbook.steps[1]).join('\n'),/Roster offset: 1/);
+  assert.match(stepLines(pkg.runbook.steps[2]).join('\n'),/Rating: 1–5 · private/);
+  assert.match(stepLines(pkg.runbook.steps[11]).join('\n'),/Scale mean to 5 ratings/);
+  assert.match(stepLines(pkg.runbook.steps[12]).join('\n'),/including all cutoff ties/);
+  assert.match(stepLines({op:'collect@1',fields:{value:{type:'integer',min:0,max:100,visibility:'private'}}}).join('\n'),/integer \(0–100\)/);
+  const svg=renderSvg(buildDiagram(pkg));
+  assert.ok(svg.includes('Rating: 1–5'));assert.ok(svg.includes('Roster offset: 5'));
 });

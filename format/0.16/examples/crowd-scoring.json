@@ -1,0 +1,165 @@
+{
+  "format": "harmonomicon.activity-package/0.16",
+  "id": "harmonomicon.crowdscoring",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "25/10 proposed digital translation",
+    "summary": "Collect proposals, route them to distinct reviewers, collect private numeric ratings, and publish exact ranked results.",
+    "setup": "Invite participants in the desired enrollment order.",
+    "prompt": "Contribute an idea and its first practical step.",
+    "participant": "Submit one idea, then rate only the item assigned for each named round.",
+    "completion": "The app publishes ranked results; missing ratings do not extend a deadline.",
+    "access": "Only assigned readers see an item before ranking. Raw ratings stay private to their contributor."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "sourceUrl": "https://www.liberatingstructures.com/25-10-crowdsourcing",
+    "credit": "Adapted from Liberating Structures 25/10 by Henri Lipmanowicz and Keith McCandless; deterministic digital routing, timing, and tie handling are declared here, not source-endorsed online instructions.",
+    "rights": "Original wording for a proposed digital translation; source material is attributed under its stated CC BY-SA terms."
+  },
+  "participants": {
+    "min": 6,
+    "max": 100
+  },
+  "requires": [
+    "aggregate@1",
+    "clock@1",
+    "durable_state@1",
+    "identity@1",
+    "integer_values@1",
+    "policy:competition_rank_all_ties@1",
+    "policy:mean_scaled_scores@1",
+    "policy:roster_offset@1",
+    "pool@1",
+    "private_views@1",
+    "publish_ranking@1",
+    "rate@1",
+    "route@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "ideas",
+        "op": "pool@1",
+        "prompt": "Submit an idea and a first step.",
+        "perActor": 1,
+        "close": "deadline",
+        "afterMs": 300000
+      },
+      {
+        "id": "route_1",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_1",
+        "offset": 1
+      },
+      {
+        "id": "rate_1",
+        "op": "rate@1",
+        "source": "route_1",
+        "prompt": "Rate your assigned idea.",
+        "min": 1,
+        "max": 5,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "route_2",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_2",
+        "offset": 2
+      },
+      {
+        "id": "rate_2",
+        "op": "rate@1",
+        "source": "route_2",
+        "prompt": "Rate your assigned idea.",
+        "min": 1,
+        "max": 5,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "route_3",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_3",
+        "offset": 3
+      },
+      {
+        "id": "rate_3",
+        "op": "rate@1",
+        "source": "route_3",
+        "prompt": "Rate your assigned idea.",
+        "min": 1,
+        "max": 5,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "route_4",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_4",
+        "offset": 4
+      },
+      {
+        "id": "rate_4",
+        "op": "rate@1",
+        "source": "route_4",
+        "prompt": "Rate your assigned idea.",
+        "min": 1,
+        "max": 5,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "route_5",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_5",
+        "offset": 5
+      },
+      {
+        "id": "rate_5",
+        "op": "rate@1",
+        "source": "route_5",
+        "prompt": "Rate your assigned idea.",
+        "min": 1,
+        "max": 5,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "totals",
+        "op": "aggregate@1",
+        "sources": [
+          "rate_1",
+          "rate_2",
+          "rate_3",
+          "rate_4",
+          "rate_5"
+        ],
+        "policy": "policy:mean_scaled_scores@1",
+        "targetCount": 5
+      },
+      {
+        "id": "results",
+        "op": "publish_ranking@1",
+        "source": "totals",
+        "limit": 10,
+        "policy": "policy:competition_rank_all_ties@1"
+      }
+    ]
+  },
+  "settings": {}
+}

@@ -8,6 +8,10 @@
     "title": "Choose a group outing"
   },
   {
+    "file": "examples/crowd-scoring.json",
+    "title": "25/10 proposed digital translation"
+  },
+  {
     "file": "examples/gratitude-pool.json",
     "title": "Gratefulness Grab Bag"
   },
@@ -26,6 +30,10 @@
   {
     "file": "examples/pooled-ideas-and-pairs.json",
     "title": "Pooled ideas followed by pair discussion"
+  },
+  {
+    "file": "examples/proposal-assessment.json",
+    "title": "Peer proposal assessment"
   },
   {
     "file": "examples/scheduled-check-in-pairs.json",
