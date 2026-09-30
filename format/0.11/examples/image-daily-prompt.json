@@ -1,0 +1,42 @@
+{
+  "format": "harmonomicon.activity-package/0.11",
+  "id": "org.harmonomicon.example.image-daily-prompt",
+  "version": "0.11.0",
+  "content": {
+    "language": "en",
+    "title": "Image Shared daily micro-story",
+    "summary": "A digitally mediated image-reference version of this activity.",
+    "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+    "prompt": "Write a short story inspired by an ordinary object.",
+    "participant": "Submit one story in each open window. The group can read it immediately.",
+    "completion": "All stories remain available in earlier windows. Missing entries do not block the next window.",
+    "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "image_ref@1"
+  ],
+  "behavior": {
+    "contract": "repeated_collection@1",
+    "medium": "image_ref",
+    "allowPromptOverride": false,
+    "intervalMs": 86400000,
+    "windowMs": 72000000,
+    "occurrences": 3,
+    "visibility": "group_immediate"
+  }
+}

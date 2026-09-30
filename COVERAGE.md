@@ -1,8 +1,8 @@
 # Activity coverage toward 1.0
 
-This audit compares the [25 source-backed and constructed activity cards](research/activities/) with the [0.10 candidate](format/0.10/README.md). A match means a package can express a **digitally mediated rule slice** of the card, not that software reproduces the whole social, artistic, physical, or human-facilitated practice. The cards remain the record of the real procedure. “Partial” names a rule still missing for a closer digital version; it is not an instruction to invent that rule for the original activity.
+This audit compares the [25 source-backed and constructed activity cards](research/activities/) with the [0.11 candidate](format/0.11/README.md). A match means a package can express a **digitally mediated rule slice** of the card, not that software reproduces the whole social, artistic, physical, or human-facilitated practice. The cards remain the record of the real procedure. “Partial” names a rule still missing for a closer digital version; it is not an instruction to invent that rule for the original activity.
 
-| Activity card | 0.10 digital slice | Missing for a closer digital version |
+| Activity card | 0.11 digital slice | Missing for a closer digital version |
 |---|---|---|
 | [1-2-4-All](research/activities/1-2-4-all.md) | Timed prompts, solo/pair/quartet/full-group partitions, and after-round text sharing. | Human synthesis, facilitator adjustment, and spoken discussion remain outside app observation. |
 | [750 Words month challenge](research/activities/750-words-month-challenge.md) | Private recurring entries and group-visible completion status. | Local-calendar days, word threshold, monthly aggregate and source-specific consequences. |
@@ -11,7 +11,7 @@ This audit compares the [25 source-backed and constructed activity cards](resear
 | [Call and Response Songs](research/activities/call-and-response-songs.md) | Directions and sequential cues. | Low-latency live audio synchrony and observation of singing; ordinary internet hosts cannot claim these from the package alone. |
 | [Cook Along Challenge](research/activities/cook-along-challenge.md) | Prompt, deadline, and PNG result submission. | Live coordination and other media; food preparation remains outside software observation. |
 | [Cover and Response](research/activities/cover-and-response.md) | `offered_response_vote@1` models PNG or text sources, two offers, linked text responses, a vote, and a result. | Audio storage and other selection policies. |
-| [Critical Response Process](research/activities/critical-response-process.md) | Directions and a work submission. | Ordered speaking rights and each maker-controlled permission decision. Human judgment of neutrality remains outside software. |
+| [Critical Response Process](research/activities/critical-response-process.md) | Facilitator-controlled text phases, linked questions, and a maker decision for each opinion request. | Human judgment of neutrality, tone, and live speech remains outside software. |
 | [Day One shared journal](research/activities/day-one-shared-journal.md) | An ongoing text space with comments and per-entry private or group sharing. | Media in this contract, reactions, approval or changing membership, and the source product’s full sharing controls. |
 | [Drawception picture telephone](research/activities/drawception-picture-telephone.md) | Concealed sequential handoff or bounded competing text offers with deadline fallback. | Alternating image/text steps in one chain and the source-specific queue lease, skip/requeue rules. |
 | [Exquisite Corpse drawing](research/activities/exquisite-corpse-drawing.md) | PNG handoff and final reveal are possible. | Drawing tools, alternating media, and limited guide-mark view. Paper folding is a physical variant beyond app control. |
@@ -22,7 +22,7 @@ This audit compares the [25 source-backed and constructed activity cards](resear
 | [Gratitude Spies](research/activities/gratitude-spies.md) | Prompt and timed closing collection. | Private target assignment and later disclosure; real-world observation remains human. |
 | [itch.io ranked game jam](research/activities/itch-ranked-game-jam.md) | Team progress, final entry, and text review window; a separate simple caption vote demonstrates one selection policy. | The source-specific rating eligibility, allocation, criteria, aggregation, release, and project media remain outside this contract. |
 | [Jamuary](research/activities/jamuary.md) | Optional prompt series with text entries, comments, and no imposed missed-day signal. | Local-calendar timing and audio/link entries in the ongoing-space contract. |
-| [Moodle Workshop](research/activities/moodle-workshop.md) | Staged final submission and peer text review in a narrow variant. | Configurable phase authority, reviewer allocation, grading policy, manual intervention, late work. |
+| [Moodle Workshop](research/activities/moodle-workshop.md) | Staged final submission and peer text review in a narrow variant; a separate dialogue contract demonstrates manual phase authority. | Reviewer allocation, grading policy, reversible phases, manual intervention, and late work. |
 | [Pass the Parcel](research/activities/pass-the-parcel.md) | Directions and a possible digital-possession adaptation. | The physical holder, layers, and music stop are not app-observed. A digital game needs its own exact rules. |
 | [Relay Jam](research/activities/relay-jam-2026.md) | Fixed teams and a final showcase can be adapted. | Exclusive A-to-B work phases, editable artifact handoff, missed-turn recovery. |
 | [Roll the Orange](research/activities/roll-the-orange.md) | Sequential prompts or preassigned competing offers could be adapted. | Participant-chosen next recipient and turn coverage; the physical orange and speech remain human. |
@@ -32,11 +32,11 @@ This audit compares the [25 source-backed and constructed activity cards](resear
 
 ## Coverage decisions
 
-The current nine contracts establish timed submission, hidden handoff, fixed recurrence, source-to-response assignment, fixed-team project progress/review, an ongoing text space with optional prompt cadence, timed guided rounds with changing groups, bounded competitive handoff, and one source-response voting branch. These are **nine behavior families**, not a claim that any card is fully reproduced. The table shows why a count of runnable packages alone would overstate coverage: media, schedule, authority, and recovery rules often change the activity.
+The current ten contracts establish timed submission, hidden handoff, fixed recurrence, source-to-response assignment, fixed-team project progress/review, an ongoing text space with optional prompt cadence, timed guided rounds with changing groups, bounded competitive handoff, one source-response voting branch, and a permissioned feedback dialogue. These are **ten behavior families**, not a claim that any card is fully reproduced. The table shows why a count of runnable packages alone would overstate coverage: media, schedule, authority, and recovery rules often change the activity.
 
-The remaining **widely reused digital families** to test before choosing a 1.0 set are:
+The remaining decisions for the 1.0 coverage set are:
 
-1. **Permissioned facilitation:** a maker or participant explicitly approves a particular response before it becomes visible, with role-specific rights and a facilitator-controlled phase where the source procedure requires it. This affects Critical Response and parts of Moodle Workshop. The fixed timed groups in `guided_rounds@1` do not grant these permissions.
+1. **Permissioned facilitation:** 0.11 tests facilitator-controlled phases and a maker decision for each opinion request in a digital feedback circle. Moodle Workshop’s reversible phases, review allocation, and grading are different rules; human judgment of neutral questions remains outside host enforcement.
 2. **Open-queue recovery:** 0.8 tests fixed offer pairs, timeout or decline fallback, and one accepted contribution. A participant-driven queue, skip/requeue, and lease expiry remain different rules for Drawception-like digital chains.
 3. **Selection and broader media:** 0.9 validates a bounded PNG reference with real storage and access checks in four contracts. A one-ballot caption selection is now tested; ranked jams and peer review still need their distinct eligibility, criteria, aggregation, and publication rules. Audio, links, drawing tools, and media in project or ongoing-space contracts are also outside the current subset.
 

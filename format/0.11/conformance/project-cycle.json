@@ -1,0 +1,940 @@
+{
+  "package": "../examples/small-team-jam.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "project_cycle@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "teams": [
+      {
+        "id": "red",
+        "members": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "id": "blue",
+        "members": [
+          "c",
+          "d"
+        ]
+      }
+    ],
+    "opensAt": 10,
+    "submissionDeadline": 30,
+    "reviewDeadline": 50
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "group-post",
+        "type": "post_progress",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "audience": "group",
+          "value": "Early sketch"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": []
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "team-post",
+        "type": "post_progress",
+        "actor": "b",
+        "at": 12,
+        "payload": {
+          "audience": "team",
+          "value": "Secret prototype"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": []
+              },
+              {
+                "id": "team-post",
+                "team": "red",
+                "actor": "b",
+                "audience": "team",
+                "value": "Secret prototype",
+                "comments": []
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": []
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": []
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "group-comment",
+        "type": "comment",
+        "actor": "c",
+        "at": 13,
+        "payload": {
+          "postId": "group-post",
+          "value": "Looking good"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              },
+              {
+                "id": "team-post",
+                "team": "red",
+                "actor": "b",
+                "audience": "team",
+                "value": "Secret prototype",
+                "comments": []
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "cross-team-comment",
+        "type": "comment",
+        "actor": "c",
+        "at": 14,
+        "payload": {
+          "postId": "team-post",
+          "value": "I should not see this"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "team-comment",
+        "type": "comment",
+        "actor": "a",
+        "at": 15,
+        "payload": {
+          "postId": "team-post",
+          "value": "Let us test it"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              },
+              {
+                "id": "team-post",
+                "team": "red",
+                "actor": "b",
+                "audience": "team",
+                "value": "Secret prototype",
+                "comments": [
+                  {
+                    "actor": "a",
+                    "value": "Let us test it"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "red-final",
+        "type": "submit_final",
+        "actor": "a",
+        "at": 20,
+        "payload": {
+          "value": "Red story"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              },
+              {
+                "id": "team-post",
+                "team": "red",
+                "actor": "b",
+                "audience": "team",
+                "value": "Secret prototype",
+                "comments": [
+                  {
+                    "actor": "a",
+                    "value": "Let us test it"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 1,
+            "reviewCount": 0,
+            "ownFinal": {
+              "team": "red",
+              "actor": "a",
+              "value": "Red story"
+            },
+            "ownReviews": []
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 1,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "red-duplicate",
+        "type": "submit_final",
+        "actor": "b",
+        "at": 21,
+        "payload": {
+          "value": "Second red story"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "blue-final",
+        "type": "submit_final",
+        "actor": "d",
+        "at": 22,
+        "payload": {
+          "value": "Blue story"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "review-open",
+        "type": "tick",
+        "actor": "system",
+        "at": 30,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "review",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "submitted"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 2,
+            "reviewCount": 0,
+            "ownFinal": {
+              "team": "blue",
+              "actor": "d",
+              "value": "Blue story"
+            },
+            "ownReviews": [],
+            "finals": [
+              {
+                "team": "red",
+                "actor": "a",
+                "value": "Red story"
+              },
+              {
+                "team": "blue",
+                "actor": "d",
+                "value": "Blue story"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "review",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "submitted"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 2,
+            "reviewCount": 0,
+            "finals": [
+              {
+                "team": "red",
+                "actor": "a",
+                "value": "Red story"
+              },
+              {
+                "team": "blue",
+                "actor": "d",
+                "value": "Blue story"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "red-review",
+        "type": "submit_review",
+        "actor": "a",
+        "at": 31,
+        "payload": {
+          "team": "blue",
+          "value": "Strong ending"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "review",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "submitted"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              },
+              {
+                "id": "team-post",
+                "team": "red",
+                "actor": "b",
+                "audience": "team",
+                "value": "Secret prototype",
+                "comments": [
+                  {
+                    "actor": "a",
+                    "value": "Let us test it"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 2,
+            "reviewCount": 1,
+            "ownFinal": {
+              "team": "red",
+              "actor": "a",
+              "value": "Red story"
+            },
+            "ownReviews": [
+              {
+                "actor": "a",
+                "team": "blue",
+                "value": "Strong ending"
+              }
+            ],
+            "finals": [
+              {
+                "team": "red",
+                "actor": "a",
+                "value": "Red story"
+              },
+              {
+                "team": "blue",
+                "actor": "d",
+                "value": "Blue story"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "review",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "submitted"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 2,
+            "reviewCount": 1,
+            "ownFinal": {
+              "team": "blue",
+              "actor": "d",
+              "value": "Blue story"
+            },
+            "ownReviews": [],
+            "finals": [
+              {
+                "team": "red",
+                "actor": "a",
+                "value": "Red story"
+              },
+              {
+                "team": "blue",
+                "actor": "d",
+                "value": "Blue story"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "self-review",
+        "type": "submit_review",
+        "actor": "a",
+        "at": 32,
+        "payload": {
+          "team": "red",
+          "value": "Us"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "duplicate-review",
+        "type": "submit_review",
+        "actor": "a",
+        "at": 33,
+        "payload": {
+          "team": "blue",
+          "value": "Again"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "blue-review",
+        "type": "submit_review",
+        "actor": "c",
+        "at": 34,
+        "payload": {
+          "team": "red",
+          "value": "Nice interaction"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "complete",
+        "type": "tick",
+        "actor": "system",
+        "at": 50,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "submitted"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 2,
+            "reviewCount": 2,
+            "finals": [
+              {
+                "team": "red",
+                "actor": "a",
+                "value": "Red story"
+              },
+              {
+                "team": "blue",
+                "actor": "d",
+                "value": "Blue story"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "a",
+                "team": "blue",
+                "value": "Strong ending"
+              },
+              {
+                "actor": "c",
+                "team": "red",
+                "value": "Nice interaction"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "d",
+          "expect": {
+            "phase": "complete",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "submitted"
+              }
+            ],
+            "progress": [
+              {
+                "id": "group-post",
+                "team": "red",
+                "actor": "a",
+                "audience": "group",
+                "value": "Early sketch",
+                "comments": [
+                  {
+                    "actor": "c",
+                    "value": "Looking good"
+                  }
+                ]
+              }
+            ],
+            "finalCount": 2,
+            "reviewCount": 2,
+            "ownFinal": {
+              "team": "blue",
+              "actor": "d",
+              "value": "Blue story"
+            },
+            "ownReviews": [],
+            "finals": [
+              {
+                "team": "red",
+                "actor": "a",
+                "value": "Red story"
+              },
+              {
+                "team": "blue",
+                "actor": "d",
+                "value": "Blue story"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "a",
+                "team": "blue",
+                "value": "Strong ending"
+              },
+              {
+                "actor": "c",
+                "team": "red",
+                "value": "Nice interaction"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "late-comment",
+        "type": "comment",
+        "actor": "a",
+        "at": 50,
+        "payload": {
+          "postId": "group-post",
+          "value": "Late"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "red-review",
+        "type": "submit_review",
+        "actor": "a",
+        "at": 51,
+        "payload": {
+          "team": "blue",
+          "value": "Strong ending"
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "red-review",
+        "type": "submit_review",
+        "actor": "a",
+        "at": 52,
+        "payload": {
+          "team": "blue",
+          "value": "Changed"
+        }
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

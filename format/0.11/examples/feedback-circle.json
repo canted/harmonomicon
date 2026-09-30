@@ -1,0 +1,42 @@
+{
+  "format": "harmonomicon.activity-package/0.11",
+  "id": "org.harmonomicon.example.feedback-circle",
+  "version": "0.11.0",
+  "content": {
+    "language": "en",
+    "title": "Feedback circle",
+    "summary": "A facilitator guides a maker and responders through text feedback with permission before opinions.",
+    "setup": "Invite a maker and responders, and name a facilitator who will advance each phase.",
+    "prompt": "Share a work in progress and ask the group for feedback.",
+    "participant": "Follow the current phase prompt. Request permission before posting an opinion.",
+    "completion": "Read the feedback transcript and the maker’s permission decisions.",
+    "access": "Everyone in the circle can read accepted text and decisions; the app does not assess tone or usefulness."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "permissioned_dialogue@1",
+    "allowPromptOverride": false,
+    "phasePrompts": {
+      "meaning": "Responders: say what caught your attention in the work.",
+      "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+      "neutral_questions": "Responders: ask questions for the maker to answer.",
+      "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+    }
+  }
+}
