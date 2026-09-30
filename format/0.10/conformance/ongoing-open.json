@@ -1,0 +1,308 @@
+{
+  "package": "../examples/shared-notebook.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "ongoing_space@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 10,
+    "endsAt": 50
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "entries": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "private-a",
+        "type": "post_entry",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "audience": "private",
+          "value": "Hidden note"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "private-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "private",
+                "value": "Hidden note",
+                "comments": []
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "entries": []
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "entries": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "group-a",
+        "type": "post_entry",
+        "actor": "a",
+        "at": 12,
+        "payload": {
+          "audience": "group",
+          "value": "Shared note"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "group-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "group",
+                "value": "Shared note",
+                "comments": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "private-comment",
+        "type": "comment",
+        "actor": "b",
+        "at": 13,
+        "payload": {
+          "entryId": "private-a",
+          "value": "Cannot comment"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "group-comment",
+        "type": "comment",
+        "actor": "b",
+        "at": 14,
+        "payload": {
+          "entryId": "group-a",
+          "value": "Thank you"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "entries": [
+              {
+                "id": "private-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "private",
+                "value": "Hidden note",
+                "comments": []
+              },
+              {
+                "id": "group-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "group",
+                "value": "Shared note",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "Thank you"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "group-b",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 20,
+        "payload": {
+          "audience": "group",
+          "value": "Another note"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 50,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "complete",
+            "entries": [
+              {
+                "id": "private-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "private",
+                "value": "Hidden note",
+                "comments": []
+              },
+              {
+                "id": "group-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "group",
+                "value": "Shared note",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "Thank you"
+                  }
+                ]
+              },
+              {
+                "id": "group-b",
+                "actor": "b",
+                "occurrence": null,
+                "audience": "group",
+                "value": "Another note",
+                "comments": []
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "entries": [
+              {
+                "id": "group-a",
+                "actor": "a",
+                "occurrence": null,
+                "audience": "group",
+                "value": "Shared note",
+                "comments": [
+                  {
+                    "actor": "b",
+                    "value": "Thank you"
+                  }
+                ]
+              },
+              {
+                "id": "group-b",
+                "actor": "b",
+                "occurrence": null,
+                "audience": "group",
+                "value": "Another note",
+                "comments": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "late-comment",
+        "type": "comment",
+        "actor": "a",
+        "at": 50,
+        "payload": {
+          "entryId": "group-b",
+          "value": "Late"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "group-b",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 51,
+        "payload": {
+          "audience": "group",
+          "value": "Another note"
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "group-b",
+        "type": "post_entry",
+        "actor": "b",
+        "at": 52,
+        "payload": {
+          "audience": "group",
+          "value": "Changed"
+        }
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

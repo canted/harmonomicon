@@ -1,0 +1,60 @@
+{
+  "package": "../examples/two-offer-story-chain.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1"
+  ],
+  "contracts": [],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "startsAt": 10,
+    "routes": [
+      [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      [
+        [
+          "c",
+          "d"
+        ],
+        [
+          "a",
+          "b"
+        ]
+      ],
+      [
+        [
+          "a",
+          "d"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    ]
+  },
+  "expectStatus": "unsupported",
+  "missing": [
+    "behavior:competitive_handoff@1",
+    "clock@1"
+  ],
+  "events": []
+}

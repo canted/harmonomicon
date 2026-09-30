@@ -1,0 +1,452 @@
+{
+  "package": "../examples/two-offer-story-chain.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "competitive_handoff@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "startsAt": 10,
+    "routes": [
+      [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ],
+      [
+        [
+          "c",
+          "d"
+        ],
+        [
+          "a",
+          "b"
+        ]
+      ],
+      [
+        [
+          "a",
+          "d"
+        ],
+        [
+          "b",
+          "c"
+        ]
+      ]
+    ]
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0,
+            "ownEntries": [],
+            "offer": {
+              "step": 1,
+              "attempt": 1,
+              "deadline": 60010,
+              "input": "A mysterious package arrived at the station."
+            }
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0,
+            "ownEntries": []
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "invalid",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "payload": {
+          "step": 1,
+          "attempt": 1,
+          "value": ""
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "a-decline",
+        "type": "decline",
+        "actor": "a",
+        "at": 12,
+        "payload": {
+          "step": 1,
+          "attempt": 1
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0,
+            "ownEntries": []
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 1,
+            "deadline": 60010,
+            "acceptedCount": 0,
+            "ownEntries": [],
+            "offer": {
+              "step": 1,
+              "attempt": 1,
+              "deadline": 60010,
+              "input": "A mysterious package arrived at the station."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "b-decline",
+        "type": "decline",
+        "actor": "b",
+        "at": 13,
+        "payload": {
+          "step": 1,
+          "attempt": 1
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 2,
+            "deadline": 60013,
+            "acceptedCount": 0,
+            "ownEntries": [],
+            "offer": {
+              "step": 1,
+              "attempt": 2,
+              "deadline": 60013,
+              "input": "A mysterious package arrived at the station."
+            }
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "step": 1,
+            "attempt": 2,
+            "deadline": 60013,
+            "acceptedCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "c-step1",
+        "type": "submit",
+        "actor": "c",
+        "at": 14,
+        "payload": {
+          "step": 1,
+          "attempt": 2,
+          "value": "First line"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "open",
+            "step": 2,
+            "attempt": 1,
+            "deadline": 60014,
+            "acceptedCount": 1,
+            "ownEntries": [
+              {
+                "step": 1,
+                "actor": "c",
+                "value": "First line"
+              }
+            ],
+            "offer": {
+              "step": 2,
+              "attempt": 1,
+              "deadline": 60014,
+              "input": "First line"
+            }
+          }
+        },
+        {
+          "actor": "d",
+          "expect": {
+            "phase": "open",
+            "step": 2,
+            "attempt": 1,
+            "deadline": 60014,
+            "acceptedCount": 1,
+            "ownEntries": [],
+            "offer": {
+              "step": 2,
+              "attempt": 1,
+              "deadline": 60014,
+              "input": "First line"
+            }
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "step": 2,
+            "attempt": 1,
+            "deadline": 60014,
+            "acceptedCount": 1,
+            "ownEntries": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "late-step1",
+        "type": "submit",
+        "actor": "d",
+        "at": 15,
+        "payload": {
+          "step": 1,
+          "attempt": 2,
+          "value": "Too late"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "c-step2",
+        "type": "submit",
+        "actor": "c",
+        "at": 16,
+        "payload": {
+          "step": 2,
+          "attempt": 1,
+          "value": "Second line"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "step": 3,
+            "attempt": 1,
+            "deadline": 60016,
+            "acceptedCount": 2,
+            "ownEntries": [],
+            "offer": {
+              "step": 3,
+              "attempt": 1,
+              "deadline": 60016,
+              "input": "Second line"
+            }
+          }
+        },
+        {
+          "actor": "d",
+          "expect": {
+            "phase": "open",
+            "step": 3,
+            "attempt": 1,
+            "deadline": 60016,
+            "acceptedCount": 2,
+            "ownEntries": [],
+            "offer": {
+              "step": 3,
+              "attempt": 1,
+              "deadline": 60016,
+              "input": "Second line"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "a-step3",
+        "type": "submit",
+        "actor": "a",
+        "at": 17,
+        "payload": {
+          "step": 3,
+          "attempt": 1,
+          "value": "Final line"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "step": null,
+            "attempt": null,
+            "deadline": null,
+            "acceptedCount": 3,
+            "entries": [
+              {
+                "step": 1,
+                "actor": "c",
+                "value": "First line"
+              },
+              {
+                "step": 2,
+                "actor": "c",
+                "value": "Second line"
+              },
+              {
+                "step": 3,
+                "actor": "a",
+                "value": "Final line"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "complete",
+            "step": null,
+            "attempt": null,
+            "deadline": null,
+            "acceptedCount": 3,
+            "ownEntries": [],
+            "entries": [
+              {
+                "step": 1,
+                "actor": "c",
+                "value": "First line"
+              },
+              {
+                "step": 2,
+                "actor": "c",
+                "value": "Second line"
+              },
+              {
+                "step": 3,
+                "actor": "a",
+                "value": "Final line"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "loser",
+        "type": "submit",
+        "actor": "d",
+        "at": 17,
+        "payload": {
+          "step": 3,
+          "attempt": 1,
+          "value": "Other final"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "a-step3",
+        "type": "submit",
+        "actor": "a",
+        "at": 18,
+        "payload": {
+          "step": 3,
+          "attempt": 1,
+          "value": "Final line"
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "a-step3",
+        "type": "submit",
+        "actor": "a",
+        "at": 19,
+        "payload": {
+          "step": 3,
+          "attempt": 1,
+          "value": "Changed"
+        }
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

@@ -1,0 +1,1201 @@
+#!/usr/bin/env python3
+"""Local 0.10 host: Python HTTP server, independent SQLite state, and deadline worker."""
+
+import argparse
+import base64
+import binascii
+import zlib
+import hashlib
+import json
+import re
+import runpy
+import sqlite3
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import urlsplit
+
+ROOT = Path(__file__).resolve().parents[2]
+VALIDATE_PACKAGE = runpy.run_path(str(ROOT / "format/0.10/check.py"))["validate_package"]
+PACKAGES = {}
+PACKAGE_HASHES = {}
+
+
+def canonical_package(package):
+    return json.dumps(package, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+CAPABILITIES = {"identity@1", "serial_events@1", "durable_state@1", "private_views@1", "clock@1", "text@1", "image_ref@1", "policy:balanced_artifacts_exact32@1"}
+CONTRACTS = {"timed_collection@1", "sequential_handoff@1", "repeated_collection@1", "offered_response@1", "offered_response_vote@1", "project_cycle@1", "ongoing_space@1", "guided_rounds@1", "competitive_handoff@1"}
+SAFE_MAX = 9007199254740991
+MAX_IMAGE_BYTES = 524288
+REF_RE = re.compile(r"sha256:[0-9a-f]{64}\Z")
+
+
+def valid_png(data):
+    if not isinstance(data, bytes) or not (8 <= len(data) <= MAX_IMAGE_BYTES) or data[:8] != b"\x89PNG\r\n\x1a\n":
+        return False
+    pos, width, height, channels, idat = 8, None, None, None, []
+    saw_iend = False
+    while pos + 12 <= len(data):
+        length = int.from_bytes(data[pos:pos + 4], "big")
+        end = pos + 12 + length
+        if length > MAX_IMAGE_BYTES or end > len(data):
+            return False
+        kind = data[pos + 4:pos + 8]
+        body = data[pos + 8:pos + 8 + length]
+        crc = int.from_bytes(data[pos + 8 + length:end], "big")
+        if zlib.crc32(kind + body) & 0xffffffff != crc:
+            return False
+        if width is None:
+            if kind != b"IHDR" or length != 13:
+                return False
+            width = int.from_bytes(body[:4], "big")
+            height = int.from_bytes(body[4:8], "big")
+            if not (1 <= width <= 1024 and 1 <= height <= 1024 and body[8] == 8
+                    and body[9] in (2, 6) and body[10:] == b"\0\0\0"):
+                return False
+            channels = 3 if body[9] == 2 else 4
+        elif kind == b"IDAT":
+            idat.append(body)
+        elif kind == b"IEND":
+            if length != 0 or not idat or end != len(data):
+                return False
+            saw_iend = True
+            break
+        elif kind == b"IHDR" or not (len(kind) == 4 and 97 <= kind[0] <= 122
+                                            and 65 <= kind[2] <= 90 and all(65 <= c <= 90 or 97 <= c <= 122 for c in kind)):
+            return False
+        pos = end
+    if not saw_iend:
+        return False
+    expected = height * (1 + width * channels)
+    try:
+        decoder = zlib.decompressobj()
+        pixels = decoder.decompress(b"".join(idat), expected + 1)
+        pixels += decoder.flush(max(1, expected - len(pixels) + 1))
+    except zlib.error:
+        return False
+    return (decoder.eof and not decoder.unused_data and not decoder.unconsumed_tail and len(pixels) == expected
+            and all(pixels[row * (1 + width * channels)] <= 4 for row in range(height)))
+
+
+def media_value(conn, instance_id, actor, value):
+    return (type(value) is str and REF_RE.fullmatch(value) is not None and
+            conn.execute("SELECT 1 FROM media WHERE instance_id=? AND actor=? AND ref=?",
+                         (instance_id, actor, value)).fetchone() is not None)
+
+
+def upload_media(conn, instance_id, actor, body):
+    if type(body) is not dict or set(body) != {"mediaType", "data"} or body["mediaType"] != "image/png" or type(body["data"]) is not str:
+        return 400, {"status": "invalid_media"}
+    row = conn.execute("SELECT state_json FROM instances WHERE id=?", (instance_id,)).fetchone()
+    if row is None:
+        return 404, {"status": "not_found"}
+    state = json.loads(row["state_json"])
+    if actor not in state["participants"] or state.get("medium") != "image_ref" and state.get("sourceMedium") != "image_ref":
+        return 400, {"status": "invalid_media"}
+    try:
+        data = base64.b64decode(body["data"], validate=True)
+    except (binascii.Error, ValueError):
+        return 400, {"status": "invalid_media"}
+    if base64.b64encode(data).decode() != body["data"] or not valid_png(data):
+        return 400, {"status": "invalid_media"}
+    ref = "sha256:" + hashlib.sha256(data).hexdigest()
+    conn.execute("INSERT OR IGNORE INTO media(instance_id,actor,ref,media_type,bytes) VALUES (?,?,?,?,?)",
+                 (instance_id, actor, ref, "image/png", data))
+    return 200, {"ref": ref}
+
+
+def media_read(conn, instance_id, actor, ref):
+    if REF_RE.fullmatch(ref) is None:
+        return 404, {"status": "not_found"}
+    row = conn.execute("SELECT state_json FROM instances WHERE id=?", (instance_id,)).fetchone()
+    if row is None:
+        return 404, {"status": "not_found"}
+    state = json.loads(row["state_json"])
+    now = clock(conn)
+    reconcile(conn, instance_id, state, now)
+    view = semantic_view(state, actor, now)
+    owned = conn.execute("SELECT 1 FROM media WHERE instance_id=? AND actor=? AND ref=?", (instance_id, actor, ref)).fetchone()
+    visible_refs = []
+    if state.get("sourceMedium") == "image_ref":
+        if "ownSource" in view:
+            visible_refs.append(view["ownSource"]["value"])
+        visible_refs.extend(source["value"] for source in view.get("offer", []))
+        visible_refs.extend(source["value"] for source in view.get("sources", []))
+    elif state.get("medium") == "image_ref":
+        if "own" in view:
+            visible_refs.append(view["own"]["value"])
+        visible_refs.extend(entry["value"] for entry in view.get("entries", []))
+        for occurrence in view.get("occurrences", []):
+            if "own" in occurrence:
+                visible_refs.append(occurrence["own"]["value"])
+            visible_refs.extend(entry["value"] for entry in occurrence.get("entries", []))
+        if state["contract"] == "sequential_handoff@1" and state["index"] > 0 and "input" in view:
+            visible_refs.append(view["input"])
+    if not owned and ref not in visible_refs:
+        return 404, {"status": "not_found"}
+    blob = conn.execute("SELECT media_type,bytes FROM media WHERE instance_id=? AND ref=? LIMIT 1", (instance_id, ref)).fetchone()
+    if blob is None:
+        return 404, {"status": "not_found"}
+    return 200, {"ref": ref, "mediaType": blob["media_type"], "data": base64.b64encode(blob["bytes"]).decode()}
+
+
+def valid_time(value):
+    return type(value) is int and 0 <= value <= SAFE_MAX
+
+
+def valid_text(value):
+    return type(value) is str and bool(value)
+
+
+MAX_U64 = 18446744073709551615
+MOD32 = 1 << 32
+
+
+def canonical_u64(value):
+    return type(value) is str and len(value) <= 20 and re.fullmatch(r"0|[1-9][0-9]*", value) is not None and int(value) <= MAX_U64
+
+
+def offer_phase(state, now):
+    if now < state["opensAt"]:
+        return "waiting"
+    if now < state["sourceDeadline"]:
+        return "sources_open"
+    if len(state["sources"]) < 3:
+        return "insufficient_sources"
+    if now < state["responseDeadline"]:
+        return "responses_open"
+    if state["contract"] == "offered_response_vote@1" and now < state["voteDeadline"]:
+        return "voting"
+    return "complete"
+
+
+def choose_offer(state, actor):
+    exposed = {source["actor"]: 0 for source in state["sources"]}
+    for offer in state["offers"].values():
+        for source_id in offer:
+            exposed[source_id] += 1
+    r, u = int(state["roundId"]), int(actor)
+    def ranking(source):
+        a = int(source["actor"])
+        x = ((r * 73856093) % MOD32) ^ ((u * 19349663) % MOD32) ^ ((a * 83492791) % MOD32)
+        return exposed[source["actor"]], x ^ (x >> 16), a
+    return [source["actor"] for source in sorted(
+        (source for source in state["sources"] if source["actor"] != actor), key=ranking)[:2]]
+
+
+def token_hash(value):
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def db_connect(path):
+    conn = sqlite3.connect(path, timeout=30, isolation_level=None)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA busy_timeout=30000")
+    return conn
+
+
+def initialize_db(path):
+    with db_connect(path) as conn:
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.executescript("""
+            CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+            INSERT OR IGNORE INTO meta(key,value) VALUES ('clock','0');
+            CREATE TABLE IF NOT EXISTS packages (
+                id TEXT NOT NULL, version TEXT NOT NULL, body_json TEXT NOT NULL, digest TEXT NOT NULL,
+                PRIMARY KEY(id,version)
+            );
+            CREATE TABLE IF NOT EXISTS instances (
+                id TEXT PRIMARY KEY, package_id TEXT NOT NULL, state_json TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS tokens (
+                instance_id TEXT NOT NULL, token_hash TEXT NOT NULL, actor TEXT NOT NULL,
+                PRIMARY KEY(instance_id,token_hash)
+            );
+            CREATE TABLE IF NOT EXISTS media (
+                instance_id TEXT NOT NULL, actor TEXT NOT NULL, ref TEXT NOT NULL,
+                media_type TEXT NOT NULL, bytes BLOB NOT NULL,
+                PRIMARY KEY(instance_id,actor,ref)
+            );
+            CREATE TABLE IF NOT EXISTS event_log (
+                seq INTEGER PRIMARY KEY AUTOINCREMENT, instance_id TEXT NOT NULL,
+                event_id TEXT, type TEXT NOT NULL, actor TEXT NOT NULL,
+                at INTEGER NOT NULL, payload_json TEXT NOT NULL,
+                UNIQUE(instance_id,event_id)
+            );
+        """)
+
+
+def load_packages(db_path):
+    PACKAGES.clear()
+    PACKAGE_HASHES.clear()
+    with db_connect(db_path) as conn:
+        for row in conn.execute("SELECT id,version,body_json,digest FROM packages"):
+            key = (row["id"], row["version"])
+            package = json.loads(row["body_json"])
+            VALIDATE_PACKAGE(package)
+            if hashlib.sha256(canonical_package(package)).hexdigest() != row["digest"]:
+                raise RuntimeError("stored package digest mismatch")
+            PACKAGES[key] = package
+            PACKAGE_HASHES[key] = row["digest"]
+
+
+def import_package(conn, body):
+    if type(body) is not dict or set(body) != {"package"}:
+        return 400, {"status": "invalid_package"}
+    package = body["package"]
+    try:
+        VALIDATE_PACKAGE(package)
+        payload = canonical_package(package)
+    except (ValueError, KeyError, TypeError, UnicodeError, OverflowError):
+        return 400, {"status": "invalid_package"}
+    if len(payload) > 1000000:
+        return 400, {"status": "invalid_package"}
+    digest = hashlib.sha256(payload).hexdigest()
+    key = (package["id"], package["version"])
+    row = conn.execute("SELECT digest FROM packages WHERE id=? AND version=?", key).fetchone()
+    if row:
+        if row["digest"] != digest:
+            return 409, {"status": "package_conflict"}
+        return 200, {"status": "existing", "sha256": digest}
+    conn.execute("INSERT INTO packages(id,version,body_json,digest) VALUES (?,?,?,?)",
+                 (key[0], key[1], payload.decode("utf-8"), digest))
+    PACKAGES[key] = package
+    PACKAGE_HASHES[key] = digest
+    return 201, {"status": "imported", "sha256": digest}
+
+
+def transact(path, operation):
+    conn = db_connect(path)
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        result = operation(conn)
+        conn.execute("COMMIT")
+        return result
+    except Exception:
+        conn.execute("ROLLBACK")
+        raise
+    finally:
+        conn.close()
+
+
+def clock(conn):
+    return int(conn.execute("SELECT value FROM meta WHERE key='clock'").fetchone()["value"])
+
+
+def write_state(conn, instance_id, state):
+    conn.execute("UPDATE instances SET state_json=? WHERE id=?", (json.dumps(state, sort_keys=True), instance_id))
+
+
+def append_event(conn, instance_id, event_id, event_type, actor, at, payload):
+    conn.execute(
+        "INSERT INTO event_log(instance_id,event_id,type,actor,at,payload_json) VALUES (?,?,?,?,?,?)",
+        (instance_id, event_id, event_type, actor, at, json.dumps(payload, sort_keys=True)),
+    )
+
+
+def competitive_advance_attempt(state, at):
+    if state["attempt"] + 1 < len(state["routes"][state["step"]]):
+        state["attempt"] += 1
+        state["deadline"] = at + state["attemptMs"]
+        state["declined"] = []
+    else:
+        state["phase"] = "stalled"
+        state["deadline"] = None
+        state["declined"] = []
+
+
+def competitive_view(state, actor):
+    phase = state["phase"]
+    view = {"phase": phase, "step": None if phase == "complete" else state["step"] + 1,
+            "attempt": state["attempt"] + 1 if phase == "open" else None,
+            "deadline": state["deadline"] if phase == "open" else None,
+            "acceptedCount": len(state["entries"])}
+    if actor in state["participants"]:
+        view["ownEntries"] = [entry for entry in state["entries"] if entry["actor"] == actor]
+    if phase == "open" and actor in state["routes"][state["step"]][state["attempt"]] and actor not in state["declined"]:
+        view["offer"] = {"step": state["step"] + 1, "attempt": state["attempt"] + 1,
+                         "deadline": state["deadline"],
+                         "input": state["prompt"] if state["step"] == 0 else state["entries"][-1]["value"]}
+    if phase == "complete":
+        view["entries"] = state["entries"]
+    return view
+
+
+def guided_position(state, now):
+    if now < state["startsAt"]:
+        return "waiting", None, 0
+    if now >= state["endsAt"]:
+        return "complete", None, len(state["rounds"])
+    boundary = state["startsAt"]
+    for index, stage in enumerate(state["rounds"]):
+        boundary += stage["durationMs"]
+        if now < boundary:
+            return "round", index + 1, index + 1
+    raise RuntimeError("invalid round position")
+
+
+def guided_boundary(state, index):
+    return state["startsAt"] + sum(stage["durationMs"] for stage in state["rounds"][:index])
+
+
+def guided_view(state, actor, now):
+    phase, current, opened = guided_position(state, now)
+    view = {"phase": phase, "currentRound": current, "rounds": []}
+    boundary = state["startsAt"]
+    for index in range(opened):
+        stage = state["rounds"][index]
+        boundary += stage["durationMs"]
+        closed = now >= boundary
+        item = {"number": index + 1, "id": stage["id"], "prompt": stage["prompt"],
+                "phase": "closed" if closed else "open", "groups": []}
+        for group in state["groupsByRound"][index]:
+            entries = [entry for entry in state["entries"][index] if entry["group"] == group["id"]]
+            if stage["visibility"] == "private":
+                visible = [entry for entry in entries if entry["actor"] == actor]
+            elif stage["visibility"] == "group":
+                visible = entries if actor in group["members"] else []
+            else:
+                visible = entries if closed else [entry for entry in entries if entry["actor"] == actor]
+            item["groups"].append({"id": group["id"], "members": group["members"],
+                                   "submissionCount": len(entries), "entries": visible})
+        view["rounds"].append(item)
+    return view
+
+
+def ongoing_position(state, now):
+    schedule = state["schedule"]
+    if now < state["startsAt"]:
+        return "waiting", None, 0
+    if now >= state["endsAt"]:
+        return "complete", None, 0 if schedule["kind"] == "open" else len(schedule["prompts"])
+    if schedule["kind"] == "open":
+        return "open", None, 0
+    index = min((now - state["startsAt"]) // schedule["intervalMs"], len(schedule["prompts"]) - 1)
+    closes = state["startsAt"] + index * schedule["intervalMs"] + schedule["windowMs"]
+    return ("open", index + 1, index + 1) if now < closes else ("between", None, index + 1)
+
+
+def ongoing_boundary(state, index):
+    if state["schedule"]["kind"] == "open":
+        return state["startsAt"] if index == 0 else state["endsAt"]
+    schedule = state["schedule"]
+    occurrence = index // 2
+    opening = state["startsAt"] + occurrence * schedule["intervalMs"]
+    return opening if index % 2 == 0 else opening + schedule["windowMs"]
+
+
+def ongoing_view(state, actor, now):
+    phase, current, opened = ongoing_position(state, now)
+    view = {"phase": phase, "entries": [entry for entry in state["entries"]
+                                   if entry["audience"] == "group" or entry["actor"] == actor]}
+    schedule = state["schedule"]
+    if schedule["kind"] == "fixed_prompt_series":
+        view["currentOccurrence"] = current
+        view["occurrences"] = []
+        for index in range(opened):
+            number = index + 1
+            closes = state["startsAt"] + index * schedule["intervalMs"] + schedule["windowMs"]
+            item_phase = "closed" if now >= closes else "open"
+            item = {"number": number, "prompt": schedule["prompts"][index], "phase": item_phase}
+            if schedule["statusVisibility"] == "group":
+                posted = {entry["actor"] for entry in state["entries"] if entry["occurrence"] == number}
+                item["statuses"] = [{"actor": person, "status": "complete" if person in posted
+                                     else "missed" if item_phase == "closed" else "pending"}
+                                    for person in state["participants"]]
+            view["occurrences"].append(item)
+    return view
+
+
+def project_phase(state, now):
+    if now < state["opensAt"]:
+        return "waiting"
+    if now < state["submissionDeadline"]:
+        return "work"
+    return "review" if now < state["reviewDeadline"] else "complete"
+
+
+def project_team(state, actor):
+    for team in state["teams"]:
+        if actor in team["members"]:
+            return team["id"]
+    return None
+
+
+def project_view(state, actor, now):
+    phase = project_phase(state, now)
+    own_team = project_team(state, actor)
+    visible = [post for post in state["posts"] if post["audience"] == "group" or post["team"] == own_team]
+    statuses = [{"team": team["id"], "status": "submitted" if any(f["team"] == team["id"] for f in state["finals"])
+                 else "pending" if phase in ("waiting", "work") else "missed"} for team in state["teams"]]
+    view = {"phase": phase, "finalStatuses": statuses, "progress": visible,
+            "finalCount": len(state["finals"]), "reviewCount": len(state["reviews"])}
+    if own_team is not None:
+        own_final = next((f for f in state["finals"] if f["team"] == own_team), None)
+        if own_final is not None:
+            view["ownFinal"] = own_final
+        view["ownReviews"] = [r for r in state["reviews"] if r["actor"] == actor]
+    if phase in ("review", "complete"):
+        view["finals"] = state["finals"]
+    if phase == "complete":
+        view["reviews"] = state["reviews"]
+    return view
+
+
+def repeated_phase(state, now):
+    if now < state["startsAt"]:
+        return "waiting", None, 0
+    index = min((now - state["startsAt"]) // state["intervalMs"], state["occurrenceCount"] - 1)
+    opened = index + 1
+    closes_at = state["startsAt"] + index * state["intervalMs"] + state["windowMs"]
+    if now < closes_at:
+        return "open", opened, opened
+    return ("complete" if index == state["occurrenceCount"] - 1 else "between"), None, opened
+
+
+def repeated_boundary(state, boundary_index):
+    occurrence = boundary_index // 2
+    opens_at = state["startsAt"] + occurrence * state["intervalMs"]
+    return opens_at if boundary_index % 2 == 0 else opens_at + state["windowMs"]
+
+
+def reconcile(conn, instance_id, state, now):
+    if state["contract"] == "competitive_handoff@1":
+        changed = False
+        if state["phase"] == "waiting" and now >= state["startsAt"]:
+            state["phase"] = "open"
+            append_event(conn, instance_id, None, "tick", "system", state["startsAt"], {})
+            changed = True
+        while state["phase"] == "open" and now >= state["deadline"]:
+            at = state["deadline"]
+            append_event(conn, instance_id, None, "tick", "system", at, {})
+            competitive_advance_attempt(state, at)
+            changed = True
+        if changed:
+            write_state(conn, instance_id, state)
+        return
+    if state["contract"] == "guided_rounds@1":
+        changed = False
+        while state["nextBoundary"] <= len(state["rounds"]):
+            at = guided_boundary(state, state["nextBoundary"])
+            if at > now:
+                break
+            append_event(conn, instance_id, None, "tick", "system", at, {})
+            state["nextBoundary"] += 1
+            changed = True
+        phase, current, _ = guided_position(state, now)
+        if state["phase"] != phase or state["currentRound"] != current:
+            state["phase"], state["currentRound"] = phase, current
+            changed = True
+        if changed:
+            write_state(conn, instance_id, state)
+        return
+    if state["contract"] == "ongoing_space@1":
+        limit = 2 if state["schedule"]["kind"] == "open" else len(state["schedule"]["prompts"]) * 2
+        changed = False
+        while state["nextBoundary"] < limit:
+            at = ongoing_boundary(state, state["nextBoundary"])
+            if at > now:
+                break
+            append_event(conn, instance_id, None, "tick", "system", at, {})
+            state["nextBoundary"] += 1
+            changed = True
+        phase, current, _ = ongoing_position(state, now)
+        if state["phase"] != phase or state["currentOccurrence"] != current:
+            state["phase"], state["currentOccurrence"] = phase, current
+            changed = True
+        if changed:
+            write_state(conn, instance_id, state)
+        return
+    if state["contract"] == "project_cycle@1":
+        boundaries = [state["opensAt"], state["submissionDeadline"], state["reviewDeadline"]]
+        changed = False
+        while state["nextBoundary"] < 3 and boundaries[state["nextBoundary"]] <= now:
+            at = boundaries[state["nextBoundary"]]
+            append_event(conn, instance_id, None, "tick", "system", at, {})
+            state["nextBoundary"] += 1
+            changed = True
+        phase = project_phase(state, now)
+        if state["phase"] != phase:
+            state["phase"] = phase
+            changed = True
+        if changed:
+            write_state(conn, instance_id, state)
+        return
+    if state["contract"] in ("offered_response@1", "offered_response_vote@1"):
+        boundaries = [state["opensAt"], state["sourceDeadline"], state["responseDeadline"]]
+        if state["contract"] == "offered_response_vote@1":
+            boundaries.append(state["voteDeadline"])
+        limit = 2 if now >= state["sourceDeadline"] and len(state["sources"]) < 3 else len(boundaries)
+        changed = False
+        while state["nextBoundary"] < limit and boundaries[state["nextBoundary"]] <= now:
+            at = boundaries[state["nextBoundary"]]
+            append_event(conn, instance_id, None, "tick", "system", at, {})
+            state["nextBoundary"] += 1
+            changed = True
+        phase = offer_phase(state, now)
+        if state["phase"] != phase:
+            state["phase"] = phase
+            changed = True
+        if changed:
+            write_state(conn, instance_id, state)
+        return
+    if state["contract"] == "repeated_collection@1":
+        changed = False
+        while state["nextBoundary"] < state["occurrenceCount"] * 2:
+            at = repeated_boundary(state, state["nextBoundary"])
+            if at > now:
+                break
+            append_event(conn, instance_id, None, "tick", "system", at, {})
+            state["nextBoundary"] += 1
+            changed = True
+        phase, current, _ = repeated_phase(state, now)
+        if state["phase"] != phase or state["currentOccurrence"] != current:
+            state["phase"], state["currentOccurrence"] = phase, current
+            changed = True
+        if changed:
+            write_state(conn, instance_id, state)
+        return
+    if state["contract"] != "timed_collection@1":
+        return
+    changed = False
+    if state["phase"] == "waiting" and now >= state["opensAt"]:
+        state["phase"] = "open"
+        append_event(conn, instance_id, None, "tick", "system", state["opensAt"], {})
+        changed = True
+    if state["phase"] == "open" and now >= state["closesAt"]:
+        state["phase"] = "closed"
+        append_event(conn, instance_id, None, "tick", "system", state["closesAt"], {})
+        changed = True
+    if changed:
+        write_state(conn, instance_id, state)
+
+
+def semantic_view(state, actor, now):
+    if state["contract"] == "competitive_handoff@1":
+        return competitive_view(state, actor)
+    if state["contract"] == "guided_rounds@1":
+        return guided_view(state, actor, now)
+    if state["contract"] == "ongoing_space@1":
+        return ongoing_view(state, actor, now)
+    if state["contract"] == "project_cycle@1":
+        return project_view(state, actor, now)
+    if state["contract"] in ("offered_response@1", "offered_response_vote@1"):
+        phase = offer_phase(state, now)
+        view = {"phase": phase, "sourceCount": len(state["sources"]), "responseCount": len(state["responses"])}
+        if actor in state["participants"]:
+            own = next((source for source in state["sources"] if source["actor"] == actor), None)
+            if own is not None:
+                view["ownSource"] = own
+            if actor in state["offers"]:
+                by_actor = {source["actor"]: source for source in state["sources"]}
+                view["offer"] = [by_actor[source_id] for source_id in state["offers"][actor]]
+            own_response = next((response for response in state["responses"] if response["actor"] == actor), None)
+            if own_response is not None:
+                view["ownResponse"] = own_response
+        if phase == "complete" or state["contract"] == "offered_response_vote@1" and phase == "voting":
+            view["sources"] = state["sources"]
+            view["responses"] = state["responses"]
+        if state["contract"] == "offered_response_vote@1":
+            view["voteCount"] = len(state["votes"])
+            if actor in state["participants"]:
+                own_vote = next((vote for vote in state["votes"] if vote["actor"] == actor), None)
+                if own_vote:
+                    view["ownVote"] = {"responseActor": own_vote["responseActor"]}
+            if phase == "complete":
+                scores = [{"responseActor": response["actor"],
+                           "votes": sum(vote["responseActor"] == response["actor"] for vote in state["votes"])}
+                          for response in sorted(state["responses"], key=lambda item: int(item["actor"]))]
+                highest = max((score["votes"] for score in scores), default=0)
+                view["scores"] = scores
+                view["winners"] = [score["responseActor"] for score in scores
+                                   if highest > 0 and score["votes"] == highest]
+        return view
+    entries = state["entries"]
+    if state["contract"] == "repeated_collection@1":
+        phase, current, opened = repeated_phase(state, now)
+        view = {"phase": phase, "currentOccurrence": current, "occurrences": []}
+        for index in range(opened):
+            number = index + 1
+            closes_at = state["startsAt"] + index * state["intervalMs"] + state["windowMs"]
+            item_phase = "closed" if now >= closes_at else "open"
+            group_entries = entries[index]
+            submitted = {entry["actor"] for entry in group_entries}
+            item = {"number": number, "phase": item_phase, "submissionCount": len(group_entries),
+                    "statuses": [{"actor": person, "status": "complete" if person in submitted else
+                                  "pending" if item_phase == "open" else "missed"}
+                                 for person in state["participants"]]}
+            if actor in state["participants"]:
+                own = next((entry for entry in group_entries if entry["actor"] == actor), None)
+                if own is not None:
+                    item["own"] = own
+            if state["visibility"] == "group_immediate" or (state["visibility"] == "group_after_close" and item_phase == "closed"):
+                item["entries"] = group_entries
+            view["occurrences"].append(item)
+        return view
+    if state["contract"] == "timed_collection@1":
+        view = {"phase": state["phase"], "submissionCount": len(entries)}
+    else:
+        index = state["index"]
+        done = state["phase"] == "complete"
+        view = {"phase": state["phase"], "step": min(index + 1, len(state["route"])),
+                "currentActor": None if done else state["route"][index]}
+    if actor in state["participants"]:
+        own = next((entry for entry in entries if entry["actor"] == actor), None)
+        if own is not None:
+            view["own"] = own
+    if state["contract"] == "timed_collection@1":
+        if state["phase"] == "closed":
+            view["entries"] = entries
+    elif state["phase"] == "complete":
+        view["entries"] = entries
+    elif actor == state["route"][state["index"]]:
+        view["input"] = state["prompt"] if state["index"] == 0 else entries[-1]["value"]
+    return view
+
+
+def create_instance(conn, body, disabled_capabilities, disabled_contracts):
+    if type(body) is not dict or not {"instanceId", "packageId", "organizer", "participants", "tokens"} <= set(body):
+        return 400, {"status": "invalid_instance"}
+    if not valid_text(body["packageId"]):
+        return 400, {"status": "invalid_instance"}
+    if not valid_text(body.get("packageVersion")):
+        return 400, {"status": "invalid_instance"}
+    package_key = (body["packageId"], body["packageVersion"])
+    package = PACKAGES.get(package_key)
+    if package is None or package.get("format") != "harmonomicon.activity-package/0.10":
+        return 400, {"status": "invalid_package"}
+    contract = package["behavior"]["contract"]
+    required_fields = {"instanceId", "packageId", "packageVersion", "organizer", "participants", "tokens"}
+    required_fields |= ({"opensAt", "closesAt"} if contract == "timed_collection@1" else
+                        {"startsAt"} if contract == "repeated_collection@1" else
+                        {"startsAt", "routes"} if contract == "competitive_handoff@1" else
+                        {"startsAt", "groupsByRound"} if contract == "guided_rounds@1" else
+                        ({"startsAt", "endsAt"} if package["behavior"]["schedule"]["kind"] == "open" else {"startsAt"}) if contract == "ongoing_space@1" else
+                        {"opensAt", "submissionDeadline", "reviewDeadline", "teams"} if contract == "project_cycle@1" else
+                        {"opensAt", "sourceDeadline", "responseDeadline", "voteDeadline", "roundId"} if contract == "offered_response_vote@1" else
+                        {"opensAt", "sourceDeadline", "responseDeadline", "roundId"} if contract == "offered_response@1" else {"route"})
+    if not required_fields <= set(body) or not set(body) <= required_fields | {"prompt"}:
+        return 400, {"status": "invalid_instance"}
+    available = CAPABILITIES - disabled_capabilities
+    missing = sorted(set(package["requires"]) - available)
+    if contract not in CONTRACTS - disabled_contracts:
+        missing.append("behavior:" + contract)
+    if missing:
+        return 200, {"status": "unsupported", "missing": sorted(missing)}
+    instance_id = body["instanceId"]
+    participants = body["participants"]
+    organizer = body["organizer"]
+    tokens = body["tokens"]
+    bounds = package["participants"]
+    if not (valid_text(instance_id) and valid_text(organizer) and organizer != "system"
+            and type(participants) is list and bounds["min"] <= len(participants) <= bounds["max"]
+            and all(valid_text(p) and p != "system" for p in participants)
+            and len(set(participants)) == len(participants) and organizer not in participants
+            and type(tokens) is dict and set(tokens) == {organizer, *participants}
+            and all(valid_text(t) for t in tokens.values()) and len(set(tokens.values())) == len(tokens)):
+        return 400, {"status": "invalid_instance"}
+    now = clock(conn)
+    prompt = body.get("prompt", package["content"]["prompt"])
+    if not valid_text(prompt) or ("prompt" in body and not package["behavior"]["allowPromptOverride"]):
+        return 400, {"status": "invalid_instance"}
+    state = {"packageVersion": package["version"], "packageHash": PACKAGE_HASHES[package_key],
+             "contract": contract, "medium": package["behavior"].get("medium"), "organizer": organizer,
+             "participants": participants, "prompt": prompt, "entries": [], "index": 0, "lastAt": now}
+    if contract in ("offered_response@1", "offered_response_vote@1") and not all(canonical_u64(person) for person in participants):
+        return 400, {"status": "invalid_instance"}
+    if contract == "timed_collection@1":
+        opens_at, closes_at = body.get("opensAt"), body.get("closesAt")
+        if not (valid_time(opens_at) and valid_time(closes_at) and now <= opens_at < closes_at):
+            return 400, {"status": "invalid_instance"}
+        state.update({"opensAt": opens_at, "closesAt": closes_at,
+                      "phase": "waiting" if now < opens_at else "open"})
+    elif contract == "competitive_handoff@1":
+        starts_at, routes = body["startsAt"], body["routes"]
+        steps, attempt_ms = package["behavior"]["steps"], package["behavior"]["attemptMs"]
+        if not (valid_time(starts_at) and now <= starts_at
+                and starts_at + steps * 2 * attempt_ms <= SAFE_MAX
+                and type(routes) is list and len(routes) == steps):
+            return 400, {"status": "invalid_instance"}
+        for attempts in routes:
+            if type(attempts) is not list or not 1 <= len(attempts) <= 2:
+                return 400, {"status": "invalid_instance"}
+            for pair in attempts:
+                if not (type(pair) is list and len(pair) == 2 and pair[0] != pair[1]
+                        and all(valid_text(person) and person in participants for person in pair)):
+                    return 400, {"status": "invalid_instance"}
+        state.update({"startsAt": starts_at, "routes": routes, "attemptMs": attempt_ms,
+                      "step": 0, "attempt": 0, "deadline": starts_at + attempt_ms,
+                      "declined": [], "entries": [], "phase": "waiting" if now < starts_at else "open"})
+    elif contract == "guided_rounds@1":
+        starts_at = body["startsAt"]
+        rounds = package["behavior"]["rounds"]
+        groups_by_round = body["groupsByRound"]
+        ends_at = starts_at + sum(stage["durationMs"] for stage in rounds) if valid_time(starts_at) else SAFE_MAX + 1
+        if not (valid_time(starts_at) and now <= starts_at and ends_at <= SAFE_MAX
+                and type(groups_by_round) is list and len(groups_by_round) == len(rounds)):
+            return 400, {"status": "invalid_instance"}
+        for stage, groups in zip(rounds, groups_by_round):
+            if type(groups) is not list or not groups:
+                return 400, {"status": "invalid_instance"}
+            ids, members = [], []
+            for group in groups:
+                if not (type(group) is dict and set(group) == {"id", "members"}
+                        and valid_text(group["id"]) and group["id"] != "system"
+                        and type(group["members"]) is list
+                        and stage["groupMin"] <= len(group["members"]) <= stage["groupMax"]
+                        and all(valid_text(person) for person in group["members"])):
+                    return 400, {"status": "invalid_instance"}
+                ids.append(group["id"])
+                members.extend(group["members"])
+            if not (len(set(ids)) == len(ids) and len(set(members)) == len(members)
+                    and set(members) == set(participants)):
+                return 400, {"status": "invalid_instance"}
+        state.update({"startsAt": starts_at, "endsAt": ends_at, "rounds": rounds,
+                      "groupsByRound": groups_by_round, "entries": [[] for _ in rounds],
+                      "nextBoundary": 0, "phase": "waiting" if now < starts_at else "round",
+                      "currentRound": None if now < starts_at else 1})
+    elif contract == "ongoing_space@1":
+        starts_at = body["startsAt"]
+        schedule = package["behavior"]["schedule"]
+        if not valid_time(starts_at) or now > starts_at:
+            return 400, {"status": "invalid_instance"}
+        if schedule["kind"] == "open":
+            ends_at = body["endsAt"]
+            if not valid_time(ends_at) or starts_at >= ends_at:
+                return 400, {"status": "invalid_instance"}
+        else:
+            ends_at = starts_at + (len(schedule["prompts"]) - 1) * schedule["intervalMs"] + schedule["windowMs"]
+            if ends_at > SAFE_MAX:
+                return 400, {"status": "invalid_instance"}
+        state.update({"startsAt": starts_at, "endsAt": ends_at, "schedule": schedule,
+                      "entries": [], "nextBoundary": 0, "phase": "waiting" if now < starts_at else "open",
+                      "currentOccurrence": None if schedule["kind"] == "open" or now < starts_at else 1})
+    elif contract == "project_cycle@1":
+        opens_at, submit_at, review_at = body["opensAt"], body["submissionDeadline"], body["reviewDeadline"]
+        teams = body["teams"]
+        if not (all(valid_time(value) for value in (opens_at, submit_at, review_at))
+                and now <= opens_at < submit_at < review_at and type(teams) is list
+                and 2 <= len(teams) <= len(participants)):
+            return 400, {"status": "invalid_instance"}
+        ids, members = [], []
+        for team in teams:
+            if not (type(team) is dict and set(team) == {"id", "members"}
+                    and valid_text(team["id"]) and team["id"] != "system"
+                    and type(team["members"]) is list and team["members"]
+                    and all(valid_text(person) for person in team["members"])):
+                return 400, {"status": "invalid_instance"}
+            ids.append(team["id"])
+            members.extend(team["members"])
+        if not (len(set(ids)) == len(ids) and len(set(members)) == len(members)
+                and set(members) == set(participants)):
+            return 400, {"status": "invalid_instance"}
+        state.update({"opensAt": opens_at, "submissionDeadline": submit_at, "reviewDeadline": review_at,
+                      "teams": teams, "posts": [], "finals": [], "reviews": [], "nextBoundary": 0,
+                      "phase": "waiting" if now < opens_at else "work"})
+    elif contract in ("offered_response@1", "offered_response_vote@1"):
+        opens_at, source_deadline, response_deadline = body["opensAt"], body["sourceDeadline"], body["responseDeadline"]
+        if not (all(valid_time(value) for value in (opens_at, source_deadline, response_deadline)) and
+                now <= opens_at < source_deadline < response_deadline and canonical_u64(body["roundId"])):
+            return 400, {"status": "invalid_instance"}
+        if contract == "offered_response_vote@1":
+            vote_deadline = body["voteDeadline"]
+            if not valid_time(vote_deadline) or vote_deadline <= response_deadline:
+                return 400, {"status": "invalid_instance"}
+        state.update({"opensAt": opens_at, "sourceDeadline": source_deadline,
+                      "responseDeadline": response_deadline, "roundId": body["roundId"],
+                      "sourceMedium": package["behavior"]["sourceMedium"],
+                      "sources": [], "offers": {}, "responses": [], "nextBoundary": 0,
+                      "phase": "waiting" if now < opens_at else "sources_open"})
+        if contract == "offered_response_vote@1":
+            state.update({"voteDeadline": vote_deadline, "votes": []})
+    elif contract == "repeated_collection@1":
+        starts_at = body.get("startsAt")
+        behavior = package["behavior"]
+        interval, window, count = behavior["intervalMs"], behavior["windowMs"], behavior["occurrences"]
+        if not (valid_time(starts_at) and now <= starts_at and
+                starts_at + (count - 1) * interval + window <= SAFE_MAX):
+            return 400, {"status": "invalid_instance"}
+        state.update({"startsAt": starts_at, "intervalMs": interval, "windowMs": window,
+                      "occurrenceCount": count, "visibility": behavior["visibility"],
+                      "entries": [[] for _ in range(count)], "nextBoundary": 0})
+        state["phase"], state["currentOccurrence"], _ = repeated_phase(state, now)
+    else:
+        route = body.get("route")
+        if not (type(route) is list and len(route) == package["behavior"]["steps"]
+                and len(route) == len(set(route)) and set(route) == set(participants)):
+            return 400, {"status": "invalid_instance"}
+        state.update({"route": route, "phase": "active"})
+    try:
+        conn.execute("INSERT INTO instances(id,package_id,state_json) VALUES (?,?,?)",
+                     (instance_id, package["id"], json.dumps(state, sort_keys=True)))
+    except sqlite3.IntegrityError:
+        return 409, {"status": "already_exists"}
+    for actor, token in tokens.items():
+        conn.execute("INSERT INTO tokens(instance_id,token_hash,actor) VALUES (?,?,?)",
+                     (instance_id, token_hash(token), actor))
+    return 201, {"status": "created", "instanceId": instance_id}
+
+
+def actor_for(conn, instance_id, authorization):
+    if not authorization.startswith("Bearer "):
+        return None
+    token = authorization[7:]
+    row = conn.execute("SELECT actor FROM tokens WHERE instance_id=? AND token_hash=?",
+                       (instance_id, token_hash(token))).fetchone()
+    return row["actor"] if row else None
+
+
+def submit_event(conn, instance_id, actor, body):
+    row = conn.execute("SELECT state_json FROM instances WHERE id=?", (instance_id,)).fetchone()
+    if row is None:
+        return 404, {"status": "not_found"}
+    state = json.loads(row["state_json"])
+    now = clock(conn)
+    if now < state["lastAt"]:
+        return 400, {"status": "invalid_time"}
+    reconcile(conn, instance_id, state, now)
+    state["lastAt"] = now
+    if type(body) is not dict or set(body) != {"eventId", "type", "payload"}:
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "rejected"}
+    event_id, event_type, payload = body["eventId"], body["type"], body["payload"]
+    if not valid_text(event_id) or not valid_text(event_type) or type(payload) is not dict:
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "rejected"}
+    previous = conn.execute("SELECT type,actor,payload_json FROM event_log WHERE instance_id=? AND event_id=?",
+                            (instance_id, event_id)).fetchone()
+    if previous:
+        outcome = "replayed" if previous["type"] == event_type and previous["actor"] == actor and json.loads(previous["payload_json"]) == payload else "rejected"
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": outcome}
+    if state["contract"] == "competitive_handoff@1":
+        accepted = False
+        if (state["phase"] == "open" and actor in state["routes"][state["step"]][state["attempt"]]
+                and actor not in state["declined"]):
+            if event_type == "decline" and set(payload) == {"step", "attempt"}:
+                if (type(payload["step"]) is int and payload["step"] == state["step"] + 1
+                        and type(payload["attempt"]) is int and payload["attempt"] == state["attempt"] + 1):
+                    state["declined"].append(actor)
+                    accepted = True
+                    if len(state["declined"]) == 2:
+                        competitive_advance_attempt(state, now)
+            elif event_type == "submit" and set(payload) == {"step", "attempt", "value"}:
+                if (type(payload["step"]) is int and payload["step"] == state["step"] + 1
+                        and type(payload["attempt"]) is int and payload["attempt"] == state["attempt"] + 1
+                        and valid_text(payload["value"])):
+                    state["entries"].append({"step": state["step"] + 1, "actor": actor, "value": payload["value"]})
+                    accepted = True
+                    if state["step"] + 1 == len(state["routes"]):
+                        state["phase"] = "complete"
+                        state["deadline"] = None
+                        state["declined"] = []
+                    else:
+                        state["step"] += 1
+                        state["attempt"] = 0
+                        state["deadline"] = now + state["attemptMs"]
+                        state["declined"] = []
+        if accepted:
+            append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "accepted" if accepted else "rejected"}
+    if state["contract"] == "guided_rounds@1":
+        phase, current, _ = guided_position(state, now)
+        allowed = (event_type == "submit" and phase == "round" and actor in state["participants"]
+                   and set(payload) == {"round", "value"} and type(payload["round"]) is int
+                   and payload["round"] == current and valid_text(payload["value"])
+                   and not any(entry["actor"] == actor for entry in state["entries"][current - 1])) if current is not None else False
+        if allowed:
+            group = next(group["id"] for group in state["groupsByRound"][current - 1] if actor in group["members"])
+            state["entries"][current - 1].append({"group": group, "actor": actor, "value": payload["value"]})
+            append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "accepted" if allowed else "rejected"}
+    if state["contract"] == "ongoing_space@1":
+        phase, current, _ = ongoing_position(state, now)
+        schedule = state["schedule"]
+        accepted = False
+        if actor in state["participants"] and event_type == "post_entry" and phase == "open":
+            keys = {"audience", "value"} if schedule["kind"] == "open" else {"occurrence", "audience", "value"}
+            if set(payload) == keys and payload["audience"] in ("private", "group") and valid_text(payload["value"]):
+                if schedule["kind"] == "open" or (type(payload["occurrence"]) is int and payload["occurrence"] == current):
+                    state["entries"].append({"id": event_id, "actor": actor, "occurrence": current,
+                                             "audience": payload["audience"], "value": payload["value"], "comments": []})
+                    accepted = True
+        elif actor in state["participants"] and event_type == "comment" and phase in ("open", "between") and set(payload) == {"entryId", "value"}:
+            entry = next((entry for entry in state["entries"] if entry["id"] == payload["entryId"]), None)
+            if entry and entry["audience"] == "group" and valid_text(payload["value"]):
+                entry["comments"].append({"actor": actor, "value": payload["value"]})
+                accepted = True
+        if accepted:
+            append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "accepted" if accepted else "rejected"}
+    if state["contract"] == "project_cycle@1":
+        phase = state["phase"]
+        team = project_team(state, actor)
+        if team is None:
+            write_state(conn, instance_id, state)
+            return 200, {"outcome": "rejected"}
+        accepted = False
+        if event_type == "post_progress" and phase == "work" and set(payload) == {"audience", "value"}:
+            if payload["audience"] in ("team", "group") and valid_text(payload["value"]):
+                state["posts"].append({"id": event_id, "team": team, "actor": actor,
+                                       "audience": payload["audience"], "value": payload["value"], "comments": []})
+                accepted = True
+        elif event_type == "comment" and phase == "work" and set(payload) == {"postId", "value"}:
+            post = next((post for post in state["posts"] if post["id"] == payload["postId"]), None)
+            if post and valid_text(payload["value"]) and (post["audience"] == "group" or post["team"] == team):
+                post["comments"].append({"actor": actor, "value": payload["value"]})
+                accepted = True
+        elif event_type == "submit_final" and phase == "work" and set(payload) == {"value"}:
+            if valid_text(payload["value"]) and not any(f["team"] == team for f in state["finals"]):
+                state["finals"].append({"team": team, "actor": actor, "value": payload["value"]})
+                accepted = True
+        elif event_type == "submit_review" and phase == "review" and set(payload) == {"team", "value"}:
+            target = payload["team"]
+            if (valid_text(target) and valid_text(payload["value"]) and target != team
+                    and any(f["team"] == target for f in state["finals"])
+                    and not any(r["actor"] == actor and r["team"] == target for r in state["reviews"])):
+                state["reviews"].append({"actor": actor, "team": target, "value": payload["value"]})
+                accepted = True
+        if accepted:
+            append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "accepted" if accepted else "rejected"}
+    if state["contract"] in ("offered_response@1", "offered_response_vote@1"):
+        phase = state["phase"]
+        if event_type == "submit_source" and phase == "sources_open" and actor in state["participants"] and set(payload) == {"value"}:
+            value = payload["value"]
+            if ((valid_text(value) and state["sourceMedium"] == "text") or
+                    (state["sourceMedium"] == "image_ref" and media_value(conn, instance_id, actor, value))) and not any(source["actor"] == actor for source in state["sources"]):
+                state["sources"].append({"actor": actor, "value": value})
+                append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+                write_state(conn, instance_id, state)
+                return 200, {"outcome": "accepted"}
+        if event_type == "request_offer" and phase == "responses_open" and actor in state["participants"] and not payload:
+            if any(source["actor"] == actor for source in state["sources"]):
+                outcome = "existing" if actor in state["offers"] else "accepted"
+                if outcome == "accepted":
+                    state["offers"][actor] = choose_offer(state, actor)
+                append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+                write_state(conn, instance_id, state)
+                return 200, {"outcome": outcome}
+        if event_type == "submit_response" and phase == "responses_open" and actor in state["offers"] and set(payload) == {"source", "value"}:
+            source_id, value = payload["source"], payload["value"]
+            if (type(source_id) is str and source_id in state["offers"][actor] and valid_text(value) and
+                    not any(response["actor"] == actor for response in state["responses"])):
+                state["responses"].append({"actor": actor, "source": source_id, "value": value})
+                append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+                write_state(conn, instance_id, state)
+                return 200, {"outcome": "accepted"}
+        if (state["contract"] == "offered_response_vote@1" and event_type == "submit_vote"
+                and phase == "voting" and actor in state["participants"] and set(payload) == {"responseActor"}):
+            target = payload["responseActor"]
+            if (type(target) is str and target != actor and
+                    any(response["actor"] == target for response in state["responses"]) and
+                    not any(vote["actor"] == actor for vote in state["votes"])):
+                state["votes"].append({"actor": actor, "responseActor": target})
+                append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+                write_state(conn, instance_id, state)
+                return 200, {"outcome": "accepted"}
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "rejected"}
+    if state["contract"] == "repeated_collection@1":
+        valid_payload = set(payload) == {"occurrence", "value"}
+        occurrence = payload.get("occurrence") if valid_payload else None
+        value = payload.get("value") if valid_payload else None
+        allowed = (event_type == "submit" and actor in state["participants"] and
+                   type(occurrence) is int and state["phase"] == "open" and
+                   occurrence == state["currentOccurrence"] and
+                   ((state["medium"] == "text" and valid_text(value)) or
+                    (state["medium"] == "image_ref" and media_value(conn, instance_id, actor, value))) and
+                   not any(x["actor"] == actor for x in state["entries"][occurrence - 1]))
+        if not allowed:
+            write_state(conn, instance_id, state)
+            return 200, {"outcome": "rejected"}
+        state["entries"][occurrence - 1].append({"actor": actor, "value": value})
+        append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "accepted"}
+    value = payload.get("value") if set(payload) == {"value"} else None
+    valid_value = ((state["medium"] == "text" and valid_text(value)) or
+                   (state["medium"] == "image_ref" and media_value(conn, instance_id, actor, value)))
+    if event_type != "submit" or actor not in state["participants"] or not valid_value:
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "rejected"}
+    if state["contract"] == "timed_collection@1":
+        allowed = state["phase"] == "open" and not any(x["actor"] == actor for x in state["entries"])
+    else:
+        allowed = state["phase"] == "active" and actor == state["route"][state["index"]]
+    if not allowed:
+        write_state(conn, instance_id, state)
+        return 200, {"outcome": "rejected"}
+    state["entries"].append({"actor": actor, "value": value})
+    if state["contract"] == "sequential_handoff@1":
+        state["index"] += 1
+        if state["index"] == len(state["route"]):
+            state["phase"] = "complete"
+    append_event(conn, instance_id, event_id, event_type, actor, now, payload)
+    write_state(conn, instance_id, state)
+    return 200, {"outcome": "accepted"}
+
+
+def worker(db_path, stop):
+    while not stop.is_set():
+        try:
+            def work(conn):
+                now = clock(conn)
+                rows = conn.execute("SELECT id,state_json FROM instances").fetchall()
+                for row in rows:
+                    state = json.loads(row["state_json"])
+                    reconcile(conn, row["id"], state, now)
+            transact(db_path, work)
+        except Exception as error:
+            print("worker error:", error, flush=True)
+        stop.wait(0.025)
+
+
+def verify_persisted_packages(db_path):
+    conn = db_connect(db_path)
+    try:
+        for row in conn.execute("SELECT package_id,state_json FROM instances"):
+            state = json.loads(row["state_json"])
+            key = (row["package_id"], state.get("packageVersion"))
+            package = PACKAGES.get(key)
+            if package is None or state.get("packageHash") != PACKAGE_HASHES[key]:
+                raise RuntimeError("persisted instance package changed without a new version")
+    finally:
+        conn.close()
+
+
+def serve(args):
+    db_path = str(Path(args.db).resolve())
+    initialize_db(db_path)
+    load_packages(db_path)
+    verify_persisted_packages(db_path)
+    disabled_capabilities = set(args.disable_capability)
+    disabled_contracts = set(args.disable_contract)
+    stop = threading.Event()
+    threading.Thread(target=worker, args=(db_path, stop), daemon=True).start()
+
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *unused):
+            return
+
+        def respond(self, status, value):
+            data = json.dumps(value, separators=(",", ":")).encode()
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+
+        def body(self):
+            length = int(self.headers.get("Content-Length", "0"))
+            if length > 1000000:
+                raise ValueError("body too large")
+            return json.loads(self.rfile.read(length))
+
+        def admin(self):
+            return self.headers.get("X-Admin-Token") == args.admin_token
+
+        def do_GET(self):
+            parts = urlsplit(self.path).path.strip("/").split("/")
+            if parts == ["health"]:
+                return self.respond(200, {"status": "ok"})
+            if parts == ["capabilities"]:
+                return self.respond(200, {"format": "harmonomicon.activity-package/0.10",
+                    "behaviors": sorted(CONTRACTS - disabled_contracts),
+                    "capabilities": sorted(CAPABILITIES - disabled_capabilities)})
+            if len(parts) == 3 and parts[0] == "packages":
+                key = (parts[1], parts[2])
+                package = PACKAGES.get(key)
+                if package is None:
+                    return self.respond(404, {"status": "not_found"})
+                return self.respond(200, {"package": package, "sha256": PACKAGE_HASHES[key]})
+            if len(parts) == 4 and parts[0] == "instances" and parts[2] == "media":
+                instance_id, ref = parts[1], parts[3]
+                def operation(conn):
+                    actor = actor_for(conn, instance_id, self.headers.get("Authorization", ""))
+                    if actor is None:
+                        return 401, {"status": "unauthorized"}
+                    return media_read(conn, instance_id, actor, ref)
+                return self.respond(*transact(db_path, operation))
+            if len(parts) == 3 and parts[0] == "instances" and parts[2] == "view":
+                instance_id = parts[1]
+                def operation(conn):
+                    actor = actor_for(conn, instance_id, self.headers.get("Authorization", ""))
+                    if actor is None:
+                        return 401, {"status": "unauthorized"}
+                    row = conn.execute("SELECT state_json FROM instances WHERE id=?", (instance_id,)).fetchone()
+                    if row is None:
+                        return 404, {"status": "not_found"}
+                    state = json.loads(row["state_json"])
+                    now = clock(conn)
+                    reconcile(conn, instance_id, state, now)
+                    return 200, semantic_view(state, actor, now)
+                return self.respond(*transact(db_path, operation))
+            self.respond(404, {"status": "not_found"})
+
+        def do_POST(self):
+            path = urlsplit(self.path).path
+            try:
+                body = self.body()
+            except (ValueError, json.JSONDecodeError):
+                return self.respond(400, {"status": "invalid_json"})
+            if path == "/admin/clock":
+                if not self.admin():
+                    return self.respond(401, {"status": "unauthorized"})
+                def operation(conn):
+                    at = body.get("at") if type(body) is dict else None
+                    if not valid_time(at) or at < clock(conn):
+                        return 400, {"status": "invalid_time"}
+                    conn.execute("UPDATE meta SET value=? WHERE key='clock'", (str(at),))
+                    return 200, {"at": at}
+                return self.respond(*transact(db_path, operation))
+            if path == "/admin/packages/import":
+                if not self.admin():
+                    return self.respond(401, {"status": "unauthorized"})
+                return self.respond(*transact(db_path, lambda conn: import_package(conn, body)))
+            if path == "/admin/instances":
+                if not self.admin():
+                    return self.respond(401, {"status": "unauthorized"})
+                return self.respond(*transact(db_path, lambda conn: create_instance(conn, body, disabled_capabilities, disabled_contracts)))
+            parts = path.strip("/").split("/")
+            if len(parts) == 3 and parts[0] == "instances" and parts[2] == "media":
+                instance_id = parts[1]
+                def operation(conn):
+                    actor = actor_for(conn, instance_id, self.headers.get("Authorization", ""))
+                    if actor is None:
+                        return 401, {"status": "unauthorized"}
+                    return upload_media(conn, instance_id, actor, body)
+                return self.respond(*transact(db_path, operation))
+            if len(parts) == 3 and parts[0] == "instances" and parts[2] == "events":
+                instance_id = parts[1]
+                def operation(conn):
+                    actor = actor_for(conn, instance_id, self.headers.get("Authorization", ""))
+                    if actor is None:
+                        return 401, {"status": "unauthorized"}
+                    return submit_event(conn, instance_id, actor, body)
+                return self.respond(*transact(db_path, operation))
+            self.respond(404, {"status": "not_found"})
+
+    server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+    print(f"READY {server.server_port}", flush=True)
+    try:
+        server.serve_forever()
+    finally:
+        stop.set()
+        server.server_close()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--db", required=True)
+    parser.add_argument("--port", type=int, default=0)
+    parser.add_argument("--admin-token", required=True)
+    parser.add_argument("--disable-capability", action="append", default=[])
+    parser.add_argument("--disable-contract", action="append", default=[])
+    serve(parser.parse_args())

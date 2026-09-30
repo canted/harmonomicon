@@ -1,0 +1,47 @@
+{
+  "format": "harmonomicon.activity-package/0.10",
+  "id": "org.harmonomicon.prompt-series-soft",
+  "version": "0.10.0",
+  "content": {
+    "language": "en",
+    "title": "Three creative prompts",
+    "summary": "Make and optionally share work from a short prompt series.",
+    "setup": "Invite participants and choose the first opening time.",
+    "prompt": "Make something from each prompt if you wish. Posting is optional.",
+    "participant": "Add text entries during the activity. Shared entries can receive comments.",
+    "completion": "Read the entries and comments you can access.",
+    "access": "This text example does not require posting every day."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "ongoing_space@1",
+    "allowPromptOverride": false,
+    "schedule": {
+      "kind": "fixed_prompt_series",
+      "intervalMs": 86400000,
+      "windowMs": 72000000,
+      "prompts": [
+        "Describe a color.",
+        "Write a tiny scene.",
+        "Name a sound."
+      ],
+      "statusVisibility": "none"
+    }
+  }
+}

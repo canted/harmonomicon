@@ -1,0 +1,40 @@
+{
+  "format": "harmonomicon.activity-package/0.10",
+  "id": "org.harmonomicon.example.image-caption-circle",
+  "version": "0.10.0",
+  "content": {
+    "language": "en",
+    "title": "Image caption circle",
+    "summary": "Participants share images, receive two other images, and caption one.",
+    "setup": "Invite at least three participants and choose a source opening, source deadline, response deadline, and round ID.",
+    "prompt": "Share an image that could inspire a playful caption.",
+    "participant": "Submit one image before the source deadline. If enough images arrive, request two others and caption one before the response deadline.",
+    "completion": "At the response deadline, submitted sources and linked responses become visible to the group. Missing responses do not delay the reveal.",
+    "access": "Participants need access to image upload and viewing as well as text entry. Hosts must store and authorize actual image references."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 3,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1",
+    "image_ref@1"
+  ],
+  "behavior": {
+    "contract": "offered_response@1",
+    "sourceMedium": "image_ref",
+    "allowPromptOverride": false,
+    "assignmentPolicy": "policy:balanced_artifacts_exact32@1"
+  }
+}

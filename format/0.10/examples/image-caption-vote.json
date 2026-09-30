@@ -1,0 +1,40 @@
+{
+  "format": "harmonomicon.activity-package/0.10",
+  "id": "org.harmonomicon.example.image-caption-vote",
+  "version": "0.10.0",
+  "content": {
+    "language": "en",
+    "title": "Image caption vote",
+    "summary": "Share images, caption an offered image, then vote on other participants’ captions.",
+    "setup": "Invite participants and choose source, response, and vote deadlines plus a round ID.",
+    "prompt": "Share an image that could inspire a playful caption.",
+    "participant": "Upload an image, submit it, caption one of two offered images, and vote once for another participant’s caption.",
+    "completion": "At the vote deadline, show caption vote totals and every tied winner.",
+    "access": "Participants need access to image upload and viewing as well as text entry. Hosts must store and authorize actual image references."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 3,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1",
+    "image_ref@1"
+  ],
+  "behavior": {
+    "contract": "offered_response_vote@1",
+    "sourceMedium": "image_ref",
+    "allowPromptOverride": false,
+    "assignmentPolicy": "policy:balanced_artifacts_exact32@1"
+  }
+}

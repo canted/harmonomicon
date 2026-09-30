@@ -1,0 +1,113 @@
+{
+  "package": "../examples/paired-story-response.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1"
+  ],
+  "contracts": [
+    "offered_response@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "1",
+      "2",
+      "9007199254740993",
+      "18446744073709551615"
+    ],
+    "opensAt": 10,
+    "sourceDeadline": 20,
+    "responseDeadline": 40,
+    "roundId": "42"
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "source-1",
+        "type": "submit_source",
+        "actor": "1",
+        "at": 10,
+        "payload": {
+          "value": "Source 1"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-2",
+        "type": "submit_source",
+        "actor": "2",
+        "at": 11,
+        "payload": {
+          "value": "Source 2"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-9007199254740993",
+        "type": "submit_source",
+        "actor": "9007199254740993",
+        "at": 12,
+        "payload": {
+          "value": "Source 9007199254740993"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-18446744073709551615",
+        "type": "submit_source",
+        "actor": "18446744073709551615",
+        "at": 13,
+        "payload": {
+          "value": "Source 18446744073709551615"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "large-offer",
+        "type": "request_offer",
+        "actor": "2",
+        "at": 20,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "2",
+              "value": "Source 2"
+            },
+            "offer": [
+              {
+                "actor": "18446744073709551615",
+                "value": "Source 18446744073709551615"
+              },
+              {
+                "actor": "1",
+                "value": "Source 1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

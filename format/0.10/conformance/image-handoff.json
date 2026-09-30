@@ -1,0 +1,241 @@
+{
+  "package": "../examples/image-pass-along.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "text@1",
+    "image_ref@1"
+  ],
+  "contracts": [
+    "sequential_handoff@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "route": [
+      "a",
+      "b",
+      "c"
+    ]
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "early-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "payload": {
+          "value": "Too early"
+        }
+      },
+      "outcome": "rejected",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "active",
+            "step": 1,
+            "currentActor": "a",
+            "input": "A mysterious package arrived at the door."
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "active",
+            "step": 1,
+            "currentActor": "a"
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "line-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "payload": {
+          "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b",
+            "own": {
+              "actor": "a",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            }
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b",
+            "input": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+          }
+        },
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b"
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "active",
+            "step": 2,
+            "currentActor": "b"
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "line-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 3,
+        "payload": {
+          "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "line-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "payload": {
+          "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "c",
+          "expect": {
+            "phase": "active",
+            "step": 3,
+            "currentActor": "c",
+            "input": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "active",
+            "step": 3,
+            "currentActor": "c",
+            "own": {
+              "actor": "a",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "line-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 5,
+        "payload": {
+          "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "complete",
+            "step": 3,
+            "currentActor": null,
+            "own": {
+              "actor": "a",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            },
+            "entries": [
+              {
+                "actor": "a",
+                "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+              },
+              {
+                "actor": "b",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              },
+              {
+                "actor": "c",
+                "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "step": 3,
+            "currentActor": null,
+            "entries": [
+              {
+                "actor": "a",
+                "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+              },
+              {
+                "actor": "b",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              },
+              {
+                "actor": "c",
+                "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "uploads": [
+    {
+      "actor": "a",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGO4I+cGAAMaAUEO+HheAAAAAElFTkSuQmCC",
+      "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+    },
+    {
+      "actor": "b",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGPQyLsEAAIqAWk3JmoSAAAAAElFTkSuQmCC",
+      "ref": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+    },
+    {
+      "actor": "c",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNQXhUFAAIbAShAJlIcAAAAAElFTkSuQmCC",
+      "ref": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+    }
+  ]
+}
