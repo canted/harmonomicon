@@ -1,6 +1,6 @@
 {
   "format": "harmonomicon.activity-package/0.15",
-  "id": "harmonomicon.choicepoll",
+  "id": "harmonomicon.scheduledpoll",
   "version": "0.3.0",
   "content": {
     "language": "en",
@@ -28,15 +28,15 @@
     "private_views@1",
     "clock@1",
     "text@1",
-    "collect@1",
     "reveal@1",
-    "tally@1"
+    "tally@1",
+    "collect_until@1"
   ],
   "runbook": {
     "steps": [
       {
         "id": "vote",
-        "op": "collect@1",
+        "op": "collect_until@1",
         "actors": "participants",
         "prompt": "Choose an outing.",
         "fields": {
@@ -50,8 +50,7 @@
             ]
           }
         },
-        "close": "organizer",
-        "afterMs": 60000
+        "until": 50
       },
       {
         "id": "reveal",

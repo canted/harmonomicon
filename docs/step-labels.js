@@ -1,7 +1,9 @@
 /** Summaries of reusable operation settings, never activity-specific templates. */
 export function stepLines(step) {
   const lines = [step.op];
-  if (step.prompt) lines.push(`“${step.prompt}”`);
+  if (typeof step.prompt === 'string') lines.push(`“${step.prompt}”`);
+  else if (step.prompt?.setting) lines.push(`Prompt from instance setting: ${step.prompt.setting}`);
+  if (Object.hasOwn(step,'until')) lines.push(`${step.op === 'wait_until@1' ? 'Waits until' : 'Closes at'}: ${typeof step.until === 'object' ? 'instance setting '+step.until.setting : step.until+' Unix ms'}`);
   if (step.actors) lines.push(`Actors: ${{participants:'participants',turn:'current participant',others:'other participants'}[step.actors] ?? step.actors}`);
   for (const [name,field] of Object.entries(step.fields ?? {})) {
     let value = field.type;

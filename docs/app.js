@@ -76,7 +76,7 @@ function render(diagram) {
   }
   setText('layer-prompt',diagram.prompt);
   setText('layer-participants',`${diagram.participants.min}–${diagram.participants.max} participants`);
-  setText('layer-setup',diagram.content.setup ?? 'Not declared');
+  setText('layer-setup',(diagram.content.setup ?? 'Not declared') + Object.entries(diagram.settings).map(([key,value]) => ` ${key}: ${value.type}${Object.hasOwn(value,'default') ? ' (default: '+value.default+')' : ' (required)'}`).join(';'));
   setText('layer-events',unique(diagram.nodes.map(n=>n.subtitle)).join(' · '));
   setText('layer-views',diagram.content.access ?? 'Not declared');
   setText('layer-requires',diagram.requires.join(' · '));

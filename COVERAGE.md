@@ -73,3 +73,11 @@ Candidate 0.14 adds [ten runbook examples](format/0.14/README.md#start-with-a-pa
 - A new pooled-ideas-and-pairs arrangement reuses both pool and group operations, transfers between apps, and preserves private results after restart. No complete-activity token was added.
 
 The proposed 25/10 target still needs numeric ratings, repeated card routing, exact score aggregation, and ranked reveal. Streams, media, recurrence, and permissioned dialogue remain unported. The [migration checklist](format/0.14/MIGRATION.md) includes all twenty earlier packages: zero complete migrations, twenty requiring additional rules, zero dismissed as outside scope. Counts refer to full legacy behavior and supported setup choices, not similarity of titles or selected variants. The [next milestone](ROADMAP.md#path-from-013-to-10) addresses exact timing and instance setup bindings first.
+
+## Composed candidate 0.15 evidence
+
+Candidate 0.15 adds [scheduled collection and saved settings](format/0.15/README.md#saved-instance-settings). Its twelve examples and sixteen traces pass both independent app hosts. The twelve previous traces retain the same outcomes and views.
+
+The [migration checklist](format/0.15/MIGRATION.md) now records **one complete migration, nineteen requiring additional rules, and zero outside scope**. The scheduled text check-in reproduces its earlier opening/closing constraints, optional saved question, one private answer per participant, exact closing, missing-answer omission, and accepted-order reveal. Six scenarios compare the unchanged legacy reference model and actual 0.12 implementations with 0.15 in both languages. Envelope and view shapes differ; adapters compare behavior and audience access rather than asserting wire compatibility.
+
+A scheduled check-in followed by paired reflection demonstrates the same schedule composed with a different audience and continuation; it transfers and survives restart in both apps. A structured scheduled poll additionally tests reveal and tally with a literal deadline. This does not supply recurrence, routed numeric scoring, ongoing streams, or media. Those remain explicit gaps in the [roadmap](ROADMAP.md#path-from-013-to-10).

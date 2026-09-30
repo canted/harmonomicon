@@ -8,7 +8,7 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.14/examples');
+const source = path.join(here,'../format/0.15/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -121,4 +121,18 @@ test('black text on every diagram stage fill meets WCAG AA 4.5:1', async () => {
     const ratio = (luminance+0.05)/0.05;
     assert.ok(ratio>=4.5, `${hex}: ${ratio.toFixed(2)}:1`);
   }
+});
+
+
+test('scheduled references and declared settings remain visible without invented instance values', () => {
+  const pkg=read(path.join(source,'scheduled-check-in.json'));
+  const diagram=buildDiagram(pkg);
+  assert.deepEqual(diagram.settings,pkg.settings);
+  assert.match(diagram.nodes[0].description,/instance setting: question/);
+  const lines=stepLines(pkg.runbook.steps[1]).join('\n');
+  assert.match(lines,/Closes at: instance setting closes_at/);
+  const svg=renderSvg(diagram);
+  assert.ok(svg.includes('instance setting opens_at'));
+  assert.ok(svg.includes('instance setting closes_at'));
+  assert.ok(!svg.includes('[object Object]'));
 });
