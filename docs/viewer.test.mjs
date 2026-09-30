@@ -5,6 +5,8 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildDiagram, FORMAT} from './model.js';
 import {layoutDiagram} from './diagram-layout.js';
+import {stepLines, containerLabel} from './step-labels.js';
+import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const source = path.join(here,'../format/0.14/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
@@ -66,8 +68,16 @@ test('nested arrays are rendered as bodies without expanding iterations or inven
   assert.deepEqual(diagram.edges.map(e => [e.source,e.target,e.label]),[
     ['outer','inner','steps'],['inner','second','next'],['outer','after','next']]);
   const layout = layoutDiagram(diagram);
-  assert.ok(layout.nodes[1].x > layout.nodes[0].x);
-  assert.equal(layout.nodes[3].x,layout.nodes[0].x);
+  const outer = layout.nodes[0];
+  assert.equal(outer.container,true);
+  for (const child of layout.nodes.slice(1,3)) {
+    assert.ok(child.x-child.width/2 >= outer.x-outer.width/2+20);
+    assert.ok(child.x+child.width/2 <= outer.x+outer.width/2-20);
+    assert.ok(child.y-child.height/2 >= outer.y-outer.height/2+outer.headerHeight);
+    assert.ok(child.y+child.height/2 <= outer.y+outer.height/2-20);
+  }
+  assert.ok(layout.nodes[3].y-layout.nodes[3].height/2 > outer.y+outer.height/2);
+  assert.equal(layout.edges.some(e => e.kind === 'nested'),false);
 });
 
 test('malformed structure fails without falling back to an activity template', () => {
@@ -76,4 +86,26 @@ test('malformed structure fails without falling back to an activity template', (
   assert.throws(() => buildDiagram({...base,runbook:{steps:[{id:'x'}]}}),/id and op/);
   assert.throws(() => buildDiagram({...base,runbook:{steps:[{id:'x',op:'a'},{id:'x',op:'b'}]}}),/Duplicate/);
   assert.throws(() => buildDiagram({...base,runbook:{steps:[{id:'x',op:'a',steps:[]}]}}),/nonempty/);
+});
+
+test('summaries expose declared options, privacy, prompts, actors and alternative close triggers', () => {
+  const step = {id:'custom',op:'collect@1',prompt:'Choose something.',actors:'others',
+    fields:{pick:{type:'choice',options:['One','Two'],visibility:'private'}},close:'organizer',afterMs:60000};
+  const text = stepLines(step).join('\n');
+  assert.match(text,/Choose something/); assert.match(text,/other participants/);
+  assert.match(text,/One · Two/); assert.match(text,/private/);
+  assert.match(text,/organizer advances OR 1 min passes/);
+  assert.match(containerLabel({op:'for_each@1',over:'participants'}),/Repeat for each participant/);
+  assert.match(containerLabel({op:'for_items@1',source:'my_pool'}),/item from my_pool/);
+  const svg = renderSvg(buildDiagram({...base,runbook:{steps:[step]}}));
+  assert.ok(svg.includes('One · Two')); assert.ok(svg.includes('Choose something.'));
+});
+
+test('shared renderer escapes package strings and never turns choices into flow branches', () => {
+  const pkg = {...base,runbook:{steps:[{id:'answer',op:'collect@1',prompt:'<script>alert(1)</script>',
+    fields:{choice:{type:'choice',options:['<one>','two'],visibility:'private'}}}]}};
+  const diagram = buildDiagram(pkg);
+  assert.equal(diagram.nodes.length,1); assert.equal(diagram.edges.length,0);
+  const svg = renderSvg(diagram);
+  assert.ok(svg.includes('&lt;script&gt;')); assert.ok(!svg.includes('<script>'));
 });

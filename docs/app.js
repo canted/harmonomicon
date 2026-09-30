@@ -1,11 +1,11 @@
 import {buildDiagram} from './model.js';
-import {diagramFill} from './palette.js';
-import {layoutDiagram, edgeLabelWidth, NODE_FONT_SIZE, EDGE_FONT_SIZE} from './diagram-layout.js';
+import {renderSvg} from './diagram-svg.js';
+import {layoutDiagram} from './diagram-layout.js';
 
 const $ = id => document.getElementById(id);
 let current = null;
 let graph = null;
-let graphOriginX = 0;
+
 
 function setStatus(message, error = false) {
   $('status').textContent = message;
@@ -40,46 +40,26 @@ function selectStage(id, focus = true) {
   for (const button of $('stage-buttons').querySelectorAll('button')) {
     button.setAttribute('aria-pressed',String(button.dataset.stage === id));
   }
-  if (graph) {
-    graph.nodes().removeClass('selected');
-    const node = graph.getElementById(id);
-    node.addClass('selected');
-    if (focus) {
-      const viewport = $('diagram-scroll');
-      viewport.scrollTo({left:Math.max(0,node.renderedPosition().x-viewport.clientWidth/2),top:Math.max(0,node.renderedPosition().y-viewport.clientHeight/2),behavior:'smooth'});
-    }
+  if (graph && focus) {
+    const node = graph.nodes.find(n => n.id === id);
+    $('diagram-scroll').scrollTo({top:Math.max(0,node.y-node.height/2-20),left:0,behavior:'smooth'});
   }
 }
 function renderGraph(diagram) {
-  if (graph) { graph.destroy(); graph = null; }
-  const fallback = $('graph-fallback');
-  if (typeof window.cytoscape !== 'function') {
-    fallback.hidden = false;
-    $('diagram').setAttribute('aria-label','Graph unavailable; use the step list below');
-    return;
-  }
-  fallback.hidden = true;
-  const layout = layoutDiagram(diagram);
-  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, layout.width)}px`;
-  $('diagram').style.height = `${layout.height}px`;
-  graphOriginX = Math.max(0, ($('diagram-scroll').clientWidth - layout.width) / 2);
+  graph = layoutDiagram(diagram);
+  $('diagram').innerHTML = renderSvg(diagram);
+  $('diagram').style.width = `${graph.width}px`;
+  $('diagram').style.height = `${graph.height}px`;
   $('diagram-scroll').scrollTo({left:0,top:0});
-  const elements = [
-    ...layout.nodes.map(node => ({data:{id:node.id,label:node.title,fill:diagramFill(node),width:node.width,height:node.height},position:{x:node.x,y:node.y}})),
-    ...diagram.edges.map(edge => ({data:{id:edge.id,source:edge.source,target:edge.target,label:edge.label,kind:edge.kind === 'nested' ? 'branch' : 'main',labelOffsetX:24+edgeLabelWidth(edge.label)/2}}))
-  ];
-  graph = window.cytoscape({
-    container:$('diagram'), elements, layout:{name:'preset',fit:false},
-    minZoom:1,maxZoom:2.5,userPanningEnabled:false,userZoomingEnabled:false,
-    style:[
-      {selector:'node',style:{'shape':'round-rectangle','width':'data(width)','height':'data(height)','background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':NODE_FONT_SIZE,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'none','text-valign':'center','text-halign':'center','padding':'0px'}},
-      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1,'label':'data(label)','font-size':EDGE_FONT_SIZE,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'none','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':2,'text-margin-x':'data(labelOffsetX)'}},
-      {selector:'edge[kind="branch"]',style:{'text-margin-x':0,'text-margin-y':-18}},
-    ]
-  });
-  graph.on('tap','node',event => selectStage(event.target.id()));
-  graph.ready(() => { graph.zoom(1); graph.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollTo({left:0,top:0}); });
+  $('graph-fallback').hidden = true;
+  for (const group of $('diagram').querySelectorAll('[data-step]')) {
+    group.addEventListener('click', event => { event.stopPropagation(); selectStage(group.dataset.step); });
+    group.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectStage(group.dataset.step); }
+    });
+  }
 }
+
 function render(diagram) {
   current = diagram;
   setText('package-title',diagram.title);
@@ -130,13 +110,18 @@ $('file-input').addEventListener('change',async event=>{
   try { openPackage(JSON.parse(await file.text()),file.name); }
   catch { setStatus('The selected file is not valid JSON.',true); }
 });
-$('fit-button').addEventListener('click',()=>{ graph?.zoom(1); graph?.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollTo({left:0,top:0}); });
-$('png-button').addEventListener('click',()=>{
-  if (!graph) { setStatus('The graph library is unavailable; PNG export is disabled.',true); return; }
-  const anchor=document.createElement('a');
-  anchor.href=graph.png({full:true,scale:2,bg:'#ffffff'});
-  anchor.download=`${current?.id?.split('.').pop() || 'activity'}-diagram.png`;
-  anchor.click();
+$('fit-button').addEventListener('click',()=> $('diagram-scroll').scrollTo({left:0,top:0}));
+$('png-button').addEventListener('click',async()=>{
+  if (!current) return;
+  const url = URL.createObjectURL(new Blob([renderSvg(current)],{type:'image/svg+xml'}));
+  try {
+    const img = new Image(); img.src = url; await img.decode();
+    const canvas = document.createElement('canvas'); canvas.width=img.width*2; canvas.height=img.height*2;
+    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+    const anchor=document.createElement('a'); anchor.href=canvas.toDataURL('image/png');
+    anchor.download=`${current.id.split('.').pop()}-diagram.png`; anchor.click();
+  } catch { setStatus('Could not export this diagram as PNG.',true); }
+  finally { URL.revokeObjectURL(url); }
 });
 async function loadCatalog() {
   try {

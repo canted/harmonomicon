@@ -38,9 +38,9 @@
     <section class="workspace" aria-label="Package diagram and inspector">
       <div class="diagram-panel">
         <div class="panel-heading"><div><h3>Runbook structure</h3><p>Choose a step to inspect its JSON.</p></div><div class="diagram-tools"><button type="button" id="fit-button" title="Return to the start of the diagram">Start</button><button type="button" id="png-button" title="Save a static image of the diagram">Save PNG</button></div></div>
-        <div class="diagram-scroll" id="diagram-scroll"><div id="diagram" role="img" aria-label="Interactive graph of the declared runbook steps"></div></div>
+        <div class="diagram-scroll" id="diagram-scroll"><div id="diagram" role="group" aria-label="Interactive graph of the declared runbook steps"></div></div>
         <p class="graph-fallback" id="graph-fallback" hidden>The diagram library could not load. The step list and inspector remain available below.</p>
-        <div class="legend"><span>next = next step in the same array · steps = nested body</span></div>
+        <div class="legend"><span>next = next step · containers enclose repeated or nested steps</span></div>
         <div class="stage-list"><h4>Steps</h4><div id="stage-buttons" role="group" aria-label="Select a step"></div></div>
       </div>
       <aside class="inspector" aria-labelledby="inspector-title">
@@ -61,7 +61,7 @@
     <p class="boundary">This visualization reads the package’s runbook directly. Arrows show array order and nesting, not runtime outcomes or participant iterations. It does not run an instance, certify an app host, or infer rules from human-facing instructions. The normative rules are in the repository’s <code>format/0.14</code> specification.</p>
   </main>
   <footer>Harmonomicon · Activity package format 0.14</footer>
-  <script src="vendor/cytoscape.min.js"></script>
+
   <script type="module" src="app.js"></script>
 </body>
 </html>
