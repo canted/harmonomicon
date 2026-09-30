@@ -1,5 +1,6 @@
 import {buildDiagram} from './model.js';
 import {palette, diagramFill} from './palette.js';
+import {layoutDiagram, NODE_FONT_SIZE, EDGE_FONT_SIZE} from './diagram-layout.js';
 
 const $ = id => document.getElementById(id);
 const examples = {
@@ -61,20 +62,20 @@ function renderGraph(diagram) {
     return;
   }
   fallback.hidden = true;
-  const maxColumn = Math.max(...diagram.nodes.map(node => node.column));
-  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, 340 + maxColumn * 450)}px`;
-  $('diagram').style.height = diagram.nodes.some(node => node.row > 0) ? '580px' : '380px';
+  const layout = layoutDiagram(diagram);
+  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, layout.width)}px`;
+  $('diagram').style.height = `${layout.height}px`;
   $('diagram-scroll').scrollLeft = 0;
   const elements = [
-    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,fill:diagramFill(n)},position:{x:170+n.column*450,y:190+n.row*220}})),
-    ...diagram.edges.map(e => ({data:{id:e.id,source:e.source,target:e.target,label:e.label}}))
+    ...layout.nodes.map(node => ({data:{id:node.id,label:node.title,fill:diagramFill(node),width:node.width,height:node.height},position:{x:node.x,y:node.y}})),
+    ...diagram.edges.map(edge => ({data:{id:edge.id,source:edge.source,target:edge.target,label:edge.label}}))
   ];
   graph = window.cytoscape({
     container:$('diagram'), elements, layout:{name:'preset',fit:false},
     minZoom:1,maxZoom:2.5,userPanningEnabled:false,userZoomingEnabled:false,
     style:[
-      {selector:'node',style:{'shape':'round-rectangle','width':260,'height':105,'background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':21,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':220,'text-valign':'center','text-halign':'center','padding':'10px'}},
-      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1,'label':'data(label)','font-size':18,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':3,'text-margin-y':-12}},
+      {selector:'node',style:{'shape':'round-rectangle','width':'data(width)','height':'data(height)','background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':NODE_FONT_SIZE,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'none','text-valign':'center','text-halign':'center','padding':'0px'}},
+      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1,'label':'data(label)','font-size':EDGE_FONT_SIZE,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':2,'text-margin-y':-9}},
     ]
   });
   graph.on('tap','node',event => selectStage(event.target.id()));
