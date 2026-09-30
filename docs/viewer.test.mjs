@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {buildDiagram, FORMAT} from './model.js';
 import {layoutDiagram} from './diagram-layout.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.13/examples');
+const source = path.join(here,'../format/0.14/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};

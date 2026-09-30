@@ -62,3 +62,14 @@ The 25-card classifications above remain the audit of candidate 0.12. Candidate 
 | Proposed 25/10 digital variant | No card routing, per-round numeric score collection, score aggregation, or ranked reveal yet. |
 
 This establishes concrete progress on four earlier failures, including a bounded prompted-routine variant. It is not a new claim that all eight targets or the full activity cards are covered. The [remaining milestones](ROADMAP.md#path-from-013-to-10) target pools and assignments first, then scoring/routed rounds and longer/media activities.
+
+## Composed candidate 0.14 evidence
+
+Candidate 0.14 adds [ten runbook examples](format/0.14/README.md#start-with-a-package) and [twelve exact traces](format/0.14/conformance/README.md), run in two independent [durable app hosts](validation/0.14/README.md). The 0.12 card classifications above remain historical; they are not silently inherited.
+
+- The selected Gratefulness Grab Bag digital target now has two independent slips per person, non-author reader claims, private reader access, and item-by-item anonymous reveal. Accepted order and app acknowledgment are explicit digital choices; there is no claimed physical draw or proof of reading aloud.
+- The selected Impromptu Networking coordination uses three organizer-supplied group maps and timed private group notes. Regrouping preserves each earlier round's access. It does not select diverse partners or observe spoken conversation.
+- Fixed 1-2-4-All software coordination uses exact timed windows and roster-based solo/pair/quartet/whole-group partitions. Optional typed notes remain group-private; human synthesis and live discussion are not inferred. This differs from 0.12's after-round reveal and setup-supplied maps.
+- A new pooled-ideas-and-pairs arrangement reuses both pool and group operations, transfers between apps, and preserves private results after restart. No complete-activity token was added.
+
+The proposed 25/10 target still needs numeric ratings, repeated card routing, exact score aggregation, and ranked reveal. Streams, media, recurrence, and permissioned dialogue remain unported. The [migration checklist](format/0.14/MIGRATION.md) includes all twenty earlier packages: zero complete migrations, twenty requiring additional rules, zero dismissed as outside scope. Counts refer to full legacy behavior and supported setup choices, not similarity of titles or selected variants. The [next milestone](ROADMAP.md#path-from-013-to-10) addresses exact timing and instance setup bindings first.

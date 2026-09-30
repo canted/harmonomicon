@@ -8,8 +8,24 @@
     "title": "Choose a group outing"
   },
   {
+    "file": "examples/gratitude-pool.json",
+    "title": "Gratefulness Grab Bag"
+  },
+  {
     "file": "examples/list-game.json",
     "title": "List Game"
+  },
+  {
+    "file": "examples/one-two-four-all.json",
+    "title": "1-2-4-All fixed digital rooms"
+  },
+  {
+    "file": "examples/partner-rounds.json",
+    "title": "Impromptu Networking digital rounds"
+  },
+  {
+    "file": "examples/pooled-ideas-and-pairs.json",
+    "title": "Pooled ideas followed by pair discussion"
   },
   {
     "file": "examples/see-think-wonder.json",

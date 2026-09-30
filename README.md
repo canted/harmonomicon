@@ -8,7 +8,7 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current candidate:** [0.13](format/0.13/README.md) lets a package assemble reusable steps into a runbook. It can collect contributions, reveal them, count choices, append to a shared story, and repeat steps for each participant. More complex assignments, media, and ongoing activity streams still need work before the [1.0 goal](ROADMAP.md#goal-for-10) is met.
+**Current candidate:** [0.14](format/0.14/README.md) lets a package assemble reusable steps into a runbook. It can collect contributions, reveal them, count choices, append to a shared story, and repeat steps for each participant. Pools, reader claims, and private group rounds are now supported. Routed scoring, media, and ongoing activity streams still need work before the [1.0 goal](ROADMAP.md#goal-for-10) is met.
 
 ## A simple example: one question for a group
 
@@ -24,7 +24,7 @@ The package would describe the activity in terms like these:
 | Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
 | What happens if someone misses it | The reveal still happens after one hour |
 
-The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.13 package](format/0.13/examples/check-in.json) if it supports those operations.
+The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.14 package](format/0.14/examples/check-in.json) if it supports those operations.
 
 ![Runbook structure generated from the check-in package: answer then reveal](docs/previews/check-in.svg)
 
@@ -41,7 +41,7 @@ The activity has a few stages:
 
 The package says when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how votes are counted. It also says what happens if fewer than three images arrive or someone never submits a caption. In format 0.12, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A future runbook could select a different recovery step. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
-The earlier [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) runs this through one predefined behavior, with stored PNG images and audience-controlled access. Expressing its image assignments and voting as reusable runbook steps is part of the remaining work. Candidate 0.13 does not yet run this caption contest.
+The earlier [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) runs this through one predefined behavior, with stored PNG images and audience-controlled access. Expressing its image assignments and voting as reusable runbook steps is part of the remaining work. Candidate 0.14 does not yet run this caption contest.
 
 Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
 
@@ -59,21 +59,25 @@ An activity package brings together:
 
 The app that runs a package is called an **app host**. It provides accounts, storage, scheduling, messages, and screens. It also executes the steps the package declares. The app host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-## Candidate 0.13 format
+## Candidate 0.14 format
 
 A package now contains a **runbook**: an ordered list of steps. Each step names an operation and supplies its settings. The package decides the sequence; the app implements the reusable operations.
 
-For example, the [Two Truths package](format/0.13/examples/two-truths.json) repeats three steps for each speaker: collect visible statements with a private answer, collect private guesses from everybody else, and reveal the answer and guesses when the speaker advances. The [List Game package](format/0.13/examples/list-game.json) uses the same operations with five items and text guesses. A [poll](format/0.13/examples/choice-poll.json) uses collection, reveal, and counting. A [prompted routine](format/0.13/examples/see-think-wonder.json) uses three collections that the organizer advances. A [timed story](format/0.13/examples/timed-story.json) repeats a text-append step for each participant.
+For example, the [Two Truths package](format/0.14/examples/two-truths.json) repeats three steps for each speaker: collect visible statements with a private answer, collect private guesses from everybody else, and reveal the answer and guesses when the speaker advances. The [List Game package](format/0.14/examples/list-game.json) uses the same operations with five items and text guesses. A [poll](format/0.14/examples/choice-poll.json) uses collection, reveal, and counting. A [prompted routine](format/0.14/examples/see-think-wonder.json) uses three collections that the organizer advances. A [timed story](format/0.14/examples/timed-story.json) repeats a text-append step for each participant.
 
-The [authoring guide](format/0.13/authoring.md) shows how these packages are written. The [specification](format/0.13/README.md), [schema](format/0.13/package.schema.json), and [operation rules](format/0.13/operations.md) define what an app must do. The [conformance cases](format/0.13/conformance/README.md) are sample actions and expected results that check an implementation.
+The [authoring guide](format/0.14/authoring.md) shows how these packages are written. The [specification](format/0.14/README.md), [schema](format/0.14/package.schema.json), and [operation rules](format/0.14/operations.md) define what an app must do. The [conformance cases](format/0.14/conformance/README.md) are sample actions and expected results that check an implementation.
 
-In the [local trial](validation/0.13/README.md), separate Python and Node.js apps run the same composed packages with their own databases. The trial also creates a new package that performs a check-in followed by a story relay, transfers it between the apps, and runs it without changing either interpreter. The same tests check privacy, simultaneous submissions, deadlines, retries, and restart.
+In the [local trial](validation/0.14/README.md), separate Python and Node.js apps run the same composed packages with their own databases. The trial also creates a new package that performs a check-in followed by a story relay, transfers it between the apps, and runs it without changing either interpreter. The trial also transfers a new pooled-ideas-then-pairs arrangement. Tests check private group history, competing item IDs and reader claims, deadlines, retries, and restart.
+
+New packages add a [two-item gratitude pool](format/0.14/examples/gratitude-pool.json), [changing partner rounds](format/0.14/examples/partner-rounds.json), [timed solo/pair/quartet rounds](format/0.14/examples/one-two-four-all.json), and [pooled ideas followed by paired reflection](format/0.14/examples/pooled-ideas-and-pairs.json). The package states how items are ordered and how groups are chosen; it does not infer those rules from instructions.
+
+The [migration checklist](format/0.14/MIGRATION.md) accounts for all twenty earlier examples. It records available steps and missing rules; none is yet a complete migration. Ten current runbook examples demonstrate selected digital activities, rather than all earlier functionality.
 
 The [earlier 0.12 candidate](format/0.12/README.md) contains ten complete activity behaviors and PNG support. Its richer examples remain useful for testing which rules the runbook needs next. Support for one candidate does not imply support for the other.
 
 ## Package inspector
 
-The [activity package inspector](docs/README.md) renders candidate 0.13 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages.
+The [activity package inspector](docs/README.md) renders candidate 0.14 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages.
 
 ## Roadmap
 
