@@ -1,0 +1,37 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.example.group-check-in",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "One-question group check-in",
+    "summary": "Everyone answers one question privately; the group sees the answers at a set time.",
+    "setup": "Invite the group and choose when answers open and close.",
+    "prompt": "What made you smile today?",
+    "participant": "Send one text answer before the closing time. You can see your answer while the check-in is open.",
+    "completion": "At the closing time, all submitted answers appear for the group. Missing answers do not delay the reveal.",
+    "access": "Participants need a way to read the question and enter text. Missing an answer does not block the group."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "timed_collection@1",
+    "medium": "text",
+    "allowPromptOverride": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "package": "../examples/shared-notebook.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 10,
+    "endsAt": 50
+  },
+  "expectStatus": "unsupported",
+  "missing": [
+    "behavior:ongoing_space@1",
+    "private_views@1"
+  ],
+  "events": []
+}

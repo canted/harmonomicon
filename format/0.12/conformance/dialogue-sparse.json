@@ -1,0 +1,194 @@
+{
+  "package": "../examples/feedback-circle.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "permissioned_dialogue@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "m",
+      "a",
+      "b"
+    ],
+    "maker": "m"
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "advance-1",
+        "type": "advance",
+        "actor": "host",
+        "at": 1,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "maker_questions",
+            "phaseNumber": 2,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "advance-2",
+        "type": "advance",
+        "actor": "host",
+        "at": 2,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "advance-3",
+        "type": "advance",
+        "actor": "host",
+        "at": 3,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "advance-4",
+        "type": "advance",
+        "actor": "host",
+        "at": 4,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "too-late",
+        "type": "advance",
+        "actor": "host",
+        "at": 5,
+        "payload": {}
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

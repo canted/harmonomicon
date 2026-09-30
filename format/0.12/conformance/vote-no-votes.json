@@ -1,0 +1,386 @@
+{
+  "package": "../examples/text-caption-vote.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1"
+  ],
+  "contracts": [
+    "offered_response_vote@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "opensAt": 10,
+    "sourceDeadline": 20,
+    "responseDeadline": 40,
+    "voteDeadline": 50,
+    "roundId": "42"
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-1",
+        "type": "submit_source",
+        "actor": "1",
+        "at": 11,
+        "payload": {
+          "value": "Source 1"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-2",
+        "type": "submit_source",
+        "actor": "2",
+        "at": 12,
+        "payload": {
+          "value": "Source 2"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-3",
+        "type": "submit_source",
+        "actor": "3",
+        "at": 13,
+        "payload": {
+          "value": "Source 3"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-4",
+        "type": "submit_source",
+        "actor": "4",
+        "at": 14,
+        "payload": {
+          "value": "Source 4"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "source-close",
+        "type": "tick",
+        "actor": "system",
+        "at": 20,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "offer-1",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 20,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "offer-2",
+        "type": "request_offer",
+        "actor": "2",
+        "at": 20,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "response-1",
+        "type": "submit_response",
+        "actor": "1",
+        "at": 21,
+        "payload": {
+          "source": "4",
+          "value": "Reply one"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "response-2",
+        "type": "submit_response",
+        "actor": "2",
+        "at": 22,
+        "payload": {
+          "source": "3",
+          "value": "Reply two"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "vote-open",
+        "type": "tick",
+        "actor": "system",
+        "at": 40,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "voting",
+            "sourceCount": 4,
+            "responseCount": 2,
+            "sources": [
+              {
+                "actor": "1",
+                "value": "Source 1"
+              },
+              {
+                "actor": "2",
+                "value": "Source 2"
+              },
+              {
+                "actor": "3",
+                "value": "Source 3"
+              },
+              {
+                "actor": "4",
+                "value": "Source 4"
+              }
+            ],
+            "responses": [
+              {
+                "actor": "1",
+                "source": "4",
+                "value": "Reply one"
+              },
+              {
+                "actor": "2",
+                "source": "3",
+                "value": "Reply two"
+              }
+            ],
+            "voteCount": 0
+          }
+        },
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "voting",
+            "sourceCount": 4,
+            "responseCount": 2,
+            "ownSource": {
+              "actor": "1",
+              "value": "Source 1"
+            },
+            "offer": [
+              {
+                "actor": "4",
+                "value": "Source 4"
+              },
+              {
+                "actor": "2",
+                "value": "Source 2"
+              }
+            ],
+            "ownResponse": {
+              "actor": "1",
+              "source": "4",
+              "value": "Reply one"
+            },
+            "sources": [
+              {
+                "actor": "1",
+                "value": "Source 1"
+              },
+              {
+                "actor": "2",
+                "value": "Source 2"
+              },
+              {
+                "actor": "3",
+                "value": "Source 3"
+              },
+              {
+                "actor": "4",
+                "value": "Source 4"
+              }
+            ],
+            "responses": [
+              {
+                "actor": "1",
+                "source": "4",
+                "value": "Reply one"
+              },
+              {
+                "actor": "2",
+                "source": "3",
+                "value": "Reply two"
+              }
+            ],
+            "voteCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "vote-close",
+        "type": "tick",
+        "actor": "system",
+        "at": 50,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "sourceCount": 4,
+            "responseCount": 2,
+            "sources": [
+              {
+                "actor": "1",
+                "value": "Source 1"
+              },
+              {
+                "actor": "2",
+                "value": "Source 2"
+              },
+              {
+                "actor": "3",
+                "value": "Source 3"
+              },
+              {
+                "actor": "4",
+                "value": "Source 4"
+              }
+            ],
+            "responses": [
+              {
+                "actor": "1",
+                "source": "4",
+                "value": "Reply one"
+              },
+              {
+                "actor": "2",
+                "source": "3",
+                "value": "Reply two"
+              }
+            ],
+            "voteCount": 0,
+            "scores": [
+              {
+                "responseActor": "1",
+                "votes": 0
+              },
+              {
+                "responseActor": "2",
+                "votes": 0
+              }
+            ],
+            "winners": []
+          }
+        },
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "complete",
+            "sourceCount": 4,
+            "responseCount": 2,
+            "ownSource": {
+              "actor": "2",
+              "value": "Source 2"
+            },
+            "offer": [
+              {
+                "actor": "3",
+                "value": "Source 3"
+              },
+              {
+                "actor": "1",
+                "value": "Source 1"
+              }
+            ],
+            "ownResponse": {
+              "actor": "2",
+              "source": "3",
+              "value": "Reply two"
+            },
+            "sources": [
+              {
+                "actor": "1",
+                "value": "Source 1"
+              },
+              {
+                "actor": "2",
+                "value": "Source 2"
+              },
+              {
+                "actor": "3",
+                "value": "Source 3"
+              },
+              {
+                "actor": "4",
+                "value": "Source 4"
+              }
+            ],
+            "responses": [
+              {
+                "actor": "1",
+                "source": "4",
+                "value": "Reply one"
+              },
+              {
+                "actor": "2",
+                "source": "3",
+                "value": "Reply two"
+              }
+            ],
+            "voteCount": 0,
+            "scores": [
+              {
+                "responseActor": "1",
+                "votes": 0
+              },
+              {
+                "responseActor": "2",
+                "votes": 0
+              }
+            ],
+            "winners": []
+          }
+        }
+      ]
+    }
+  ]
+}

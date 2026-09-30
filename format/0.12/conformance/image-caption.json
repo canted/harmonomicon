@@ -1,0 +1,618 @@
+{
+  "package": "../examples/image-caption-circle.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1",
+    "image_ref@1"
+  ],
+  "contracts": [
+    "offered_response@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "opensAt": 10,
+    "sourceDeadline": 20,
+    "responseDeadline": 40,
+    "roundId": "42"
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "sources_open",
+            "sourceCount": 0,
+            "responseCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "s1",
+        "type": "submit_source",
+        "actor": "1",
+        "at": 11,
+        "payload": {
+          "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "sources_open",
+            "sourceCount": 1,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "1",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            }
+          }
+        },
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "sources_open",
+            "sourceCount": 1,
+            "responseCount": 0
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "sources_open",
+            "sourceCount": 1,
+            "responseCount": 0
+          }
+        }
+      ],
+      "mediaReads": [
+        {
+          "actor": "1",
+          "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360",
+          "expect": "allowed"
+        },
+        {
+          "actor": "2",
+          "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360",
+          "expect": "denied"
+        },
+        {
+          "actor": "host",
+          "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360",
+          "expect": "denied"
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "foreign-ref",
+        "type": "submit_source",
+        "actor": "2",
+        "at": 11,
+        "payload": {
+          "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "s2",
+        "type": "submit_source",
+        "actor": "2",
+        "at": 12,
+        "payload": {
+          "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+        }
+      },
+      "outcome": "accepted",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "s3",
+        "type": "submit_source",
+        "actor": "3",
+        "at": 13,
+        "payload": {
+          "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+        }
+      },
+      "outcome": "accepted",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "s4",
+        "type": "submit_source",
+        "actor": "4",
+        "at": 14,
+        "payload": {
+          "value": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+        }
+      },
+      "outcome": "accepted",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "late",
+        "type": "submit_source",
+        "actor": "1",
+        "at": 20,
+        "payload": {
+          "value": "Late replacement"
+        }
+      },
+      "outcome": "rejected",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "offer-1",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 20,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "1",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            },
+            "offer": [
+              {
+                "actor": "4",
+                "value": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+              },
+              {
+                "actor": "2",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "2",
+              "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+            }
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0
+          }
+        }
+      ],
+      "mediaReads": [
+        {
+          "actor": "1",
+          "ref": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab",
+          "expect": "allowed"
+        },
+        {
+          "actor": "1",
+          "ref": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb",
+          "expect": "allowed"
+        },
+        {
+          "actor": "1",
+          "ref": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0",
+          "expect": "denied"
+        },
+        {
+          "actor": "host",
+          "ref": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab",
+          "expect": "denied"
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "offer-2",
+        "type": "request_offer",
+        "actor": "2",
+        "at": 21,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "2",
+              "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+            },
+            "offer": [
+              {
+                "actor": "3",
+                "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+              },
+              {
+                "actor": "1",
+                "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "offer-1",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 22,
+        "payload": {}
+      },
+      "outcome": "replayed",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "offer-1-new",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 23,
+        "payload": {}
+      },
+      "outcome": "existing",
+      "views": [
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "1",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            },
+            "offer": [
+              {
+                "actor": "4",
+                "value": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+              },
+              {
+                "actor": "2",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "offer-1-new",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 24,
+        "payload": {}
+      },
+      "outcome": "replayed",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "offer-1-new",
+        "type": "request_offer",
+        "actor": "2",
+        "at": 24,
+        "payload": {}
+      },
+      "outcome": "rejected",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "offer-1-new",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 24,
+        "payload": {
+          "changed": true
+        }
+      },
+      "outcome": "rejected",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "response-1",
+        "type": "submit_response",
+        "actor": "1",
+        "at": 25,
+        "payload": {
+          "source": "4",
+          "value": "A continuation for four"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 1,
+            "ownSource": {
+              "actor": "1",
+              "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+            },
+            "offer": [
+              {
+                "actor": "4",
+                "value": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+              },
+              {
+                "actor": "2",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              }
+            ],
+            "ownResponse": {
+              "actor": "1",
+              "source": "4",
+              "value": "A continuation for four"
+            }
+          }
+        },
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 1,
+            "ownSource": {
+              "actor": "2",
+              "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+            },
+            "offer": [
+              {
+                "actor": "3",
+                "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+              },
+              {
+                "actor": "1",
+                "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "responses_open",
+            "sourceCount": 4,
+            "responseCount": 1
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "wrong-choice",
+        "type": "submit_response",
+        "actor": "2",
+        "at": 26,
+        "payload": {
+          "source": "2",
+          "value": "Cannot use my own"
+        }
+      },
+      "outcome": "rejected",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "response-2",
+        "type": "submit_response",
+        "actor": "2",
+        "at": 27,
+        "payload": {
+          "source": "3",
+          "value": "A continuation for three"
+        }
+      },
+      "outcome": "accepted",
+      "views": []
+    },
+    {
+      "event": {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 40,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "sourceCount": 4,
+            "responseCount": 2,
+            "sources": [
+              {
+                "actor": "1",
+                "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+              },
+              {
+                "actor": "2",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              },
+              {
+                "actor": "3",
+                "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+              },
+              {
+                "actor": "4",
+                "value": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+              }
+            ],
+            "responses": [
+              {
+                "actor": "1",
+                "source": "4",
+                "value": "A continuation for four"
+              },
+              {
+                "actor": "2",
+                "source": "3",
+                "value": "A continuation for three"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "3",
+          "expect": {
+            "phase": "complete",
+            "sourceCount": 4,
+            "responseCount": 2,
+            "ownSource": {
+              "actor": "3",
+              "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+            },
+            "sources": [
+              {
+                "actor": "1",
+                "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+              },
+              {
+                "actor": "2",
+                "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+              },
+              {
+                "actor": "3",
+                "value": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+              },
+              {
+                "actor": "4",
+                "value": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+              }
+            ],
+            "responses": [
+              {
+                "actor": "1",
+                "source": "4",
+                "value": "A continuation for four"
+              },
+              {
+                "actor": "2",
+                "source": "3",
+                "value": "A continuation for three"
+              }
+            ]
+          }
+        }
+      ],
+      "mediaReads": [
+        {
+          "actor": "host",
+          "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360",
+          "expect": "allowed"
+        },
+        {
+          "actor": "3",
+          "ref": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab",
+          "expect": "allowed"
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "response-late",
+        "type": "submit_response",
+        "actor": "3",
+        "at": 41,
+        "payload": {
+          "source": "1",
+          "value": "Too late"
+        }
+      },
+      "outcome": "rejected",
+      "views": []
+    }
+  ],
+  "uploads": [
+    {
+      "actor": "1",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGO4I+cGAAMaAUEO+HheAAAAAElFTkSuQmCC",
+      "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+    },
+    {
+      "actor": "2",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGPQyLsEAAIqAWk3JmoSAAAAAElFTkSuQmCC",
+      "ref": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+    },
+    {
+      "actor": "3",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNQXhUFAAIbAShAJlIcAAAAAElFTkSuQmCC",
+      "ref": "sha256:306bab48494d0ead84bb31a5d612110cb27058b11af883db7bc8a6abb87562e0"
+    },
+    {
+      "actor": "4",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4ulMXAASCAdwcfFAGAAAAAElFTkSuQmCC",
+      "ref": "sha256:eb550bcb8aef245f71612893e07dda97847c2f4dd8b650f8e1478c9ddfe5fcab"
+    }
+  ]
+}

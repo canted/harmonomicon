@@ -1,0 +1,243 @@
+{
+  "package": "../examples/image-daily-prompt.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "image_ref@1"
+  ],
+  "contracts": [
+    "repeated_collection@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 5
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "a-story",
+        "type": "submit",
+        "actor": "a",
+        "at": 5,
+        "payload": {
+          "occurrence": 1,
+          "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ],
+                "entries": [
+                  {
+                    "actor": "a",
+                    "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ],
+                "entries": [
+                  {
+                    "actor": "a",
+                    "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "next",
+        "type": "tick",
+        "actor": "system",
+        "at": 86400005,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "entries": [
+                  {
+                    "actor": "a",
+                    "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "phase": "open",
+                "submissionCount": 0,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ],
+                "entries": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "b-story",
+        "type": "submit",
+        "actor": "b",
+        "at": 86400006,
+        "payload": {
+          "occurrence": 2,
+          "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "own": {
+                  "actor": "a",
+                  "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+                },
+                "entries": [
+                  {
+                    "actor": "a",
+                    "value": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ],
+                "entries": [
+                  {
+                    "actor": "b",
+                    "value": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "uploads": [
+    {
+      "actor": "a",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGO4I+cGAAMaAUEO+HheAAAAAElFTkSuQmCC",
+      "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+    },
+    {
+      "actor": "b",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGPQyLsEAAIqAWk3JmoSAAAAAElFTkSuQmCC",
+      "ref": "sha256:b29dab324bc419f897c3eb687fa01981a50132b63dea8c1d603009dfd96a25eb"
+    }
+  ]
+}

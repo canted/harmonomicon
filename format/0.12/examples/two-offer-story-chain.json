@@ -1,0 +1,38 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.two-offer-story-chain",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Two-offer story chain",
+    "summary": "Two people are offered each story step; the first completed line advances the chain.",
+    "setup": "Invite participants, choose the start time, and set offer pairs for every step and fallback.",
+    "prompt": "A mysterious package arrived at the station.",
+    "participant": "If offered a step, read the current line and add one new line before its deadline, or decline.",
+    "completion": "Read the completed chain together.",
+    "access": "This text example can stall if every offer for a step expires or is declined."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 4,
+    "max": 8
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "competitive_handoff@1",
+    "allowPromptOverride": false,
+    "steps": 3,
+    "attemptMs": 60000
+  }
+}

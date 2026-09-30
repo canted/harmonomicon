@@ -1,0 +1,2279 @@
+{
+  "package": "../examples/feedback-circle.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "permissioned_dialogue@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "m",
+      "a",
+      "b"
+    ],
+    "maker": "m"
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "wrong-maker",
+        "type": "post_meaning",
+        "actor": "m",
+        "at": 1,
+        "payload": {
+          "value": "My work"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "meaning-a",
+        "type": "post_meaning",
+        "actor": "a",
+        "at": 2,
+        "payload": {
+          "value": "The opening stayed with me."
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "meaning",
+            "phaseNumber": 1,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "meaning",
+            "phaseNumber": 1,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "meaning-b",
+        "type": "post_meaning",
+        "actor": "b",
+        "at": 3,
+        "payload": {
+          "value": "The color suggests motion."
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "wrong-advance",
+        "type": "advance",
+        "actor": "a",
+        "at": 4,
+        "payload": {}
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "advance-1",
+        "type": "advance",
+        "actor": "host",
+        "at": 5,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "maker_questions",
+            "phaseNumber": 2,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "maker_questions",
+            "phaseNumber": 2,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "bad-answer",
+        "type": "answer_question",
+        "actor": "b",
+        "at": 6,
+        "payload": {
+          "questionId": "missing",
+          "value": "No question yet"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "maker-q",
+        "type": "ask_question",
+        "actor": "m",
+        "at": 7,
+        "payload": {
+          "value": "Where did you lose interest?"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "maker_questions",
+            "phaseNumber": 2,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "answer-a",
+        "type": "answer_question",
+        "actor": "a",
+        "at": 8,
+        "payload": {
+          "questionId": "maker-q",
+          "value": "In the second section."
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "answer-a-again",
+        "type": "answer_question",
+        "actor": "a",
+        "at": 9,
+        "payload": {
+          "questionId": "maker-q",
+          "value": "Another answer"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "answer-b",
+        "type": "answer_question",
+        "actor": "b",
+        "at": 10,
+        "payload": {
+          "questionId": "maker-q",
+          "value": "I stayed engaged."
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "advance-2",
+        "type": "advance",
+        "actor": "host",
+        "at": 11,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "neutral_questions",
+            "phaseNumber": 3,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "neutral-q",
+        "type": "ask_neutral",
+        "actor": "a",
+        "at": 12,
+        "payload": {
+          "value": "What outcome did you intend?"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "neutral-answer",
+        "type": "answer_neutral",
+        "actor": "m",
+        "at": 13,
+        "payload": {
+          "questionId": "neutral-q",
+          "value": "A feeling of uncertainty."
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "neutral_questions",
+            "phaseNumber": 3,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "wrong-neutral",
+        "type": "answer_neutral",
+        "actor": "a",
+        "at": 14,
+        "payload": {
+          "questionId": "neutral-q",
+          "value": "Not maker"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "advance-3",
+        "type": "advance",
+        "actor": "host",
+        "at": 15,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "request-a",
+        "type": "request_permission",
+        "actor": "a",
+        "at": 16,
+        "payload": {
+          "topic": "The ending"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "request-b",
+        "type": "request_permission",
+        "actor": "b",
+        "at": 17,
+        "payload": {
+          "topic": "The pacing"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "opinion-early",
+        "type": "post_opinion",
+        "actor": "a",
+        "at": 18,
+        "payload": {
+          "requestId": "request-a",
+          "value": "Too early"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "deny-a",
+        "type": "decide_permission",
+        "actor": "m",
+        "at": 19,
+        "payload": {
+          "requestId": "request-a",
+          "grant": false
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "opinion-denied",
+        "type": "post_opinion",
+        "actor": "a",
+        "at": 20,
+        "payload": {
+          "requestId": "request-a",
+          "value": "Denied"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "grant-b",
+        "type": "decide_permission",
+        "actor": "m",
+        "at": 21,
+        "payload": {
+          "requestId": "request-b",
+          "grant": true
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "opinion-wrong",
+        "type": "post_opinion",
+        "actor": "a",
+        "at": 22,
+        "payload": {
+          "requestId": "request-b",
+          "value": "Not my request"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "opinion-b",
+        "type": "post_opinion",
+        "actor": "b",
+        "at": 23,
+        "payload": {
+          "requestId": "request-b",
+          "value": "The middle could move faster."
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "permissioned_opinions",
+            "phaseNumber": 4,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "opinion-b-again",
+        "type": "post_opinion",
+        "actor": "b",
+        "at": 24,
+        "payload": {
+          "requestId": "request-b",
+          "value": "Second opinion"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "grant-b-again",
+        "type": "decide_permission",
+        "actor": "m",
+        "at": 25,
+        "payload": {
+          "requestId": "request-b",
+          "grant": true
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "request-pending",
+        "type": "request_permission",
+        "actor": "a",
+        "at": 26,
+        "payload": {
+          "topic": "The title"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "advance-4",
+        "type": "advance",
+        "actor": "host",
+        "at": 27,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              },
+              {
+                "id": "request-pending",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The title"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              },
+              {
+                "id": "request-pending",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The title"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "late-decision",
+        "type": "decide_permission",
+        "actor": "m",
+        "at": 28,
+        "payload": {
+          "requestId": "request-pending",
+          "grant": true
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "opinion-b",
+        "type": "post_opinion",
+        "actor": "b",
+        "at": 29,
+        "payload": {
+          "requestId": "request-b",
+          "value": "The middle could move faster."
+        }
+      },
+      "outcome": "replayed",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              },
+              {
+                "id": "request-pending",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The title"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              },
+              {
+                "id": "request-pending",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The title"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "opinion-b",
+        "type": "post_opinion",
+        "actor": "b",
+        "at": 30,
+        "payload": {
+          "requestId": "request-b",
+          "value": "Changed"
+        }
+      },
+      "outcome": "rejected",
+      "views": [
+        {
+          "actor": "m",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              },
+              {
+                "id": "request-pending",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The title"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "phaseNumber": null,
+            "facilitator": "host",
+            "maker": "m",
+            "prompts": {
+              "meaning": "Responders: say what caught your attention in the work.",
+              "maker_questions": "Maker: ask what you want to learn. Responders: answer the maker’s questions.",
+              "neutral_questions": "Responders: ask questions for the maker to answer.",
+              "permissioned_opinions": "Responders: name the topic of an opinion. Maker: grant or deny each request before any opinion is posted."
+            },
+            "transcript": [
+              {
+                "id": "meaning-a",
+                "kind": "meaning",
+                "actor": "a",
+                "value": "The opening stayed with me."
+              },
+              {
+                "id": "meaning-b",
+                "kind": "meaning",
+                "actor": "b",
+                "value": "The color suggests motion."
+              },
+              {
+                "id": "advance-1",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "meaning",
+                "to": "maker_questions"
+              },
+              {
+                "id": "maker-q",
+                "kind": "maker_question",
+                "actor": "m",
+                "value": "Where did you lose interest?"
+              },
+              {
+                "id": "answer-a",
+                "kind": "maker_answer",
+                "actor": "a",
+                "questionId": "maker-q",
+                "value": "In the second section."
+              },
+              {
+                "id": "answer-b",
+                "kind": "maker_answer",
+                "actor": "b",
+                "questionId": "maker-q",
+                "value": "I stayed engaged."
+              },
+              {
+                "id": "advance-2",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "maker_questions",
+                "to": "neutral_questions"
+              },
+              {
+                "id": "neutral-q",
+                "kind": "neutral_question",
+                "actor": "a",
+                "value": "What outcome did you intend?"
+              },
+              {
+                "id": "neutral-answer",
+                "kind": "neutral_answer",
+                "actor": "m",
+                "questionId": "neutral-q",
+                "value": "A feeling of uncertainty."
+              },
+              {
+                "id": "advance-3",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "neutral_questions",
+                "to": "permissioned_opinions"
+              },
+              {
+                "id": "request-a",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The ending"
+              },
+              {
+                "id": "request-b",
+                "kind": "permission_request",
+                "actor": "b",
+                "topic": "The pacing"
+              },
+              {
+                "id": "deny-a",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-a",
+                "granted": false
+              },
+              {
+                "id": "grant-b",
+                "kind": "permission_decision",
+                "actor": "m",
+                "requestId": "request-b",
+                "granted": true
+              },
+              {
+                "id": "opinion-b",
+                "kind": "opinion",
+                "actor": "b",
+                "requestId": "request-b",
+                "value": "The middle could move faster."
+              },
+              {
+                "id": "request-pending",
+                "kind": "permission_request",
+                "actor": "a",
+                "topic": "The title"
+              },
+              {
+                "id": "advance-4",
+                "kind": "phase_advance",
+                "actor": "host",
+                "from": "permissioned_opinions",
+                "to": "complete"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

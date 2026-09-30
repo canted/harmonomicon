@@ -1,0 +1,36 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.small-team-jam",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Small team jam",
+    "summary": "Teams make a small project and share progress before a review round.",
+    "setup": "Divide participants into at least two teams and choose the work and review deadlines.",
+    "prompt": "Make a tiny interactive story about an unexpected journey.",
+    "participant": "Work with your team. Share progress with your team or the whole group, then submit one final project. Review another team after the work deadline.",
+    "completion": "Read the final projects and the revealed reviews.",
+    "access": "All work and reviews use text in this package. Teams may work offline between updates."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 4,
+    "max": 16
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "project_cycle@1",
+    "allowPromptOverride": false
+  }
+}

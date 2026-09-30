@@ -1,0 +1,97 @@
+{
+  "package": "../examples/image-caption-circle.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1",
+    "image_ref@1"
+  ],
+  "contracts": [
+    "offered_response@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "1",
+      "2",
+      "3"
+    ],
+    "opensAt": 10,
+    "sourceDeadline": 20,
+    "responseDeadline": 40,
+    "roundId": "42"
+  },
+  "uploadAttempts": [
+    {
+      "actor": "1",
+      "mediaType": "image/png",
+      "data": "not-base64",
+      "expectStatus": "invalid_media"
+    },
+    {
+      "actor": "1",
+      "mediaType": "image/jpeg",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGO4I+cGAAMaAUEO+HheAAAAAElFTkSuQmCC",
+      "expectStatus": "invalid_media"
+    },
+    {
+      "actor": "1",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEBAAABCAIAAACQd1PeAAAADElEQVR4nGO4I+cGAAMaAUEO+HheAAAAAElFTkSuQmCC",
+      "expectStatus": "invalid_media"
+    },
+    {
+      "actor": "1",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAAN",
+      "expectStatus": "invalid_media"
+    }
+  ],
+  "uploads": [
+    {
+      "actor": "1",
+      "mediaType": "image/png",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGO4I+cGAAMaAUEO+HheAAAAAElFTkSuQmCC",
+      "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360"
+    }
+  ],
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "2",
+          "expect": {
+            "phase": "sources_open",
+            "sourceCount": 0,
+            "responseCount": 0
+          }
+        }
+      ],
+      "mediaReads": [
+        {
+          "actor": "1",
+          "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360",
+          "expect": "allowed"
+        },
+        {
+          "actor": "2",
+          "ref": "sha256:33d817c31db9746dacd987164ec6fd5628fb42d8f0878b5123b135851bd26360",
+          "expect": "denied"
+        }
+      ]
+    }
+  ]
+}

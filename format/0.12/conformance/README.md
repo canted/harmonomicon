@@ -1,0 +1,5 @@
+# Format 0.12 conformance cases
+
+Run `python3 format/0.12/check.py` from the repository root. The 41 JSON traces cover all ten exact behavior contracts, including deadlines, authoritative order, replay, actor-specific views, invalid actions, and unsupported requirements. Each case names an example package, setup, actions, and expected results. The reference checker is a test model, not a host or a substitute for the [normative rules](../README.md).
+
+The [two-host trial](../../../validation/0.12/README.md) runs the same traces through independent Python and Node.js services with separate SQLite state. Additional probes cover PNG byte validation and access, malformed package rejection, worker catch-up, races between submissions or maker decisions, restart persistence, immutable package identity, and transfer of a newly authored package. Passing these checked-in cases supports a local-profile claim under the [conformance rule](../README.md#versioning-and-conformance); it is not a claim about every possible input or public deployment.

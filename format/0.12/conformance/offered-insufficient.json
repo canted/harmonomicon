@@ -1,0 +1,104 @@
+{
+  "package": "../examples/paired-story-response.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "policy:balanced_artifacts_exact32@1"
+  ],
+  "contracts": [
+    "offered_response@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "1",
+      "2",
+      "3"
+    ],
+    "opensAt": 10,
+    "sourceDeadline": 20,
+    "responseDeadline": 40,
+    "roundId": "42"
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "s1",
+        "type": "submit_source",
+        "actor": "1",
+        "at": 10,
+        "payload": {
+          "value": "Opening 1"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "s2",
+        "type": "submit_source",
+        "actor": "2",
+        "at": 11,
+        "payload": {
+          "value": "Opening 2"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "stop",
+        "type": "tick",
+        "actor": "system",
+        "at": 20,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "insufficient_sources",
+            "sourceCount": 2,
+            "responseCount": 0
+          }
+        },
+        {
+          "actor": "1",
+          "expect": {
+            "phase": "insufficient_sources",
+            "sourceCount": 2,
+            "responseCount": 0,
+            "ownSource": {
+              "actor": "1",
+              "value": "Opening 1"
+            }
+          }
+        },
+        {
+          "actor": "3",
+          "expect": {
+            "phase": "insufficient_sources",
+            "sourceCount": 2,
+            "responseCount": 0
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "no-offer",
+        "type": "request_offer",
+        "actor": "1",
+        "at": 21,
+        "payload": {}
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

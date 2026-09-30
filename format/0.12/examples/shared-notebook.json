@@ -1,0 +1,39 @@
+{
+  "format": "harmonomicon.activity-package/0.12",
+  "id": "org.harmonomicon.shared-notebook",
+  "version": "1.0.0",
+  "content": {
+    "language": "en",
+    "title": "Shared notebook",
+    "summary": "A group notebook with private and shared entries.",
+    "setup": "Invite participants and choose when the notebook opens and closes.",
+    "prompt": "Write notes to yourself or share them with the group.",
+    "participant": "Add text entries during the activity. Shared entries can receive comments.",
+    "completion": "Read the entries and comments you can access.",
+    "access": "This text example does not require posting every day."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "ongoing_space@1",
+    "allowPromptOverride": false,
+    "schedule": {
+      "kind": "open"
+    }
+  }
+}

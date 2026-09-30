@@ -1,0 +1,27 @@
+{
+  "package": "../examples/feedback-circle.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [],
+  "expectStatus": "unsupported",
+  "missing": [
+    "behavior:permissioned_dialogue@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "m",
+      "a",
+      "b"
+    ],
+    "maker": "m"
+  },
+  "events": []
+}
