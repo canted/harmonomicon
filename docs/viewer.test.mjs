@@ -8,7 +8,7 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.18/examples');
+const source = path.join(here,'../format/0.19/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -172,4 +172,12 @@ test('distribution and linked-response summaries expose only declared policy and
   assert.match(stepLines(pkg.runbook.steps[2]).join('\n'),/Independent responses · assigned source ID required/);
   assert.match(stepLines(pkg.runbook.steps[3]).join('\n'),/with attribution/);
   assert.ok(!JSON.stringify(diagram).includes('assignmentSeed'));
+});
+
+test('image fields expose declared type and privacy without inventing host encoding or receipt',()=>{
+  const pkg=JSON.parse(fs.readFileSync(path.join(source,'image-check-in.json'),'utf8'));
+  const summary=stepLines(pkg.runbook.steps[1]).join('\n');
+  assert.match(summary,/value: image_ref · private/);
+  assert.doesNotMatch(summary,/image\/png|sha256:|ready|authorized/);
+  assert.equal(buildDiagram(pkg).nodes.filter(n=>n.step?.op==='collect_until@1').length,1);
 });

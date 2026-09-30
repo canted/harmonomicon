@@ -115,3 +115,14 @@ Twenty examples and thirty-four traces pass independent interpreters and durable
 | Idea exchange with paired continuation | Deterministic non-self source assignment, independent text review, all-matched-response close and later pair-private reflection. | Human evaluation, reviewer balancing and scoring are not inferred. |
 
 The [legacy checklist](format/0.18/MIGRATION.md) remains **four complete and sixteen incomplete**, with no false migration credit for simplified rules. The next proposed core milestone is authorized PNG values in scheduled/recurring forms: image check-in and image daily-practice each lack only media support. Ongoing multi-entry streams and permissions/lifecycle remain further gaps. Upload processing, drafts, notifications and publishing app records remain host integration concerns. Readiness will assess useful core scope and explicit unsupported capabilities, without requiring exact optional app replication or automatically promoting any candidate to 1.0.
+
+## Composed candidate 0.19: typed image forms
+
+| Witness | Verified result | Limit |
+|---|---|---|
+| Image check-in | Host-authorized private image value, deadline reveal; full selected legacy timing/setup/phase/order/privacy compared in both actual host implementations. | PNG is the local byte profile, not the language type. |
+| Daily image prompt | Group-immediate image values and occurrence-bound completion/missed history reproduce the selected legacy package; full day-sized comparisons, replay and restart. | Fixed bounded recurrence; no dynamic calendar scheduling. |
+| Private recurring images | Independent additional package conceals each new contribution until its window reveal; historical reveal does not expose another unpublished reference. | This distinct authored variant is not counted as a legacy migration. |
+| New image-to-story combination | Uploaded ready images, typed form, explicit reveal and cumulative text continuation transfer/run with no interpreter changes. | Package exchange does not migrate live state or stored blobs. |
+
+The candidate has 23 examples, 38 engine traces, 114 invalid definitions and all 34 prior traces preserved. Both durable hosts pass actual bytes, authority/privacy, partial-success retries, races, workers and restart. Six legacy packages are now fully compared; fourteen remain incomplete. Image pools/routing/linked responses, ongoing streams, replacement/moderation, host participation and live schedule changes remain unsupported. Rich offers/choice/exposure balancing remain optional parity. The [pre-1 readiness assessment](format/0.19/readiness-assessment.md) recommends a current held-out coverage challenge and supported-profile review before automatically adding more capabilities. No completeness or 1.0 decision is implied.

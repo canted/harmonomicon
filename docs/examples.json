@@ -32,6 +32,18 @@
     "title": "Idea exchange and paired reflection"
   },
   {
+    "file": "examples/image-check-in.json",
+    "title": "Image One-question group check-in"
+  },
+  {
+    "file": "examples/image-daily-private.json",
+    "title": "Image Daily reveal writing circle"
+  },
+  {
+    "file": "examples/image-daily-prompt.json",
+    "title": "Image daily shared prompt"
+  },
+  {
     "file": "examples/list-game.json",
     "title": "List Game"
   },
