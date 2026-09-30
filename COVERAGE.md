@@ -91,3 +91,13 @@ The proposed [25/10 digital target](format/0.16/scoring-notes.md) now has five d
 A second [proposal assessment](format/0.16/examples/proposal-assessment.json) uses two rounds, a 0–10 scale, summed scores, and private paired follow-up. Another witness uses integers in an ordinary form without scoring. Rating races, stale rounds, fractional/Boolean rejection, zero versus missing ratings, unpublished aggregate privacy, worker jumps, restart, opaque IDs, and transfer are checked.
 
 The [legacy checklist](format/0.16/MIGRATION.md) remains **one complete migration and nineteen incomplete**, with none dropped from scope. Ranked item scores do not supply caption ballots, team-owned progress streams, weighted grading, arbitrary reviewer allocation, or recurrence. The [next milestone](ROADMAP.md#path-from-013-to-10) addresses fixed repeated practice before longer/media flows.
+
+## Composed candidate 0.17 evidence
+
+Candidate 0.17 supplies bounded fixed recurrence through `for_windows@1` and `collect_window@1`, with public per-person completion status only when declared. Eighteen packages and twenty-seven traces pass independent interpreters and durable hosts. All twenty-two 0.16 traces preserve their outcomes/views. Eighty-four invalid definitions and maximum-clock/366-window/late-continuation probes check the bounded grammar and timing.
+
+The three text daily-practice packages now have complete comparison evidence against the legacy reference and actual retained 0.12 hosts in both languages. Nine scenarios cover original fixtures, actual day-sized gaps and histories, stale actions and accepted retries, all visibility modes, maximum closing times and restart. Separate worker/race/unsupported/transfer probes check durable enforcement. A repeated choice/tally schedule followed by paired reflection demonstrates reuse beyond the migrated practices.
+
+The [legacy inventory](format/0.17/MIGRATION.md) now records **four complete migrations and sixteen incomplete**, with no example silently dropped. Image recurrence still lacks authorized media values; fixed elapsed intervals do not provide local-calendar scheduling or notification delivery. Ongoing streams, linked sources, richer assignment, host roles and mutable lifecycle rules remain distinct work.
+
+For readiness review, exact product parity and core experience are separate. A simplified creative response can use one assigned non-self source rather than two offered alternatives. The next bounded milestone targets explicit distribution algorithms and authoritative source-linked responses. Optional choice/exposure balancing remains deferred; a simplified package will not be labeled a complete Chorus or legacy offered-response migration.

@@ -26,6 +26,11 @@ export function stepLines(step) {
   if (step.op === 'rate@1') lines.push(`Rating: ${step.min}–${step.max} · private`);
   if (step.targetCount !== undefined && step.targetCount !== null) lines.push(`Scale mean to ${step.targetCount} ratings`);
   if (step.limit !== undefined) lines.push(`Publish ranks through ${step.limit}, including all cutoff ties`);
+  if (step.op === 'for_windows@1') {
+    lines.push(`First opening: ${typeof step.startsAt === 'object' ? 'instance setting '+step.startsAt.setting : step.startsAt+' Unix ms'}`);
+    lines.push(`${step.occurrences} windows · every ${step.intervalMs} ms · open ${step.windowMs} ms`);
+  }
+  if (step.op === 'collect_window@1') lines.push(`Closes: fixed window deadline · completion status: ${step.completion}`);
   const ends = [];
   if (step.close) ends.push(({all:'all eligible submissions',organizer:'organizer advances',turn:'current participant advances',deadline:'deadline'})[step.close] ?? step.close);
   if (step.op === 'append@1') { lines.push('Actor: current participant'); ends.push('text submitted'); }
@@ -40,5 +45,6 @@ export function stepLines(step) {
 export function containerLabel(step) {
   if (step.op === 'for_each@1') return `Repeat for each ${step.over === 'participants' ? 'participant' : step.over} · roster order`;
   if (step.op === 'for_items@1') return `Repeat for each item from ${step.source}`;
+  if (step.op === 'for_windows@1') return `Repeat ${step.occurrences} fixed windows · ${step.intervalMs} ms interval`;
   return `Nested steps · ${step.op}`;
 }

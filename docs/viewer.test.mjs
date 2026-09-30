@@ -8,7 +8,7 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.16/examples');
+const source = path.join(here,'../format/0.17/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -147,4 +147,15 @@ test('rating routes, numeric bounds, exact aggregation and cutoff settings come 
   assert.match(stepLines({op:'collect@1',fields:{value:{type:'integer',min:0,max:100,visibility:'private'}}}).join('\n'),/integer \(0–100\)/);
   const svg=renderSvg(buildDiagram(pkg));
   assert.ok(svg.includes('Rating: 1–5'));assert.ok(svg.includes('Roster offset: 5'));
+});
+
+
+test('recurring windows show declared schedule and status without expanding runtime occurrences', () => {
+  const pkg=read(path.join(source,'daily-reveal.json'));
+  const graph=buildDiagram(pkg);
+  assert.equal(graph.nodes.length,3);
+  assert.match(stepLines(pkg.runbook.steps[0]).join('\n'),/First opening: instance setting starts_at/);
+  assert.match(stepLines(pkg.runbook.steps[0]).join('\n'),/3 windows · every 86400000 ms · open 72000000 ms/);
+  assert.match(stepLines(pkg.runbook.steps[0].steps[0]).join('\n'),/completion status: group/);
+  assert.ok(renderSvg(graph).includes('Repeat 3 fixed windows'));
 });

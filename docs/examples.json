@@ -12,6 +12,18 @@
     "title": "25/10 proposed digital translation"
   },
   {
+    "file": "examples/daily-private-practice.json",
+    "title": "Private daily writing circle"
+  },
+  {
+    "file": "examples/daily-reveal.json",
+    "title": "Daily reveal writing circle"
+  },
+  {
+    "file": "examples/daily-shared-prompt.json",
+    "title": "Shared daily micro-story"
+  },
+  {
     "file": "examples/gratitude-pool.json",
     "title": "Gratefulness Grab Bag"
   },
@@ -34,6 +46,10 @@
   {
     "file": "examples/proposal-assessment.json",
     "title": "Peer proposal assessment"
+  },
+  {
+    "file": "examples/repeated-poll-and-pairs.json",
+    "title": "Repeated choices and paired reflection"
   },
   {
     "file": "examples/scheduled-check-in-pairs.json",

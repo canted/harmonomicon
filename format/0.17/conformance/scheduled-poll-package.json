@@ -1,0 +1,71 @@
+{
+  "format": "harmonomicon.activity-package/0.17",
+  "id": "harmonomicon.scheduledpoll",
+  "version": "0.3.0",
+  "content": {
+    "language": "en",
+    "title": "Choose a group outing",
+    "summary": "Choose a group outing coordinated through a composable runbook.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "Choose a group outing",
+    "participant": "Follow the current prompt in the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "The app shows your own submissions and fields whose visibility permits it."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+    "rights": "Original example description. Rights to participant contributions are not specified by this package."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "reveal@1",
+    "tally@1",
+    "collect_until@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "vote",
+        "op": "collect_until@1",
+        "actors": "participants",
+        "prompt": "Choose an outing.",
+        "fields": {
+          "choice": {
+            "type": "choice",
+            "visibility": "private",
+            "options": [
+              "Museum",
+              "Park",
+              "Cafe"
+            ]
+          }
+        },
+        "until": 50
+      },
+      {
+        "id": "reveal",
+        "op": "reveal@1",
+        "sources": [
+          "vote"
+        ]
+      },
+      {
+        "id": "count",
+        "op": "tally@1",
+        "source": "vote",
+        "field": "choice"
+      }
+    ]
+  },
+  "settings": {}
+}
