@@ -2,13 +2,15 @@
 
 ![Harmonomicon pixel logo with the Harmonia symbol above the wordmark](assets/harmonomicon-logo.svg)
 
-Harmonomicon describes a common format for group activities coordinated by software. An **activity package** describes one activity so different apps can run it. It tells the app what to show, when people can act, what each person can see, and how the activity moves from one step to the next.
+Harmonomicon aims to provide an expressive activity language and runtime so a host app can support many user-authored group activities. Authors can compose reusable steps and adjust their settings to create different activities within the app. An **activity package** describes what to show, when people can act, what each person can see, and how the activity moves from one step to the next.
+
+The primary goal is in-app composability: new arrangements of supported operations should require activity data rather than new app code. Running packages across different apps is a secondary potential benefit; demand for cross-platform portability is uncertain. Independent implementations remain useful evidence that the rules are explicit and reproducible. [App integration and prompting](research/app-integration-and-prompting.md) records possible directions and unresolved choices.
 
 Think of an icebreaker in a group chat, a collaborative drawing game on a website, or a daily creative prompt sent by an app. The app might send a prompt, collect contributions, pass a turn, or reveal a result. An activity package puts those instructions and rules together so they can be reused.
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current candidate:** [0.16](format/0.16/README.md) lets a package assemble reusable steps into a runbook. It can collect contributions, reveal them, count choices, append to a shared story, and repeat steps for each participant. It also supports item pools, reader claims, private group rounds, and scheduled collection with saved instance settings. It now supports bounded numeric ratings and ranked results. Recurrence, media, and ongoing activity streams still need work before the [1.0 goal](ROADMAP.md#goal-for-10) is met.
+**Current candidate:** [0.16](format/0.16/README.md) lets a package assemble reusable steps into a runbook. It can collect contributions, reveal them, count choices, append to a shared story, and repeat steps for each participant. It also supports item pools, reader claims, private group rounds, and scheduled collection with saved instance settings. It now supports bounded numeric ratings and ranked results. Recurrence, media, and ongoing activity streams still need work toward the [proposed readiness criteria](ROADMAP.md#goal-for-10). The scope and release criteria for 1.0 are not yet defined.
 
 ## A simple example: one question for a group
 
@@ -85,7 +87,7 @@ The [activity package inspector](docs/README.md) renders candidate 0.16 runbooks
 
 ## Roadmap
 
-The [format roadmap](ROADMAP.md) records the candidate evidence and the requirements for 1.0, including composable packages. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
+The [format roadmap](ROADMAP.md) records candidate evidence, proposed readiness criteria, and a user review checkpoint before any 1.0 decision. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
 
 ## Research
 
