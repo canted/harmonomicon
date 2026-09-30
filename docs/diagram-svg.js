@@ -10,9 +10,10 @@ export function renderSvg(diagram, preview = false) {
   const groups = layout.nodes.map(node => {
     const x = node.x-node.width/2, y = node.y-node.height/2+offset;
     const rect = `<rect x="${x}" y="${y}" width="${node.width}" height="${node.height}" rx="8" fill="${node.container ? '#eef3fb' : diagramFill(node)}"/>`;
-    const title = `<text x="${x+20}" y="${y+29}" font-weight="700" font-size="${NODE_FONT_SIZE}">${escape(node.title)}</text>`;
+    const title = `<text x="${x+20}" y="${y+29}" font-weight="700" font-size="${NODE_FONT_SIZE}">${escape(node.displayTitle)}</text>`;
+    const operation = `<text x="${x+node.width-20}" y="${y+29}" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">${escape(node.subtitle)}</text>`;
     const text = node.lines.map((line,i) => `<text x="${x+20}" y="${y+52+i*21}" font-size="14">${escape(line)}</text>`).join('');
-    return `<g data-step="${escape(node.id)}" tabindex="0" role="button" aria-label="${escape(node.title+' '+node.subtitle)}"><title>${escape(node.pointer)}</title>${rect}${title}${text}</g>`;
+    return `<g data-step="${escape(node.id)}" tabindex="0" role="button" aria-label="${escape(node.title+' '+node.subtitle)}"><title>${escape(node.pointer)}</title>${rect}${title}${operation}${text}</g>`;
   }).join('');
   const edges = layout.edges.map(edge => {
     const a=byId.get(edge.source), b=byId.get(edge.target);

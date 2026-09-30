@@ -1,6 +1,6 @@
 import {buildDiagram} from './model.js';
 import {renderSvg} from './diagram-svg.js';
-import {layoutDiagram} from './diagram-layout.js';
+import {layoutDiagram, titleCase} from './diagram-layout.js';
 
 const $ = id => document.getElementById(id);
 let current = null;
@@ -29,7 +29,7 @@ function selectStage(id, focus = true) {
   if (!current) return;
   const stage = current.nodes.find(n => n.id === id);
   if (!stage) return;
-  setText('inspector-title',stage.title);
+  setText('inspector-title',titleCase(stage.title));
   setText('inspector-subtitle',stage.subtitle || '');
   setText('inspector-description',stage.description || 'This step has no prompt property.');
   const panel = $('inspector-sections'); panel.replaceChildren();
@@ -70,7 +70,7 @@ function render(diagram) {
   for (const stage of diagram.nodes) {
     const button = document.createElement('button');
     button.type = 'button'; button.dataset.stage = stage.id;
-    button.textContent = stage.title;
+    button.textContent = titleCase(stage.title);
     button.addEventListener('click',() => selectStage(stage.id));
     buttons.append(button);
   }

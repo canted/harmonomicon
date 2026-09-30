@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildDiagram, FORMAT} from './model.js';
-import {layoutDiagram} from './diagram-layout.js';
+import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -41,7 +41,7 @@ test('catalog, bundled files, and generated previews match all source examples',
     assert.equal(entry.title,sourcePkg.content.title);
     assert.deepEqual(read(path.join(here,entry.file)),sourcePkg);
     const svg = fs.readFileSync(path.join(here,'previews',path.basename(entry.file,'.json')+'.svg'),'utf8');
-    for (const step of flatten(sourcePkg.runbook.steps)) assert.ok(svg.includes(`>${step.id}</text>`));
+    for (const step of flatten(sourcePkg.runbook.steps)) assert.ok(svg.includes(`>${titleCase(step.id)}</text>`));
   }
 });
 
