@@ -19,6 +19,9 @@ def probes(kind,directory,Host):
   for blob in [b'',b'\x89PNG\r\n\x1a\n',png()+b'extra',png()[:-1],b'not a png']:
    assert upload(h,'test',tokens['a'],blob)=={'outcome':'invalid_media'}
   assert h.request('/instances/test/media',{'mediaType':'image/jpeg','data':base64.b64encode(png()).decode()},tokens['a'])=={'outcome':'invalid_media'}
+  from png_check import fixtures
+  for label,blob,valid in fixtures():
+   result=upload(h,'test',tokens['a'],blob);assert result.get('outcome')==('ready' if valid else 'invalid_media'),(kind,label,result)
   ready=upload(h,'test',tokens['a'],png());ref=ready['ref'];assert ref=='sha256:'+hashlib.sha256(png()).hexdigest();assert upload(h,'test',tokens['a'],png())==ready
   assert read(h,'test',tokens['a'],ref)['data']==base64.b64encode(png()).decode()
   assert read(h,'test',tokens['b'],ref)['outcome']=='unauthorized';assert read(h,'test',tokens['organizer'],ref)['outcome']=='unauthorized'

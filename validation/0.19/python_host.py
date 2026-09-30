@@ -41,6 +41,7 @@ def valid_png(data):
         return False
     pos, width, height, channels, idat = 8, None, None, None, []
     saw_iend = False
+    idat_finished = False
     while pos + 12 <= len(data):
         length = int.from_bytes(data[pos:pos + 4], "big")
         end = pos + 12 + length
@@ -61,6 +62,7 @@ def valid_png(data):
                 return False
             channels = 3 if body[9] == 2 else 4
         elif kind == b"IDAT":
+            if idat_finished: return False
             idat.append(body)
         elif kind == b"IEND":
             if length != 0 or not idat or end != len(data):
@@ -70,6 +72,7 @@ def valid_png(data):
         elif kind == b"IHDR" or not (len(kind) == 4 and 97 <= kind[0] <= 122
                                             and 65 <= kind[2] <= 90 and all(65 <= c <= 90 or 97 <= c <= 122 for c in kind)):
             return False
+        if idat and kind != b"IDAT": idat_finished = True
         pos = end
     if not saw_iend:
         return False
@@ -77,7 +80,9 @@ def valid_png(data):
     try:
         decoder = zlib.decompressobj()
         pixels = decoder.decompress(b"".join(idat), expected + 1)
-        pixels += decoder.flush(max(1, expected - len(pixels) + 1))
+        # max_length bounds actual output. flush(length) only sizes its initial
+        # buffer and can decode an unbounded remainder; never call it here.
+        # A valid stream fitting the budget reaches EOF in this one call.
     except zlib.error:
         return False
     return (decoder.eof and not decoder.unused_data and not decoder.unconsumed_tail and len(pixels) == expected

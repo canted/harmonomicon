@@ -39,7 +39,7 @@ function crc32(buffer) {
 function validPng(data) {
   if (!Buffer.isBuffer(data) || data.length < 8 || data.length > MAX_IMAGE_BYTES
       || !data.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return false;
-  let pos = 8, width = null, height = null, channels = null, sawIend = false;
+  let pos = 8, width = null, height = null, channels = null, sawIend = false, idatFinished = false;
   const idat = [];
   while (pos + 12 <= data.length) {
     const length = data.readUInt32BE(pos), end = pos + 12 + length;
@@ -54,12 +54,16 @@ function validPng(data) {
       if (width < 1 || width > 1024 || height < 1 || height > 1024 || body[8] !== 8
           || ![2, 6].includes(body[9]) || body[10] !== 0 || body[11] !== 0 || body[12] !== 0) return false;
       channels = body[9] === 2 ? 3 : 4;
-    } else if (name === 'IDAT') idat.push(body);
+    } else if (name === 'IDAT') {
+      if (idatFinished) return false;
+      idat.push(body);
+    }
     else if (name === 'IEND') {
       if (length !== 0 || idat.length === 0 || end !== data.length) return false;
       sawIend = true; break;
     } else if (name === 'IHDR' || kind[0] < 97 || kind[0] > 122 || kind[2] < 65 || kind[2] > 90
       || ![...kind].every(c => c >= 65 && c <= 90 || c >= 97 && c <= 122)) return false;
+    if (idat.length && name !== 'IDAT') idatFinished = true;
     pos = end;
   }
   if (!sawIend) return false;

@@ -341,6 +341,8 @@ def transfer_assessment(directory):
         for h in hosts:h.stop()
 
 if __name__=='__main__':
+    from png_check import check as check_png
+    check_png()
     with tempfile.TemporaryDirectory(prefix='harmonomicon-018-') as directory:
         directory=Path(directory);results={}
         for kind in ['python','node']:
