@@ -1,0 +1,830 @@
+[
+  {
+    "id": "two-truths-privacy-rotation",
+    "package": "two-truths",
+    "events": [
+      {
+        "eventId": "p",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "publish:0",
+        "payload": {
+          "items": [
+            "Ski",
+            "Cook",
+            "Mars"
+          ],
+          "answer": 2
+        }
+      },
+      {
+        "eventId": "gself",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "invalid",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": 3
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 3,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "step": "guess:0",
+        "payload": {
+          "guess": true
+        }
+      },
+      {
+        "eventId": "g2",
+        "type": "submit",
+        "actor": "b",
+        "at": 5,
+        "step": "guess:0",
+        "payload": {
+          "guess": 0
+        }
+      },
+      {
+        "eventId": "wrongadvance",
+        "type": "advance",
+        "actor": "c",
+        "at": 6,
+        "step": "guess:0",
+        "payload": {}
+      },
+      {
+        "eventId": "done",
+        "type": "advance",
+        "actor": "a",
+        "at": 6,
+        "step": "guess:0",
+        "payload": {}
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "c",
+        "at": 7,
+        "step": "guess:0",
+        "payload": {
+          "guess": 1
+        }
+      },
+      {
+        "eventId": "bp",
+        "type": "submit",
+        "actor": "b",
+        "at": 8,
+        "step": "publish:1",
+        "payload": {
+          "items": [
+            "One",
+            "Two",
+            "Three"
+          ],
+          "answer": 0
+        }
+      },
+      {
+        "eventId": "bd",
+        "type": "advance",
+        "actor": "b",
+        "at": 9,
+        "step": "guess:1",
+        "payload": {}
+      },
+      {
+        "eventId": "cp",
+        "type": "submit",
+        "actor": "c",
+        "at": 10,
+        "step": "publish:2",
+        "payload": {
+          "items": [
+            "Four",
+            "Five",
+            "Six"
+          ],
+          "answer": 1
+        }
+      },
+      {
+        "eventId": "cd",
+        "type": "advance",
+        "actor": "c",
+        "at": 11,
+        "step": "guess:2",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "rejected",
+      "accepted",
+      "replayed",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value"
+        ],
+        "equals": {
+          "items": [
+            "Ski",
+            "Cook",
+            "Mars"
+          ]
+        }
+      },
+      {
+        "after": 0,
+        "actor": "organizer",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "missing": true
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "value": {
+              "guess": 2
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "equals": 2
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "value": {
+              "guess": 2
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "publish:1"
+      },
+      {
+        "after": 13,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "list-game-same-operations",
+    "package": "list-game",
+    "events": [
+      {
+        "eventId": "p",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "publish:0",
+        "payload": {
+          "items": [
+            "Torch",
+            "Map",
+            "Water",
+            "Snack",
+            "Coat"
+          ],
+          "answer": "hiking kit"
+        }
+      },
+      {
+        "eventId": "bad",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": "camping gear"
+        }
+      },
+      {
+        "eventId": "r",
+        "type": "advance",
+        "actor": "a",
+        "at": 3,
+        "step": "guess:0",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "missing": true
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "equals": "hiking kit"
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "publish:1"
+      }
+    ]
+  },
+  {
+    "id": "poll-timed-reveal-tally",
+    "package": "choice-poll",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "vote",
+        "payload": {
+          "choice": "Park"
+        }
+      },
+      {
+        "eventId": "bad",
+        "type": "submit",
+        "actor": "c",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "choice": "Beach"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "choice": "Museum"
+        }
+      },
+      {
+        "eventId": "unauthorized",
+        "type": "advance",
+        "actor": "a",
+        "at": 3,
+        "step": "vote",
+        "payload": {}
+      },
+      {
+        "eventId": "boundary",
+        "type": "submit",
+        "actor": "c",
+        "at": 60000,
+        "step": "vote",
+        "payload": {
+          "choice": "Park"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 60001,
+        "step": "vote",
+        "payload": {
+          "choice": "Museum"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "rejected",
+      "replayed"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "counts"
+        ],
+        "equals": [
+          {
+            "value": "Museum",
+            "count": 1
+          },
+          {
+            "value": "Park",
+            "count": 1
+          },
+          {
+            "value": "Cafe",
+            "count": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "poll-organizer-empty-close",
+    "package": "choice-poll",
+    "events": [
+      {
+        "eventId": "r",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 1,
+        "step": "vote",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "counts"
+        ],
+        "equals": [
+          {
+            "value": "Museum",
+            "count": 0
+          },
+          {
+            "value": "Park",
+            "count": 0
+          },
+          {
+            "value": "Cafe",
+            "count": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "manual-three-prompt-routine",
+    "package": "see-think-wonder",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "see",
+        "payload": {
+          "response": "A red roof"
+        }
+      },
+      {
+        "eventId": "wrong",
+        "type": "advance",
+        "actor": "a",
+        "at": 2,
+        "step": "see",
+        "payload": {}
+      },
+      {
+        "eventId": "one",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 3,
+        "step": "see",
+        "payload": {}
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "step": "think",
+        "payload": {
+          "response": "A house"
+        }
+      },
+      {
+        "eventId": "two",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 5,
+        "step": "think",
+        "payload": {}
+      },
+      {
+        "eventId": "three",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 6,
+        "step": "wonder",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "response": "A red roof"
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "think"
+      },
+      {
+        "after": 4,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "wonder"
+      },
+      {
+        "after": 5,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "cumulative-story-timeout",
+    "package": "timed-story",
+    "events": [
+      {
+        "eventId": "wrong",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "step": "write:0",
+        "payload": {
+          "text": "wrong turn"
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "step": "write:0",
+        "payload": {
+          "text": "Once upon a time"
+        }
+      },
+      {
+        "eventId": "timeout",
+        "type": "tick",
+        "actor": "system",
+        "at": 60002,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "b",
+        "at": 60003,
+        "step": "write:1",
+        "payload": {
+          "text": "late line"
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 60004,
+        "step": "write:2",
+        "payload": {
+          "text": "the end"
+        }
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "story"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Once upon a time"
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "write:2"
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 4,
+        "actor": "b",
+        "path": [
+          "story"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Once upon a time"
+            }
+          },
+          {
+            "actor": "c",
+            "value": {
+              "text": "the end"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "check-in-all-complete",
+    "package": "check-in",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "answer",
+        "payload": {
+          "answer": "a"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "step": "answer",
+        "payload": {
+          "answer": "b"
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 1,
+        "step": "answer",
+        "payload": {
+          "answer": "c"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "records",
+          0,
+          "count"
+        ],
+        "equals": 3
+      }
+    ]
+  }
+]

@@ -1,0 +1,466 @@
+{
+  "type": "object",
+  "properties": {
+    "format": {
+      "const": "harmonomicon.activity-package/0.13"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$(?![\\s\\S])"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$(?![\\s\\S])"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "setup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "participant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "completion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "language",
+        "title",
+        "summary",
+        "setup",
+        "prompt",
+        "participant",
+        "completion",
+        "access"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "original"
+            },
+            "credit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rights": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "credit",
+            "rights"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "adaptation"
+            },
+            "credit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rights": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sourceUrl": {
+              "type": "string",
+              "pattern": "^https?://[^\\s]+$(?![\\s\\S])"
+            }
+          },
+          "required": [
+            "kind",
+            "credit",
+            "rights",
+            "sourceUrl"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "participants": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 100
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "requires": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true
+    },
+    "runbook": {
+      "type": "object",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          },
+          "minItems": 1,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "steps"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "format",
+    "id",
+    "version",
+    "content",
+    "provenance",
+    "participants",
+    "requires",
+    "runbook"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:harmonomicon:activity-package:0.13",
+  "$defs": {
+    "step": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            },
+            "op": {
+              "const": "collect@1"
+            },
+            "actors": {
+              "enum": [
+                "participants",
+                "turn",
+                "others"
+              ]
+            },
+            "prompt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fields": {
+              "type": "object",
+              "minProperties": 1,
+              "maxProperties": 8,
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+              },
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "text"
+                      },
+                      "visibility": {
+                        "enum": [
+                          "group",
+                          "private"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "visibility"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "text_list"
+                      },
+                      "visibility": {
+                        "enum": [
+                          "group",
+                          "private"
+                        ]
+                      },
+                      "count": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 32
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "visibility",
+                      "count"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "choice"
+                      },
+                      "visibility": {
+                        "enum": [
+                          "group",
+                          "private"
+                        ]
+                      },
+                      "options": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 2,
+                        "maxItems": 32,
+                        "uniqueItems": true
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "visibility",
+                      "options"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "index"
+                      },
+                      "visibility": {
+                        "enum": [
+                          "group",
+                          "private"
+                        ]
+                      },
+                      "indexOf": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "visibility",
+                      "indexOf"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "close": {
+              "enum": [
+                "all",
+                "organizer",
+                "turn"
+              ]
+            },
+            "afterMs": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 86400000
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "op",
+            "actors",
+            "prompt",
+            "fields",
+            "close",
+            "afterMs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            },
+            "op": {
+              "const": "reveal@1"
+            },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+              },
+              "minItems": 1,
+              "maxItems": 32,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "id",
+            "op",
+            "sources"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            },
+            "op": {
+              "const": "append@1"
+            },
+            "prompt": {
+              "type": "string",
+              "minLength": 1
+            },
+            "afterMs": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 86400000
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "op",
+            "prompt",
+            "afterMs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            },
+            "op": {
+              "const": "tally@1"
+            },
+            "source": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            },
+            "field": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            }
+          },
+          "required": [
+            "id",
+            "op",
+            "source",
+            "field"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{0,47}$(?![\\s\\S])"
+            },
+            "op": {
+              "const": "for_each@1"
+            },
+            "over": {
+              "const": "participants"
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/step"
+              },
+              "minItems": 1,
+              "maxItems": 32
+            }
+          },
+          "required": [
+            "id",
+            "op",
+            "over",
+            "steps"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

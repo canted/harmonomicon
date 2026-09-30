@@ -8,11 +8,11 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current limit:** Candidate 0.12 lets apps exchange packages for ten predefined kinds of activity. A package cannot yet combine their rules into a new sequence. For example, an app that supports a timed collection and a handoff cannot run a package that joins them unless its programmers add a new complete behavior. Composable packages are the [1.0 goal](ROADMAP.md#goal-for-10).
+**Current candidate:** [0.13](format/0.13/README.md) lets a package assemble reusable steps into a runbook. It can collect contributions, reveal them, count choices, append to a shared story, and repeat steps for each participant. More complex assignments, media, and ongoing activity streams still need work before the [1.0 goal](ROADMAP.md#goal-for-10) is met.
 
 ## A simple example: one question for a group
 
-Imagine an organizer starts a check-in for eight people in an app. At the start, the app asks everyone, “What made you smile today?” Each person can send one text answer. Answers stay private while people write. At 7 p.m., the app shows the answers to the group, even if some people did not reply.
+Imagine an organizer starts a check-in for eight people in an app. At the start, the app asks everyone, “What made you smile today?” Each person can send one text answer. Answers stay private while people write. When everybody has answered, or an hour has passed, the app shows the answers to the group.
 
 The package would describe the activity in terms like these:
 
@@ -20,13 +20,17 @@ The package would describe the activity in terms like these:
 |---|---|
 | Who takes part | The organizer and the invited participants |
 | What people do | Answer one question with text |
-| When it happens | Start at the chosen time; reveal at 7 p.m. |
+| When it happens | Start at the chosen time; reveal when everyone answers or after one hour |
 | Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
-| What happens if someone misses it | The reveal still happens at 7 p.m. |
+| What happens if someone misses it | The reveal still happens after one hour |
 
-An app running the package would show the prompt, accept answers, keep them private, watch the deadline, and reveal them. Another app could run the same package if it supports those rules. A [0.12 package](format/0.12/examples/group-check-in.json) describes this check-in.
+The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.13 package](format/0.13/examples/check-in.json) if it supports those operations.
 
-![Static package blueprint for the check-in: waiting, open, then closed at the configured deadline](docs/previews/check-in.svg)
+```mermaid
+flowchart TD
+    A[Collect private answers] -->|Everyone answers or one hour passes| B[Reveal answers to the group]
+    B --> C[Complete]
+```
 
 ## A richer example: image caption contest
 
@@ -39,9 +43,9 @@ The activity has a few stages:
 3. Each contributor chooses one offered image and submits a caption. Captions stay private during this stage.
 4. At the caption deadline, the app reveals the image-caption pairs. Participants vote for a caption by someone else; the app shows totals and any tied winners when voting closes.
 
-The package says when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how votes are counted. It also says what happens if fewer than three images arrive or someone never submits a caption. In format 0.12, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A later contract could define a different recovery rule. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
+The package says when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how votes are counted. It also says what happens if fewer than three images arrive or someone never submits a caption. In format 0.12, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A future runbook could select a different recovery step. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
 
-The [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) defines image collection, two-source offers, linked text captions, voting, and a result. Both local validation app hosts run it with stored PNG images and audience-controlled access.
+The earlier [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) runs this through one predefined behavior, with stored PNG images and audience-controlled access. Expressing its image assignments and voting as reusable runbook steps is part of the remaining work. Candidate 0.13 does not yet run this caption contest.
 
 ![Static package blueprint for the image caption contest: source collection, responses, voting, and an insufficient-source branch](docs/previews/caption-contest.svg)
 
@@ -52,28 +56,30 @@ Other packages could describe a hidden drawing handoff in a browser, a recurring
 An activity package brings together:
 
 - **Directions for people:** what the activity is, how to join, and what to do at each step.
-- **Settings:** details an organizer can choose, such as a prompt, group size, or deadline.
+- **Settings:** prompts, participant limits, and timing for the app to use.
 - **Roles and actions:** who may submit, whose turn it is, and who can see the reveal.
 - **Timing and visibility:** when actions are allowed and who can see each contribution.
-- **Rules for interruptions:** what happens when someone is late, absent, or retries. Other responses to interruption can be added through later behavior contracts.
+- **Rules for interruptions:** what happens when someone is late, absent, or retries. Each step states how it ends and what happens to missing contributions.
 - **App requirements:** features such as a clock, private views, or support for particular media.
 - **Example runs:** sample actions and expected results that an app can use to check its implementation.
 
-The app that runs a package is called an **app host**. It provides accounts, storage, scheduling, messages, and screens. It also carries out the rules the package names. The app host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
+The app that runs a package is called an **app host**. It provides accounts, storage, scheduling, messages, and screens. It also executes the steps the package declares. The app host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-## Candidate 0.12 format
+## Candidate 0.13 format
 
-The [candidate 0.12 format](format/0.12/README.md) describes each activity in JSON: directions for people, participation limits, source and rights information, app features it needs, and a named set of rules for the app host to run. The [package schema](format/0.12/package.schema.json) describes the structure; the [behavior contracts](format/0.12/contracts.md) and [image rules](format/0.12/media.md) define what an app host does. An app host checks exact rule and feature versions before starting an activity.
+A package now contains a **runbook**: an ordered list of steps. Each step names an operation and supplies its settings. The package decides the sequence; the app implements the reusable operations.
 
-It defines ten sets of rules. **Timed collection** gathers private submissions for a deadline reveal. **Sequential handoff** passes a contribution to the next participant. **Repeated collection** runs a fixed series of windows. **Offered response** gives contributors two sources to choose from before they respond. **Project cycle** lets fixed teams share progress, submit final work, and review one another. **Ongoing space** keeps a shared notebook or prompt series with private entries, comments, and optional completion status. **Guided rounds** run timed prompts with changing participant groups and clear rules for when each group's text becomes visible. **Competitive handoff** offers each turn to two people, accepts the first response, and falls back after a decline or timeout. **Offered response vote** adds a voting window and exact result rules to a source-and-response activity. **Permissioned dialogue** lets a facilitator advance stages and lets a maker approve or decline each request for an opinion. The [group check-in](format/0.12/examples/group-check-in.json), [Pass a line](format/0.12/examples/pass-a-line.json), [private daily writing circle](format/0.12/examples/daily-private-practice.json), [paired story response](format/0.12/examples/paired-story-response.json), [small team jam](format/0.12/examples/small-team-jam.json), [shared notebook](format/0.12/examples/shared-notebook.json), [small group synthesis](format/0.12/examples/small-group-synthesis.json), and [two-offer story chain](format/0.12/examples/two-offer-story-chain.json), [image caption vote](format/0.12/examples/image-caption-vote.json), and [feedback circle](format/0.12/examples/feedback-circle.json) are example packages.
+For example, the [Two Truths package](format/0.13/examples/two-truths.json) repeats three steps for each speaker: collect visible statements with a private answer, collect private guesses from everybody else, and reveal the answer and guesses when the speaker advances. The [List Game package](format/0.13/examples/list-game.json) uses the same operations with five items and text guesses. A [poll](format/0.13/examples/choice-poll.json) uses collection, reveal, and counting. A [prompted routine](format/0.13/examples/see-think-wonder.json) uses three collections that the organizer advances. A [timed story](format/0.13/examples/timed-story.json) repeats a text-append step for each participant.
 
-Images can be stored as content-hash references that the app host authorizes when someone reads the bytes. Packages can move between apps. An app host can import a package, report the rule and feature versions it supports, and export the same package for another app host. The activity's ID and version identify its content; changing that content requires a new version. The package contains data rather than code tied to one server language.
+The [authoring guide](format/0.13/authoring.md) shows how these packages are written. The [specification](format/0.13/README.md), [schema](format/0.13/package.schema.json), and [operation rules](format/0.13/operations.md) define what an app must do. The [conformance cases](format/0.13/conformance/README.md) are sample actions and expected results that check an implementation.
 
-The [conformance cases](format/0.12/conformance/README.md) give sample actions and expected participant views. The [local trial with two app hosts](validation/0.12/README.md) imported the same text and image packages into independent Python and Node.js services, ran all 41 cases, and transferred a newly authored package between them. Image support currently covers a bounded PNG subset. The local trial does not cover other media types, notifications, human judgment of feedback, multi-criterion ratings, migration of an activity in progress, or public deployment.
+In the [local trial](validation/0.13/README.md), separate Python and Node.js apps run the same composed packages with their own databases. The trial also creates a new package that performs a check-in followed by a story relay, transfers it between the apps, and runs it without changing either interpreter. The same tests check privacy, simultaneous submissions, deadlines, retries, and restart.
+
+The [earlier 0.12 candidate](format/0.12/README.md) contains ten complete activity behaviors and PNG support. Its richer examples remain useful for testing which rules the runbook needs next. Support for one candidate does not imply support for the other.
 
 ## Package inspector
 
-The [activity package inspector](docs/README.md) renders a 0.12 package as an interactive diagram. It ships with these two examples and can open another package JSON file locally. The static diagrams above display directly in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages; the repository file view does not run its JavaScript.
+The [activity package inspector](docs/README.md) renders a 0.12 package as an interactive diagram. It ships with the earlier check-in and caption examples and can open another 0.12 package JSON file locally. It does not yet render 0.13 runbooks. The caption diagram above displays directly in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages; the repository file view does not run its JavaScript.
 
 ## Roadmap
 

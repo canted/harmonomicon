@@ -45,3 +45,20 @@ The selected 0.12 set is the ten defined behavior families and their exact capab
 The 0.12 contracts have exact rules for timed collection, hidden handoff, fixed recurrence, source-to-response assignment, fixed-team progress and review, an ongoing text space, timed changing groups, bounded fallback, one voting branch, and permissioned dialogue. These are behavior families, not a claim that a source practice is completely reproduced.
 
 The partial cards identify separate work: Drawception-style open queues and requeue, BeReal-style post-to-view gates, local-calendar schedules, private target assignment, alternating image/text handoffs, project media, reviewer allocation, and multi-criterion grading. The reference-only cards include physical possession or performance, low-latency singing, and a game-specific auction. The [1.0 goal](ROADMAP.md#goal-for-10) is to express suitable digital variants through composed operations where possible, with new exact primitives where needed and independent app host evidence. An app host must not infer these rules from a prompt or from support for a related 0.12 contract.
+
+## Composed candidate 0.13 evidence
+
+The 25-card classifications above remain the audit of candidate 0.12. Candidate 0.13 is a separate runbook subset, not an automatic superset. Its [examples and conformance cases](format/0.13/conformance/README.md) exercise collection/reveal, a private hidden answer, typed guesses, a general option poll, manually advanced prompts, participant turns, and cumulative text with timeouts. A newly authored check-in-then-story package also runs in both [local app hosts](validation/0.13/README.md) without interpreter changes.
+
+| Earlier strict challenge target | Candidate 0.13 evidence or remaining gap |
+|---|---|
+| Fixed 1-2-4-All rooms and timing | No within-group audiences or partition validation yet; the 0.12 slice does not transfer automatically. |
+| Minimal Choice poll | Three exact options, one choice per participant, close/reveal, and per-option counts are exercised. Changes, capacities, and richer Moodle settings are outside the selected minimal target. |
+| Selected Two Truths digital variant | All roster turns, public statements/private answer, typed one-per-person guesses, speaker close, and answer/guess reveal are exercised through composed steps. |
+| Gratefulness Grab Bag | No independent two-item pool, concealed selection, or reader assignment yet. |
+| Selected cumulative-story text variant | Ordered turns, append-only whole-story entries, one-minute deadlines, omission of missed turns, and rejection of stale events are exercised. |
+| See, Think, Wonder | A selected one-response-per-person-per-stage variant has group-visible responses and organizer-controlled transitions. Broader conversation or multiple entries is not claimed. |
+| Impromptu Networking | No transition-time participant regrouping or pair-specific audience yet. |
+| Proposed 25/10 digital variant | No card routing, per-round numeric score collection, score aggregation, or ranked reveal yet. |
+
+This establishes concrete progress on four earlier failures, including a bounded prompted-routine variant. It is not a new claim that all eight targets or the full activity cards are covered. The [remaining milestones](ROADMAP.md#path-from-013-to-10) target pools and assignments first, then scoring/routed rounds and longer/media activities.

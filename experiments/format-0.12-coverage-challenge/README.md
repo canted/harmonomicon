@@ -71,7 +71,7 @@ The [source](https://www.liberatingstructures.com/25-10-crowdsourcing/) asks par
 ## What this changes in the research record
 
 1. The 0.12 envelope did **not** fail this set: a single new behavior token could technically express any one finite procedure. The composition classification instead records recurring cross-contract operations and the risk of adding a separate monolithic contract for every arrangement. The [earlier composition experiment](../composition/findings.md) already found reuse in assignment and commit operations, while also finding that interpreter size and policy complexity rose.
-2. The 25-card [coverage audit](../../COVERAGE.md) remains true under its stated **digitally mediated slice** definition. This stricter experiment shows why a “modeled” slice must not be read as source-equivalent. The next change should be judged against the concrete witnesses above, including whether a later contract supports them in independent app hosts as required by the [roadmap](../../ROADMAP.md#future-advancement-rule).
+2. The 25-card [coverage audit](../../COVERAGE.md) remains true under its stated **digitally mediated slice** definition. This stricter experiment shows why a “modeled” slice must not be read as source-equivalent. The next change should be judged against the concrete witnesses above, including whether a later contract supports them in independent app hosts as required by the [roadmap](../../ROADMAP.md#goal-for-10).
 3. No tested case proves a need to change `format`, the top-level fields, or the one-`behavior` package envelope. A separate test of independently reusable child activities or concurrent behaviors would be needed before claiming a package-structure change.
 
 ## Run the positive probe
@@ -83,3 +83,7 @@ python3 experiments/format-0.12-coverage-challenge/probe.py
 ```
 
 The probe validates all eight checked-in packages against the 0.12 reference validator and exercises timing, privacy, pair/quartet views, and completion. It does not validate the other seven source procedures through an app host; their failures are witnessed by the normative 0.12 contracts above.
+
+## Subsequent candidate evidence
+
+[Candidate 0.13](../../format/0.13/README.md) implements package-level runbooks and tests the minimal poll, selected Two Truths variant, cumulative story, and a bounded manually advanced prompted routine. The [coverage update](../../COVERAGE.md#composed-candidate-013-evidence) records the tested digital variants and remaining gaps. This does not alter the historical 0.12 failures above.
