@@ -1,0 +1,291 @@
+{
+  "package": "../examples/small-team-jam.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "project_cycle@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "teams": [
+      {
+        "id": "red",
+        "members": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "id": "blue",
+        "members": [
+          "c",
+          "d"
+        ]
+      }
+    ],
+    "opensAt": 10,
+    "submissionDeadline": 30,
+    "reviewDeadline": 50
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "private",
+        "type": "post_progress",
+        "actor": "c",
+        "at": 12,
+        "payload": {
+          "audience": "team",
+          "value": "Still working"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        },
+        {
+          "actor": "d",
+          "expect": {
+            "phase": "work",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "pending"
+              },
+              {
+                "team": "blue",
+                "status": "pending"
+              }
+            ],
+            "progress": [
+              {
+                "id": "private",
+                "team": "blue",
+                "actor": "c",
+                "audience": "team",
+                "value": "Still working",
+                "comments": []
+              }
+            ],
+            "finalCount": 0,
+            "reviewCount": 0,
+            "ownReviews": []
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "red-final",
+        "type": "submit_final",
+        "actor": "b",
+        "at": 20,
+        "payload": {
+          "value": "Only final"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "review-open",
+        "type": "tick",
+        "actor": "system",
+        "at": 30,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "review",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "missed"
+              }
+            ],
+            "progress": [],
+            "finalCount": 1,
+            "reviewCount": 0,
+            "finals": [
+              {
+                "team": "red",
+                "actor": "b",
+                "value": "Only final"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "missing-review",
+        "type": "submit_review",
+        "actor": "a",
+        "at": 31,
+        "payload": {
+          "team": "blue",
+          "value": "No final"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "valid-review",
+        "type": "submit_review",
+        "actor": "c",
+        "at": 32,
+        "payload": {
+          "team": "red",
+          "value": "Thoughtful"
+        }
+      },
+      "outcome": "accepted"
+    },
+    {
+      "event": {
+        "eventId": "complete",
+        "type": "tick",
+        "actor": "system",
+        "at": 50,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "missed"
+              }
+            ],
+            "progress": [],
+            "finalCount": 1,
+            "reviewCount": 1,
+            "finals": [
+              {
+                "team": "red",
+                "actor": "b",
+                "value": "Only final"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "c",
+                "team": "red",
+                "value": "Thoughtful"
+              }
+            ]
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "complete",
+            "finalStatuses": [
+              {
+                "team": "red",
+                "status": "submitted"
+              },
+              {
+                "team": "blue",
+                "status": "missed"
+              }
+            ],
+            "progress": [],
+            "finalCount": 1,
+            "reviewCount": 1,
+            "ownFinal": {
+              "team": "red",
+              "actor": "b",
+              "value": "Only final"
+            },
+            "ownReviews": [],
+            "finals": [
+              {
+                "team": "red",
+                "actor": "b",
+                "value": "Only final"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "c",
+                "team": "red",
+                "value": "Thoughtful"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "late-final",
+        "type": "submit_final",
+        "actor": "c",
+        "at": 50,
+        "payload": {
+          "value": "Too late"
+        }
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

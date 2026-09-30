@@ -1,0 +1,25 @@
+# Activity package format 0.9 candidate
+
+**Status:** Candidate validated in two independent local hosts for text and the specified PNG image subset. It is not yet a published standard.
+
+A Harmonomicon package is data describing a digitally mediated group activity: directions, participation bounds, provenance, exact host requirements, and one behavior contract. Candidate 0.9 retains the [eight 0.8 behavior contracts](../0.8/README.md) and [package exchange rules](../0.4/README.md). Its `format` is exactly `harmonomicon.activity-package/0.9`. Each carried example has a new package version because its format field changed. Hosts must report unknown contracts or missing capabilities as `unsupported`.
+
+Candidate 0.9 defines `image_ref@1` as a real host capability. The [image-caption circle](examples/image-caption-circle.json) can now run: contributors upload images, submit image references, receive two other images, caption one, and see the sources and linked captions at the response deadline. The [coverage audit](../../COVERAGE.md) identified image storage and access as a gap in caption, photo-prompt, drawing, and project activities. This candidate provides a deliberately bounded image subset; it does not add voting or scoring.
+
+## Image-reference contract
+
+A host claiming `image_ref@1` must provide an authenticated way for a bound participant to upload bytes to one activity instance and for an authorized actor to read them. The portable value in an activity event or view is `sha256:` followed by 64 lowercase hexadecimal digits: the SHA-256 digest of the exact stored bytes. A reference is scoped to its instance. The same bytes may be uploaded by several participants; each upload establishes ownership for that actor and returns the same reference. Repeating an upload is idempotent. Uploading does not itself submit an activity contribution or make the image visible to the group.
+
+The required media type is `image/png`. This candidate accepts at most 524,288 bytes per image, dimensions from 1 to 1,024 pixels on either axis, 8-bit RGB or RGBA, no interlace, and the ordinary PNG row filters 0–4. The host checks the PNG signature, first `IHDR` chunk, each chunk's length and CRC, at least one `IDAT`, a final `IEND` with no trailing bytes, and that decompression yields exactly the declared raster rows. Ancillary chunks with valid letter names and an uppercase reserved third letter may be skipped. A malformed upload is rejected without creating an owner record. Other image formats and PNG modes require a later capability version.
+
+For a package with `medium: image_ref` or `sourceMedium: image_ref`, a submission value must name bytes previously uploaded to that instance by the submitting actor. A ref from another instance or another person's upload is not a valid submission, even if the actor knows its digest. Existing event order, deadline, retry, and reveal rules still apply. A host with `image_ref@1` supports it in `timed_collection@1`, `sequential_handoff@1`, `repeated_collection@1`, and as the source medium of `offered_response@1`. The other 0.9 contracts remain text-only.
+
+An uploader can read their own stored image. Another actor can read it only when an accepted contribution or offer makes that image reference visible to that actor under the behavior's participant view. In a timed or repeated collection, this follows the existing private and reveal rules. In a sequential handoff, the current actor can read the prior accepted image supplied as input; the completed chain is group-visible. In `offered_response@1`, a participant can read their own source and saved offered sources; everyone can read accepted sources after completion. The organizer has no special early access to participant images. A host must enforce this at the byte-read boundary, not only when rendering a view. A text prompt or caption that happens to contain a digest cannot grant media access.
+
+The local HTTP hosts use JSON upload and read endpoints with canonical base64 bytes; those endpoints demonstrate the required operations but are not a mandated public transport. Package exchange transfers only the package definition. It does not transfer private uploads or a running instance.
+
+## Evidence and limits
+
+The [0.9 schema](package.schema.json), [examples](examples/), and [35 conformance cases](conformance/README.md) cover the retained contracts and image references. Run `python3 format/0.9/check.py` for the reference model. The [two-host trial](../../validation/0.9/README.md) imports the same packages into independent Python and Node.js SQLite hosts, stores actual bytes, checks image ownership and access, and runs caption, collection, handoff, and repeated-image cases. Its probes also reject malformed bytes and preserve images through restart.
+
+This result does not define JPEG or other media, image moderation, public CDN URLs, rich editing, voting, participant notification delivery, or movement of a running instance between hosts. These require separately specified and tested behavior or capabilities.

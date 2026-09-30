@@ -1,0 +1,517 @@
+{
+  "package": "../examples/daily-private-practice.json",
+  "capabilities": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "contracts": [
+    "repeated_collection@1"
+  ],
+  "instance": {
+    "createdAt": 0,
+    "organizer": "host",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "startsAt": 10
+  },
+  "events": [
+    {
+      "event": {
+        "eventId": "start-1",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 0,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "a-day-1",
+        "type": "submit",
+        "actor": "a",
+        "at": 12,
+        "payload": {
+          "occurrence": 1,
+          "value": "A quiet morning"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ],
+                "own": {
+                  "actor": "a",
+                  "value": "A quiet morning"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 1,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "a-day-1",
+        "type": "submit",
+        "actor": "a",
+        "at": 13,
+        "payload": {
+          "occurrence": 1,
+          "value": "A quiet morning"
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "b-late",
+        "type": "submit",
+        "actor": "b",
+        "at": 72000010,
+        "payload": {
+          "occurrence": 1,
+          "value": "Too late"
+        }
+      },
+      "outcome": "rejected",
+      "views": [
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "between",
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "between",
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "own": {
+                  "actor": "a",
+                  "value": "A quiet morning"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "start-2",
+        "type": "tick",
+        "actor": "system",
+        "at": 86400010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "phase": "open",
+                "submissionCount": 0,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "pending"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "b-day-2",
+        "type": "submit",
+        "actor": "b",
+        "at": 86400011,
+        "payload": {
+          "occurrence": 2,
+          "value": "A small discovery"
+        }
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "own": {
+                  "actor": "a",
+                  "value": "A quiet morning"
+                }
+              },
+              {
+                "number": 2,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "b",
+          "expect": {
+            "phase": "open",
+            "currentOccurrence": 2,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "phase": "open",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "pending"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ],
+                "own": {
+                  "actor": "b",
+                  "value": "A small discovery"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "stale-day",
+        "type": "submit",
+        "actor": "a",
+        "at": 86400012,
+        "payload": {
+          "occurrence": 1,
+          "value": "Wrong day"
+        }
+      },
+      "outcome": "rejected"
+    },
+    {
+      "event": {
+        "eventId": "end-2",
+        "type": "tick",
+        "actor": "system",
+        "at": 158400010,
+        "payload": {}
+      },
+      "outcome": "accepted",
+      "views": [
+        {
+          "actor": "host",
+          "expect": {
+            "phase": "complete",
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ]
+              },
+              {
+                "number": 2,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "missed"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "actor": "a",
+          "expect": {
+            "phase": "complete",
+            "currentOccurrence": null,
+            "occurrences": [
+              {
+                "number": 1,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "complete"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "missed"
+                  }
+                ],
+                "own": {
+                  "actor": "a",
+                  "value": "A quiet morning"
+                }
+              },
+              {
+                "number": 2,
+                "phase": "closed",
+                "submissionCount": 1,
+                "statuses": [
+                  {
+                    "actor": "a",
+                    "status": "missed"
+                  },
+                  {
+                    "actor": "b",
+                    "status": "complete"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "event": {
+        "eventId": "a-day-1",
+        "type": "submit",
+        "actor": "a",
+        "at": 158400011,
+        "payload": {
+          "occurrence": 1,
+          "value": "A quiet morning"
+        }
+      },
+      "outcome": "replayed"
+    },
+    {
+      "event": {
+        "eventId": "a-day-1",
+        "type": "submit",
+        "actor": "a",
+        "at": 158400012,
+        "payload": {
+          "occurrence": 1,
+          "value": "Changed"
+        }
+      },
+      "outcome": "rejected"
+    }
+  ]
+}

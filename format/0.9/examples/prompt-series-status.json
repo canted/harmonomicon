@@ -1,0 +1,46 @@
+{
+  "format": "harmonomicon.activity-package/0.9",
+  "id": "org.harmonomicon.prompt-series-status",
+  "version": "0.9.0",
+  "content": {
+    "language": "en",
+    "title": "Private practice circle",
+    "summary": "Keep entries private while the group sees daily completion status.",
+    "setup": "Invite participants and choose the first opening time.",
+    "prompt": "Write a private reflection for each prompt.",
+    "participant": "Add text entries during the activity. Shared entries can receive comments.",
+    "completion": "Read the entries and comments you can access.",
+    "access": "This text example does not require posting every day."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1"
+  ],
+  "behavior": {
+    "contract": "ongoing_space@1",
+    "allowPromptOverride": false,
+    "schedule": {
+      "kind": "fixed_prompt_series",
+      "intervalMs": 86400000,
+      "windowMs": 72000000,
+      "prompts": [
+        "What stayed with you today?",
+        "What changed your mind?"
+      ],
+      "statusVisibility": "group"
+    }
+  }
+}

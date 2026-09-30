@@ -65,7 +65,7 @@ def validate_package(package):
         fields(behavior, {"contract", "medium", "steps", "allowPromptOverride"})
         check(type(behavior["steps"]) is int and behavior["steps"] >= 2, "invalid handoff step count")
         check(bounds["min"] == bounds["max"] == behavior["steps"], "handoff steps must match participant bounds")
-        required = COMMON
+        required = set(COMMON)
     else:
         raise ValueError(f"unknown behavior contract: {contract}")
     check(behavior["medium"] in {"text", "image_ref"}, "invalid medium")
