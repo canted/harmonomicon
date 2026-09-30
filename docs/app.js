@@ -1,6 +1,6 @@
 import {buildDiagram} from './model.js';
 import {palette, diagramFill} from './palette.js';
-import {layoutDiagram, NODE_FONT_SIZE, EDGE_FONT_SIZE} from './diagram-layout.js';
+import {layoutDiagram, edgeLabelWidth, NODE_FONT_SIZE, EDGE_FONT_SIZE} from './diagram-layout.js';
 
 const $ = id => document.getElementById(id);
 const examples = {
@@ -9,6 +9,7 @@ const examples = {
 };
 let current = null;
 let graph = null;
+let graphOriginX = 0;
 
 function setStatus(message, error = false) {
   $('status').textContent = message;
@@ -65,21 +66,24 @@ function renderGraph(diagram) {
   const layout = layoutDiagram(diagram);
   $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, layout.width)}px`;
   $('diagram').style.height = `${layout.height}px`;
+  graphOriginX = Math.max(0, ($('diagram-scroll').clientWidth - layout.width) / 2);
   $('diagram-scroll').scrollLeft = 0;
+  const byId = new Map(layout.nodes.map(node => [node.id,node]));
   const elements = [
     ...layout.nodes.map(node => ({data:{id:node.id,label:node.title,fill:diagramFill(node),width:node.width,height:node.height},position:{x:node.x,y:node.y}})),
-    ...diagram.edges.map(edge => ({data:{id:edge.id,source:edge.source,target:edge.target,label:edge.label}}))
+    ...diagram.edges.map(edge => ({data:{id:edge.id,source:edge.source,target:edge.target,label:edge.label,kind:byId.get(edge.target).row === 0 ? 'main' : 'branch',labelOffsetX:24+edgeLabelWidth(edge.label)/2}}))
   ];
   graph = window.cytoscape({
     container:$('diagram'), elements, layout:{name:'preset',fit:false},
     minZoom:1,maxZoom:2.5,userPanningEnabled:false,userZoomingEnabled:false,
     style:[
       {selector:'node',style:{'shape':'round-rectangle','width':'data(width)','height':'data(height)','background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':NODE_FONT_SIZE,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'none','text-valign':'center','text-halign':'center','padding':'0px'}},
-      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1,'label':'data(label)','font-size':EDGE_FONT_SIZE,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':2,'text-margin-y':-9}},
+      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1,'label':'data(label)','font-size':EDGE_FONT_SIZE,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'none','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':2,'text-margin-x':'data(labelOffsetX)'}},
+      {selector:'edge[kind="branch"]',style:{'text-margin-x':0,'text-margin-y':-18}},
     ]
   });
   graph.on('tap','node',event => selectStage(event.target.id()));
-  graph.ready(() => { graph.zoom(1); graph.pan({x:0,y:0}); $('diagram-scroll').scrollLeft = 0; });
+  graph.ready(() => { graph.zoom(1); graph.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollLeft = 0; });
 }
 function render(diagram) {
   current = diagram;
@@ -131,7 +135,7 @@ $('file-input').addEventListener('change',async event=>{
   try { openPackage(JSON.parse(await file.text()),file.name); }
   catch { setStatus('The selected file is not valid JSON.',true); }
 });
-$('fit-button').addEventListener('click',()=>{ graph?.zoom(1); graph?.pan({x:0,y:0}); $('diagram-scroll').scrollLeft = 0; });
+$('fit-button').addEventListener('click',()=>{ graph?.zoom(1); graph?.pan({x:graphOriginX,y:0}); $('diagram-scroll').scrollLeft = 0; });
 $('png-button').addEventListener('click',()=>{
   if (!graph) { setStatus('The graph library is unavailable; PNG export is disabled.',true); return; }
   const anchor=document.createElement('a');
