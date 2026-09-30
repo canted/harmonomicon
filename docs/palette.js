@@ -9,7 +9,10 @@ export const palette = Object.freeze({
   white: '#ffffff'
 });
 
-export function tint(hex, colorPart = 0.1) {
-  const channels = [1, 3, 5].map(index => Number.parseInt(hex.slice(index, index + 2), 16));
-  return '#' + channels.map(channel => Math.round(channel * colorPart + 255 * (1 - colorPart)).toString(16).padStart(2, '0')).join('');
+/** Solid fills for stages; exception and terminal colors stay consistent. */
+export function diagramFill(node) {
+  if (['insufficient', 'stalled'].includes(node.id)) return palette.pink;
+  if (['complete', 'closed'].includes(node.id)) return palette.purple;
+  const stages = [palette.blue, palette.cyan, palette.yellow, palette.green];
+  return stages[node.column % stages.length];
 }

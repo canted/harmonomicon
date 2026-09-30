@@ -1,5 +1,5 @@
 import {buildDiagram} from './model.js';
-import {palette, tint} from './palette.js';
+import {palette, diagramFill} from './palette.js';
 
 const $ = id => document.getElementById(id);
 const examples = {
@@ -62,25 +62,23 @@ function renderGraph(diagram) {
   }
   fallback.hidden = true;
   const maxColumn = Math.max(...diagram.nodes.map(node => node.column));
-  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, 450 + maxColumn * 360)}px`;
+  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, 600 + maxColumn * 1000)}px`;
+  $('diagram').style.height = diagram.nodes.some(node => node.row > 0) ? '1000px' : '600px';
   $('diagram-scroll').scrollLeft = 0;
   const elements = [
-    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,subtitle:n.subtitle,kind:n.id==='insufficient'||n.id==='stalled'?'branch':n.id==='complete'||n.id==='closed'?'terminal':'phase'},position:{x:190+n.column*360,y:180+n.row*230}})),
+    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,fill:diagramFill(n)},position:{x:300+n.column*1000,y:300+n.row*440}})),
     ...diagram.edges.map(e => ({data:{id:e.id,source:e.source,target:e.target,label:e.label}}))
   ];
   graph = window.cytoscape({
-    container:$('diagram'), elements, layout:{name:'preset',fit:true,padding:70},
-    minZoom:0.25,maxZoom:2.5,
+    container:$('diagram'), elements, layout:{name:'preset',fit:false},
+    minZoom:1,maxZoom:2.5,userPanningEnabled:false,userZoomingEnabled:false,
     style:[
-      {selector:'node',style:{'shape':'round-rectangle','width':260,'height':124,'background-color':tint(palette.blue),'border-width':4,'border-color':palette.blue,'label':'data(label)','color':palette.blueDark,'font-size':26,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':230,'text-valign':'center','text-halign':'center','padding':'16px'}},
-      {selector:'node[kind="terminal"]',style:{'background-color':tint(palette.purple),'border-color':palette.purple,'color':palette.purpleDark}},
-      {selector:'node[kind="branch"]',style:{'background-color':tint(palette.pink),'border-color':palette.pink,'color':palette.pinkDark}},
-      {selector:'node.selected',style:{'border-width':8,'border-color':palette.greenDark}},
-      {selector:'edge',style:{'curve-style':'bezier','width':4,'line-color':palette.cyan,'target-arrow-shape':'triangle','target-arrow-color':palette.cyan,'arrow-scale':1.3,'label':'data(label)','font-size':20,'font-family':'Arial, sans-serif','color':palette.cyanDark,'text-rotation':'autorotate','text-background-color':palette.white,'text-background-opacity':1,'text-background-padding':6,'text-margin-y':-14}},
+      {selector:'node',style:{'shape':'round-rectangle','width':470,'height':210,'background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':52,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':430,'text-valign':'center','text-halign':'center','padding':'12px'}},
+      {selector:'edge',style:{'curve-style':'bezier','width':4,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1.3,'label':'data(label)','font-size':40,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':6,'text-margin-y':-24}},
     ]
   });
   graph.on('tap','node',event => selectStage(event.target.id()));
-  graph.ready(() => { graph.fit(undefined,70); $('diagram-scroll').scrollLeft = 0; });
+  graph.ready(() => { graph.zoom(1); graph.pan({x:0,y:0}); $('diagram-scroll').scrollLeft = 0; });
 }
 function render(diagram) {
   current = diagram;
@@ -132,7 +130,7 @@ $('file-input').addEventListener('change',async event=>{
   try { openPackage(JSON.parse(await file.text()),file.name); }
   catch { setStatus('The selected file is not valid JSON.',true); }
 });
-$('fit-button').addEventListener('click',()=>{ graph?.fit(undefined,70); $('diagram-scroll').scrollLeft = 0; });
+$('fit-button').addEventListener('click',()=>{ graph?.zoom(1); graph?.pan({x:0,y:0}); $('diagram-scroll').scrollLeft = 0; });
 $('png-button').addEventListener('click',()=>{
   if (!graph) { setStatus('The graph library is unavailable; PNG export is disabled.',true); return; }
   const anchor=document.createElement('a');
