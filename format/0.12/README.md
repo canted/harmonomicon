@@ -4,6 +4,8 @@
 
 An activity package is a UTF-8 JSON object that describes the digital steps of one group activity. It contains directions for people, participant bounds, provenance, exact app host requirements, and one behavior contract. An **app host** is an app that imports the package and runs an **instance** by binding real actors and setup values. Packages contain no server code, accounts, scheduled instance dates, media bytes, or database instructions. App hosts may use any programming language or transport.
 
+Format 0.12 names complete activity procedures. Its ten behavior contracts may share implementation code inside an app host, but a package cannot combine parts of them into a new procedure. Support for several behavior tokens means an app host can run several separate package types; it does not give package authors a composition language. This is a scope limit of 0.12, not a failed conformance test.
+
 This document defines the common package, event, exchange, and version rules. The [behavior contracts](contracts.md) define the ten activity procedures and their audience views. The [image-reference capability](media.md) defines actual PNG storage and access. The [JSON Schema](package.schema.json) checks structure; this document and the contracts define cross-field and runtime rules. [Examples](examples/) and [conformance cases](conformance/README.md) make the rules concrete.
 
 ## Package envelope

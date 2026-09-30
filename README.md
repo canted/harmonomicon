@@ -8,6 +8,8 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
+**Current limit:** Format 0.12 lets apps exchange packages for ten predefined kinds of activity. A package cannot yet combine their rules into a new sequence. For example, an app that supports a timed collection and a handoff cannot run a package that joins them unless its programmers add a new complete behavior. Letting package authors assemble reusable rules is an unfinished part of Harmonomicon.
+
 ## A simple example: one question for a group
 
 Imagine an organizer starts a check-in for eight people in an app. At the start, the app asks everyone, “What made you smile today?” Each person can send one text answer. Answers stay private while people write. At 7 p.m., the app shows the answers to the group, even if some people did not reply.
