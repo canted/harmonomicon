@@ -62,19 +62,19 @@ function renderGraph(diagram) {
   }
   fallback.hidden = true;
   const maxColumn = Math.max(...diagram.nodes.map(node => node.column));
-  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, 600 + maxColumn * 1000)}px`;
-  $('diagram').style.height = diagram.nodes.some(node => node.row > 0) ? '1000px' : '600px';
+  $('diagram').style.width = `${Math.max($('diagram-scroll').clientWidth, 340 + maxColumn * 450)}px`;
+  $('diagram').style.height = diagram.nodes.some(node => node.row > 0) ? '580px' : '380px';
   $('diagram-scroll').scrollLeft = 0;
   const elements = [
-    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,fill:diagramFill(n)},position:{x:300+n.column*1000,y:300+n.row*440}})),
+    ...diagram.nodes.map(n => ({data:{id:n.id,label:n.title,fill:diagramFill(n)},position:{x:170+n.column*450,y:190+n.row*220}})),
     ...diagram.edges.map(e => ({data:{id:e.id,source:e.source,target:e.target,label:e.label}}))
   ];
   graph = window.cytoscape({
     container:$('diagram'), elements, layout:{name:'preset',fit:false},
     minZoom:1,maxZoom:2.5,userPanningEnabled:false,userZoomingEnabled:false,
     style:[
-      {selector:'node',style:{'shape':'round-rectangle','width':470,'height':210,'background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':52,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':430,'text-valign':'center','text-halign':'center','padding':'12px'}},
-      {selector:'edge',style:{'curve-style':'bezier','width':4,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1.3,'label':'data(label)','font-size':40,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':6,'text-margin-y':-24}},
+      {selector:'node',style:{'shape':'round-rectangle','width':260,'height':105,'background-color':'data(fill)','border-width':0,'label':'data(label)','color':'#000000','font-size':21,'font-weight':'bold','font-family':'Arial, sans-serif','text-wrap':'wrap','text-max-width':220,'text-valign':'center','text-halign':'center','padding':'10px'}},
+      {selector:'edge',style:{'curve-style':'bezier','width':2,'line-color':'#000000','target-arrow-shape':'triangle','target-arrow-color':'#000000','arrow-scale':1,'label':'data(label)','font-size':18,'font-family':'Arial, sans-serif','color':'#000000','text-rotation':'autorotate','text-background-color':'#ffffff','text-background-opacity':1,'text-background-padding':3,'text-margin-y':-12}},
     ]
   });
   graph.on('tap','node',event => selectStage(event.target.id()));
