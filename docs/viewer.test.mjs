@@ -8,7 +8,7 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.17/examples');
+const source = path.join(here,'../format/0.18/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -158,4 +158,18 @@ test('recurring windows show declared schedule and status without expanding runt
   assert.match(stepLines(pkg.runbook.steps[0]).join('\n'),/3 windows · every 86400000 ms · open 72000000 ms/);
   assert.match(stepLines(pkg.runbook.steps[0].steps[0]).join('\n'),/completion status: group/);
   assert.ok(renderSvg(graph).includes('Repeat 3 fixed windows'));
+});
+
+
+test('distribution and linked-response summaries expose only declared policy and structure', () => {
+  const pkg=read(path.join(source,'single-source-creative-response.json'));
+  const diagram=buildDiagram(pkg);
+  assert.equal(diagram.nodes.length,4);
+  const lines=stepLines(pkg.runbook.steps[1]).join('\n');
+  assert.match(lines,/Policy: policy:seeded_nonself_source@1/);
+  assert.match(lines,/Recipients: contributors · self excluded/);
+  assert.match(lines,/Cardinality: one · source reuse: allowed · unmatched: skip/);
+  assert.match(stepLines(pkg.runbook.steps[2]).join('\n'),/Independent responses · assigned source ID required/);
+  assert.match(stepLines(pkg.runbook.steps[3]).join('\n'),/with attribution/);
+  assert.ok(!JSON.stringify(diagram).includes('assignmentSeed'));
 });

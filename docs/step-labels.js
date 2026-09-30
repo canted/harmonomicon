@@ -31,6 +31,12 @@ export function stepLines(step) {
     lines.push(`${step.occurrences} windows · every ${step.intervalMs} ms · open ${step.windowMs} ms`);
   }
   if (step.op === 'collect_window@1') lines.push(`Closes: fixed window deadline · completion status: ${step.completion}`);
+  if (step.op === 'assign_sources@1') {
+    lines.push(`Recipients: ${step.recipients} · self excluded`);
+    lines.push(`Cardinality: ${step.cardinality} · source reuse: ${step.reuse} · unmatched: ${step.unmatched}`);
+  }
+  if (step.op === 'respond@1') lines.push('Independent responses · assigned source ID required');
+  if (step.op === 'reveal_responses@1') lines.push('Publish accepted source-response pairs with attribution');
   const ends = [];
   if (step.close) ends.push(({all:'all eligible submissions',organizer:'organizer advances',turn:'current participant advances',deadline:'deadline'})[step.close] ?? step.close);
   if (step.op === 'append@1') { lines.push('Actor: current participant'); ends.push('text submitted'); }

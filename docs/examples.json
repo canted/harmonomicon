@@ -28,6 +28,10 @@
     "title": "Gratefulness Grab Bag"
   },
   {
+    "file": "examples/idea-response-and-pairs.json",
+    "title": "Idea exchange and paired reflection"
+  },
+  {
     "file": "examples/list-game.json",
     "title": "List Game"
   },
@@ -62,6 +66,10 @@
   {
     "file": "examples/see-think-wonder.json",
     "title": "See, Think, Wonder"
+  },
+  {
+    "file": "examples/single-source-creative-response.json",
+    "title": "Single-source creative response"
   },
   {
     "file": "examples/timed-story.json",
