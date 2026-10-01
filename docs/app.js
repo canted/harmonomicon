@@ -7,9 +7,10 @@ let current = null;
 let graph = null;
 
 
-function setStatus(message, error = false) {
+function setStatus(message, error = false, announceOnly = false) {
   $('status').textContent = message;
   $('status').classList.toggle('error', error);
+  $('status').classList.toggle('visually-hidden', announceOnly);
 }
 function unique(items) { return [...new Set(items.filter(Boolean))]; }
 function setText(id, value) { $(id).textContent = value; }
@@ -83,11 +84,11 @@ function render(diagram) {
   renderGraph(diagram);
   selectStage(diagram.nodes[0].id, false);
 }
-function openPackage(pkg,label) {
+function openPackage(pkg) {
   try {
     const diagram = buildDiagram(pkg);
     render(diagram);
-    setStatus(`${label} loaded. The diagram shows declared runbook structure; it does not execute or validate operation rules.`);
+    setStatus(`${diagram.title} loaded.`, false, true);
   } catch (error) {
     setStatus(error instanceof Error ? error.message : 'Could not read this package.',true);
   }
@@ -97,7 +98,7 @@ async function loadExample(file) {
     setStatus('Loading example…');
     const response = await fetch(file);
     if (!response.ok) throw new Error(`Example could not be loaded (${response.status}).`);
-    openPackage(await response.json(),'Example');
+    openPackage(await response.json());
   } catch (error) {
     setStatus('Example could not be loaded. Serve the docs folder over HTTP, or open a local JSON file.',true);
   }
@@ -108,7 +109,7 @@ $('file-input').addEventListener('change',async event=>{
   const file=event.target.files?.[0];
   if (!file) return;
   if (file.size>1_500_000) { setStatus('This file is too large for the viewer.',true); return; }
-  try { openPackage(JSON.parse(await file.text()),file.name); }
+  try { openPackage(JSON.parse(await file.text())); }
   catch { setStatus('The selected file is not valid JSON.',true); }
 });
 $('fit-button').addEventListener('click',()=> $('diagram-scroll').scrollTo({left:0,top:0}));
