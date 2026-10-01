@@ -31,3 +31,7 @@ Two-cover offers, participant choice, exposure balancing, detailed legacy facili
 Uploads/transcoding/scanning, draft autosave, notifications, realtime/cache, UI cards, chat, public boards, and transactionally publishing application records belong to host integration. Production safety/scalability certification, deployment and universal cross-platform portability have not been established by local trials and are not claimed.
 
 **Next recommended work:** run a current held-out coverage/readiness challenge and review the supported profile. Use its failures to decide whether one bounded core extension is necessary; avoid automatically chasing every historical detail. Stop before 1.0 for the user's decision.
+
+## Subsequent pinned review evidence
+
+The [current-profile challenge](../../experiments/format-0.19-readiness/README.md) is now completed against `eab8745`: four new authored combinations pass independent engines/schema/every-boundary restart and both durable hosts; six explicit limits and a real-byte access witness verify the image-source distribution gap. This is a small constructed, non-blind challenge, not a coverage estimate across all activities. The [concrete inventory](../../experiments/format-0.19-readiness/inventory.md) supersedes the above proposal to run this particular challenge and recommends the next supported-scope decision. Independent review closed the three identified PNG implementation defects; those corrections are separate from optional scope. No readiness or version transition is declared.
