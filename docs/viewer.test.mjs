@@ -8,7 +8,7 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.19/examples');
+const source = path.join(here,'../format/0.20/examples');
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -180,4 +180,19 @@ test('image fields expose declared type and privacy without inventing host encod
   assert.match(summary,/value: image_ref · private/);
   assert.doesNotMatch(summary,/image\/png|sha256:|ready|authorized/);
   assert.equal(buildDiagram(pkg).nodes.filter(n=>n.step?.op==='collect_until@1').length,1);
+});
+
+test('typed exchange shows declared media and controls without inventing host values', () => {
+  const pkg=read(path.join(source,'simplified-chorus.json'));
+  const pool=stepLines(pkg.runbook.steps[0]);
+  assert.ok(pool.includes('Contribution kinds: image'));
+  assert.ok(pool.includes('Visibility: private'));
+  assert.ok(pool.includes('Actors/dates: trusted host inputs · closes by date or host control'));
+  const assignment=stepLines(pkg.runbook.steps[1]);
+  assert.ok(assignment.includes('Recipients: contributors · self excluded'));
+  const response=stepLines(pkg.runbook.steps[2]);
+  assert.ok(response.includes('Contribution kinds: text · audio'));
+  assert.ok(response.includes('Independent responses · assigned source ID required'));
+  assert.ok(!response.some(s=>/PNG|WAV|2026|reviewer|chosen cover/.test(s)));
+  assert.deepEqual(buildDiagram(pkg).nodes.map(n=>n.step),pkg.runbook.steps);
 });

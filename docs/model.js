@@ -1,5 +1,5 @@
 /** Render declared JSON structure; no activity templates or runtime inference. */
-export const FORMAT = 'harmonomicon.activity-package/0.19';
+export const FORMAT = 'harmonomicon.activity-package/0.20';
 export function buildDiagram(pkg) {
   if (pkg?.format !== FORMAT) throw new Error(`This viewer supports ${FORMAT}.`);
   if (!pkg.content?.title || !pkg.id || !pkg.version || !pkg.participants || !Array.isArray(pkg.requires)) {
