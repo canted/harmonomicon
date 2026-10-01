@@ -5,12 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <title>Activity package viewer · Harmonomicon</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=viewer-20261001">
 </head>
 <body>
   <header class="site-header">
-    <div class="brand-mark" aria-hidden="true"><span></span></div>
-    <div><a class="brand" href="./">HARMONOMICON</a><div class="brand-sub">Activity package viewer · format 0.20</div></div>
+    <div class="brand-wrap">
+      <a class="brand" href="./" aria-label="Harmonomicon home">
+        <svg class="brand-logo" viewBox="0 0 465 54" aria-hidden="true" focusable="false">
+          <!-- Both viewports use the unchanged canonical pixel artwork. -->
+          <svg x="0" y="0" width="48" height="54" viewBox="252 11 48 54" overflow="hidden"><image href="assets/harmonomicon-logo.svg" width="552" height="174"/></svg>
+          <svg x="64" y="1" width="401" height="52" viewBox="77 101 401 52" overflow="hidden"><image href="assets/harmonomicon-logo.svg" width="552" height="174"/></svg>
+        </svg>
+      </a>
+      <div class="brand-sub">Activity package viewer · format 0.20</div>
+    </div>
   </header>
 
   <main>
@@ -24,7 +32,8 @@
       <div class="load-controls">
         <label class="field"><span>Example</span><select id="example-select"></select></label>
         <span class="or" aria-hidden="true">or</span>
-        <label class="file-control"><input id="file-input" type="file" accept=".json,application/json"><span>Open package JSON</span></label>
+        <button class="file-control" id="open-file-button" type="button">Open package JSON</button>
+        <input id="file-input" type="file" accept=".json,application/json" hidden>
       </div>
     </section>
     <p id="status" class="status" role="status" aria-live="polite"></p>

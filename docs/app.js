@@ -103,6 +103,7 @@ async function loadExample(file) {
   }
 }
 $('example-select').addEventListener('change',event=>loadExample(event.target.value));
+$('open-file-button').addEventListener('click',()=> $('file-input').click());
 $('file-input').addEventListener('change',async event=>{
   const file=event.target.files?.[0];
   if (!file) return;
