@@ -1,0 +1,71 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "org.harmonomicon.example.daily-private-practice",
+  "version": "1.0.5",
+  "content": {
+    "language": "en",
+    "title": "Private daily writing circle",
+    "summary": "A group writes each day and sees who completed the prompt, while each entry stays private.",
+    "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+    "prompt": "Write a few lines about something you noticed today.",
+    "participant": "Submit one text entry in each open window. The group sees completion status, but only you can read your entry.",
+    "completion": "Entries stay available to their authors after each window closes. Missing entries do not block the next window.",
+    "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "instance_settings@1",
+    "for_windows@1",
+    "collect_window@1",
+    "completion_status@1"
+  ],
+  "settings": {
+    "starts_at": {
+      "type": "time"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "practice",
+        "op": "for_windows@1",
+        "startsAt": {
+          "setting": "starts_at"
+        },
+        "intervalMs": 86400000,
+        "windowMs": 72000000,
+        "occurrences": 2,
+        "prompt": "Write a few lines about something you noticed today.",
+        "steps": [
+          {
+            "id": "entry",
+            "op": "collect_window@1",
+            "actors": "participants",
+            "prompt": "Write a few lines about something you noticed today.",
+            "fields": {
+              "value": {
+                "type": "text",
+                "visibility": "private"
+              }
+            },
+            "completion": "group"
+          }
+        ]
+      }
+    ]
+  }
+}

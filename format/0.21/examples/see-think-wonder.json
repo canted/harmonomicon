@@ -1,0 +1,81 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.seethinkwonder",
+  "version": "0.4.5",
+  "content": {
+    "language": "en",
+    "title": "See, Think, Wonder",
+    "summary": "See, Think, Wonder coordinated through a composable runbook.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "See, Think, Wonder",
+    "participant": "Follow the current prompt in the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "The app shows your own submissions and fields whose visibility permits it."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Harmonomicon digital adaptation; source supplies the human activity, while the package specifies the selected app rules.",
+    "rights": "Original description of the digital rules; no rights to source materials or participant contributions are granted.",
+    "sourceUrl": "https://www.pz.harvard.edu/resources/see-think-wonder"
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "collect@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "see",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "What do you see?",
+        "fields": {
+          "response": {
+            "type": "text",
+            "visibility": "group"
+          }
+        },
+        "close": "organizer",
+        "afterMs": null
+      },
+      {
+        "id": "think",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "What do you think is happening?",
+        "fields": {
+          "response": {
+            "type": "text",
+            "visibility": "group"
+          }
+        },
+        "close": "organizer",
+        "afterMs": null
+      },
+      {
+        "id": "wonder",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "What do you wonder?",
+        "fields": {
+          "response": {
+            "type": "text",
+            "visibility": "group"
+          }
+        },
+        "close": "organizer",
+        "afterMs": null
+      }
+    ]
+  },
+  "settings": {}
+}

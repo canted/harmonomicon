@@ -1,0 +1,80 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.simplified-chorus",
+  "version": "0.1.1",
+  "content": {
+    "language": "en",
+    "title": "Simplified The Art Before the Chorus",
+    "summary": "A bounded host-controlled activity; app roles, publication and discussion remain with the host.",
+    "setup": "The host supplies effective actors and resolved phase dates.",
+    "prompt": "Group check-in",
+    "participant": "Follow the prompt and submit one accepted contribution in each phase for which you are eligible.",
+    "completion": "Close cover collection using the effective host date or explicit host close; reveal accepted linked responses when their phase closes.",
+    "access": "The declared visibility and assignments govern access to typed media."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+    "rights": "Original example description. Rights to participant contributions are not specified by this package."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "artifact_pool@1",
+    "artifact_response@1",
+    "assign_artifacts@1",
+    "audio_contributions@1",
+    "clock@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "policy:seeded_nonself_source@1",
+    "private_views@1",
+    "reveal_artifact_responses@1",
+    "seeded_assignment@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "covers",
+        "op": "artifact_pool@1",
+        "kinds": [
+          "image"
+        ],
+        "visibility": "private",
+        "prompt": "Contribute one ready cover image."
+      },
+      {
+        "id": "assignment",
+        "op": "assign_artifacts@1",
+        "source": "covers",
+        "policy": "policy:seeded_nonself_source@1",
+        "recipients": "contributors",
+        "cardinality": "one",
+        "reuse": "allowed",
+        "unmatched": "skip"
+      },
+      {
+        "id": "response",
+        "op": "artifact_response@1",
+        "source": "assignment",
+        "prompt": "Make a text or audio response to your assigned cover.",
+        "kinds": [
+          "text",
+          "audio"
+        ]
+      },
+      {
+        "id": "results",
+        "op": "reveal_artifact_responses@1",
+        "source": "response"
+      }
+    ]
+  },
+  "settings": {}
+}

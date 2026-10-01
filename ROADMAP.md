@@ -1,6 +1,6 @@
 # Format roadmap
 
-Harmonomicon's current format is candidate 0.20. The earlier 0.x formats are historical candidates. The overall goal is an expressive activity language and runtime for many user-authored, composable, adjustable group activities within a host app. Cross-platform portability is a secondary potential benefit with uncertain demand. The scope and release criteria for 1.0 are not yet defined; the readiness discussion below is provisional planning.
+Harmonomicon's current format is candidate 0.21. The earlier 0.x formats are historical candidates. The overall goal is an expressive activity language and runtime for many user-authored, composable, adjustable group activities within a host app. Cross-platform portability is a secondary potential benefit with uncertain demand. The scope and release criteria for 1.0 are not yet defined; the readiness discussion below is provisional planning.
 
 ## Three different versions
 
@@ -35,6 +35,8 @@ An app host must explicitly support the format and every behavior and capability
 | [0.19](format/0.19/README.md) | Typed host-authorized image values in ordinary, scheduled and recurring forms; encoding-independent language contract and advertised local PNG upload profile. | 23 examples, 38 engine traces, 114 invalid definitions, all 34 prior traces preserved, actual byte/authority/privacy/retry/race/recovery/transfer checks and four image legacy scenarios per language. | Met for the bounded local profile; six complete legacy migrations. Review-essential evidence and optional/scope-dependent gaps are named in the [assessment](format/0.19/readiness-assessment.md); no 1.0 promotion. |
 
 | [0.20](format/0.20/README.md) | Typed text/image/audio pools, saved non-self assignment, independent linked responses/reveal; host-controlled effective actors, resolved multi-day dates and early close; solo and participating organizer. | 26 examples, 44 traces, 129 invalid definitions and all 38 previous traces preserved. Actual PNG/WAV grants, source/response/control races, every-event recovery, long deadline workers, capability rejection and typed exchange/private-pairs transfer in two hosts. | Incremental pre-1 candidate; six historical migrations remain complete. Host roles/calendars/discussion remain external; independent contract/authoring review and user-supported-profile decision precede any 1.0 transition. |
+
+| [0.21](format/0.21/README.md) | Contribution identities as vote choices, optional current-vote changes, private ballots/separate aggregate publication, structured most-votes outcomes/random ties, generic result presentation and finite linked typed rounds. | Thirty examples, new conformance plus retained 44-trace exact compatibility; two independent durable hosts verify media grants, vote/deadline races, stable random decisions, restart and a proposal-to-pairs composition. See [current evidence](validation/0.21/EVIDENCE.md). | Bounded pre-1 adoption profile for prospective host app, another prospective host app. Six complete legacy migrations remain six. Designated-person tie decisions, result-derived eligibility, unlimited streams and faithful product parity remain deferred; no merge/release/1.0. |
 
 ## Candidate 0.12 validation
 
@@ -93,3 +95,7 @@ Candidate 0.19 keeps image encoding restrictions in the host profile, not the la
 ## Candidate 0.20 boundary and next checkpoint
 
 The user authorized the next candidate with a narrowed language/host boundary. Typed image-source flow closes the concrete 0.19 composability gap; simplified Chorus, public primary Feedback and solo daily-journal witnesses do not claim exact Downfold parity. Host-selected actors/dates express essential house rules without a universal role/calendar/admin system. [Current assessment](format/0.20/readiness-assessment.md) distinguishes invariant review from optional faithful-product details. Next: independent review and supported-profile/authoring assessment, not automatic expansion or a 1.0 transition.
+
+## Candidate 0.21 contract checkpoint
+
+The user authorized a next candidate focused on the composability requirements raised by prospective host app, another prospective host application. [Design checkpoint](format/0.21/DESIGN-CHECKPOINT.md) maps six capabilities to concise instructions/settings/policies/references. A finite within-instance sequence establishes selected-output continuation without a universal workflow/role/calendar system. [Decision record](format/0.21/DECISIONS.md) assesses deferred reuse; [review packet](format/0.21/HOST-REVIEW.md) is prepared for user submission, not sent. Journal rollover remains a separate thin host-adapter correction using unchanged 0.20 semantics.

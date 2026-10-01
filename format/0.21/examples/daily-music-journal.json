@@ -1,0 +1,50 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.daily-music-journal",
+  "version": "0.1.1",
+  "content": {
+    "language": "en",
+    "title": "Daily music journal: one host-scheduled instance",
+    "summary": "An illustrative private text/audio daily instance; the host resolves local-day dates and may allow backfill.",
+    "setup": "The host supplies effective actors and resolved phase dates.",
+    "prompt": "Group check-in",
+    "participant": "Follow the prompt and submit one accepted contribution in each phase for which you are eligible.",
+    "completion": "The host decides dates and closing for each daily instance; no runtime calendar, streak or missed-day penalty is imposed.",
+    "access": "Private visibility is an example choice, not a universal journal default."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+    "rights": "Original example description. Rights to participant contributions are not specified by this package."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "artifact_pool@1",
+    "audio_contributions@1",
+    "clock@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "private_views@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "entry",
+        "op": "artifact_pool@1",
+        "kinds": [
+          "text",
+          "audio"
+        ],
+        "visibility": "private",
+        "prompt": "Record a practice note or a ready audio clip."
+      }
+    ]
+  },
+  "settings": {}
+}

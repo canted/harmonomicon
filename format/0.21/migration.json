@@ -1,0 +1,228 @@
+[
+  {
+    "example": "daily-private-practice.json",
+    "behavior": "repeated_collection@1",
+    "status": "expressible",
+    "available": "Fixed-interval occurrence-bound windows, typed text forms, optional explicit reveal, and public completion/missed statuses reproduce the selected legacy package.",
+    "missing": [],
+    "evidence": [
+      "examples/daily-private-practice.json",
+      "conformance/recurrence-migration.json",
+      "recurrence_check.py",
+      "../../validation/0.21/recurrence_trial.py"
+    ]
+  },
+  {
+    "example": "daily-reveal.json",
+    "behavior": "repeated_collection@1",
+    "status": "expressible",
+    "available": "Fixed-interval occurrence-bound windows, typed text forms, optional explicit reveal, and public completion/missed statuses reproduce the selected legacy package.",
+    "missing": [],
+    "evidence": [
+      "examples/daily-reveal.json",
+      "conformance/recurrence-migration.json",
+      "recurrence_check.py",
+      "../../validation/0.21/recurrence_trial.py"
+    ]
+  },
+  {
+    "example": "daily-shared-prompt.json",
+    "behavior": "repeated_collection@1",
+    "status": "expressible",
+    "available": "Fixed-interval occurrence-bound windows, typed text forms, optional explicit reveal, and public completion/missed statuses reproduce the selected legacy package.",
+    "missing": [],
+    "evidence": [
+      "examples/daily-shared-prompt.json",
+      "conformance/recurrence-migration.json",
+      "recurrence_check.py",
+      "../../validation/0.21/recurrence_trial.py"
+    ]
+  },
+  {
+    "example": "feedback-circle.json",
+    "behavior": "permissioned_dialogue@1",
+    "status": "needs_operations",
+    "available": "Organizer-advanced prompts and typed fields exist.",
+    "missing": [
+      "Maker/responder role bindings.",
+      "Linked question-and-answer identity.",
+      "Per-request permission and opinion gates."
+    ]
+  },
+  {
+    "example": "group-check-in.json",
+    "behavior": "timed_collection@1",
+    "status": "expressible",
+    "available": "Scheduled waiting, deadline-only private text collection, instance times/question, and explicit reveal reproduce the legacy check-in.",
+    "missing": [],
+    "evidence": [
+      "examples/scheduled-check-in.json",
+      "conformance/check-in-migration.json",
+      "migration_check.py",
+      "../../validation/0.21/run.py"
+    ]
+  },
+  {
+    "example": "image-caption-circle.json",
+    "behavior": "offered_response@1",
+    "status": "needs_operations",
+    "available": "Typed host-authorized image sources, one saved non-self assignment, independent text/audio linked responses and host-resolved phase dates exist. This is a simpler policy than the legacy two-offer package.",
+    "missing": [
+      "The exact two-source exposure-balanced offer policy and saved offers.",
+      "Selection from saved two-source offers.",
+      "Insufficient-source branching."
+    ]
+  },
+  {
+    "example": "image-caption-vote.json",
+    "behavior": "offered_response_vote@1",
+    "status": "needs_operations",
+    "available": "Typed host-authorized image sources, one saved non-self assignment, independent text/audio linked responses and host-resolved phase dates exist. This is a simpler policy than the legacy two-offer package.",
+    "missing": [
+      "Two-source balanced offers and linked captions.",
+      "Ballots tied to eligible caption IDs, private individual votes and tied winners.",
+      "Insufficient-source branching."
+    ]
+  },
+  {
+    "example": "image-check-in.json",
+    "behavior": "timed_collection@1",
+    "status": "expressible",
+    "available": "Typed host-authorized image references in fixed scheduled/recurring forms preserve selected timing, accepted order, completion status and visibility; actual PNG-byte and durable legacy comparisons pass.",
+    "missing": [],
+    "evidence": [
+      "examples/image-check-in.json",
+      "image_check.py",
+      "../../validation/0.21/image_trial.py"
+    ]
+  },
+  {
+    "example": "image-daily-prompt.json",
+    "behavior": "repeated_collection@1",
+    "status": "expressible",
+    "available": "Typed host-authorized image references in fixed scheduled/recurring forms preserve selected timing, accepted order, completion status and visibility; actual PNG-byte and durable legacy comparisons pass.",
+    "missing": [],
+    "evidence": [
+      "examples/image-daily-prompt.json",
+      "image_check.py",
+      "../../validation/0.21/image_trial.py"
+    ]
+  },
+  {
+    "example": "image-pass-along.json",
+    "behavior": "sequential_handoff@1",
+    "status": "needs_operations",
+    "available": "Participant repetition and item reader access exist. Host-authorized image refs exist; they do not create predecessor-chain handoff semantics.",
+    "missing": [
+      "Concealed predecessor-to-recipient handoff with participant-selected route setup.",
+      "Final whole-chain reveal."
+    ]
+  },
+  {
+    "example": "paired-story-response.json",
+    "behavior": "offered_response@1",
+    "status": "needs_operations",
+    "available": "Closed text pools, two named single-source non-self distribution policies, independent source-linked text responses and explicit attributed result reveal are available. Existing score/tally rules remain separate.",
+    "missing": [
+      "Exact two-source balanced saved offers; single-source assignment is a different policy.",
+      "Per-contributor selection from saved two-source offers; the single assigned source is a different rule.",
+      "Insufficient-source branching and phase time bindings."
+    ]
+  },
+  {
+    "example": "pass-a-line.json",
+    "behavior": "sequential_handoff@1",
+    "status": "needs_operations",
+    "available": "Participant repetition and cumulative text exist.",
+    "missing": [
+      "Concealed immediate-predecessor input; cumulative public text has a different audience.",
+      "Participant-selected route setup and final whole-chain reveal."
+    ]
+  },
+  {
+    "example": "prompt-series-soft.json",
+    "behavior": "ongoing_space@1",
+    "status": "needs_operations",
+    "available": "Prompted sequences and multiple pooled contributions exist.",
+    "missing": [
+      "An ongoing multi-entry stream usable between windows.",
+      "Per-entry private/group visibility, comments and comment targets.",
+      "Fixed prompt scheduling with no missed-day signal."
+    ]
+  },
+  {
+    "example": "prompt-series-status.json",
+    "behavior": "ongoing_space@1",
+    "status": "needs_operations",
+    "available": "Prompted sequences and multiple pooled contributions exist.",
+    "missing": [
+      "An ongoing stream usable between windows with per-entry privacy and comments.",
+      "Fixed prompt scheduling and public completion/missed statuses."
+    ]
+  },
+  {
+    "example": "rounds-icebreaker.json",
+    "behavior": "guided_rounds@1",
+    "status": "needs_operations",
+    "available": "Partition and timed within-group responses are exercised by the partner-rounds example.",
+    "missing": [
+      "Prebound groupsByRound setup.",
+      "Delayed all-after-round response reveal.",
+      "Public whole-partition membership and group counts, distinct from 0.20 group-scoped views."
+    ]
+  },
+  {
+    "example": "shared-notebook.json",
+    "behavior": "ongoing_space@1",
+    "status": "needs_operations",
+    "available": "A finite text pool can hold multiple independent contributions.",
+    "missing": [
+      "An open append stream with mutable-length history.",
+      "Per-entry privacy and comments linked to entry IDs."
+    ]
+  },
+  {
+    "example": "small-group-synthesis.json",
+    "behavior": "guided_rounds@1",
+    "status": "needs_operations",
+    "available": "The fixed 1-2-4-All example tests solo, pair, quartet and full-group timed audiences.",
+    "missing": [
+      "Prebound group maps setup.",
+      "Delayed all-after-round reveal for the final round.",
+      "Public whole-partition membership and group counts."
+    ]
+  },
+  {
+    "example": "small-team-jam.json",
+    "behavior": "project_cycle@1",
+    "status": "needs_operations",
+    "available": "Grouped text collections and private routed item assessments exist; team-owned streams and finals do not.",
+    "missing": [
+      "Team-role binding and team-owned final submissions.",
+      "Progress and comment streams running beside a submission window.",
+      "Review allocation, delayed review reveal and public team statuses."
+    ]
+  },
+  {
+    "example": "text-caption-vote.json",
+    "behavior": "offered_response_vote@1",
+    "status": "needs_operations",
+    "available": "Closed text pools, two named single-source non-self distribution policies, independent source-linked text responses and explicit attributed result reveal are available. Existing score/tally rules remain separate.",
+    "missing": [
+      "Exact balanced saved offers and linked responses.",
+      "Eligible-caption ballot validation, private votes and tied winners.",
+      "Insufficient-source branching and phase time bindings."
+    ]
+  },
+  {
+    "example": "two-offer-story-chain.json",
+    "behavior": "competitive_handoff@1",
+    "status": "needs_operations",
+    "available": "Reader claims are atomic and timed turns can omit missing actions.",
+    "missing": [
+      "Two simultaneously offered recipients for a concealed predecessor value.",
+      "One fallback attempt after decline/timeout and terminal stall without reveal.",
+      "Configured attempt route and final whole-chain reveal."
+    ]
+  }
+]
