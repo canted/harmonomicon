@@ -1,5 +1,7 @@
 # Activity package inspector
 
+**[Open the live diagrammer](https://canted.github.io/harmonomicon/)**
+
 A static browser viewer for candidate 0.16 activity packages. It loads package JSON and renders `runbook.steps` in array order. Nested `steps` are enclosed in containers. Participant and item loops state what repeats; step cards show prompts, actors, field types, options, privacy, sources, and close conditions. Selecting a node shows its operation, JSON location, all settings, and the original step JSON.
 
 There are no activity templates, contract-specific phases, or inferred waiting/completion nodes. Node labels are the declared step IDs. **next** connects siblings in the same array; containers enclose nested bodies. These are structural links, not a runtime trace: repeated participant turns are not expanded, and arrows do not imply extra close conditions, outcomes, or events. Operation semantics remain in the [specification](../format/0.16/operations.md).
@@ -29,3 +31,7 @@ Synchronization copies source JSON unchanged, generates the catalog from package
 Scheduled steps show declared setting references rather than invented dates or resolved prompt values. The setup panel lists the package's declared types and defaults; chosen instance values do not belong to the blueprint.
 
 Rating steps show declared numeric bounds and routing rounds. Aggregation and publication show their exact policies and cutoff settings; the inspector does not generate scores or infer winners.
+
+## GitHub Pages
+
+The public site at <https://canted.github.io/harmonomicon/> is served from the `docs/` folder on `main`. Pushes to `main` publish updates automatically. `docs/.nojekyll` keeps the site as plain static files.

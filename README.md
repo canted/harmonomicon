@@ -81,7 +81,19 @@ A [proposal assessment](format/0.16/examples/proposal-assessment.json) shows ano
 
 ## Package inspector
 
-The [activity package inspector](docs/README.md) renders candidate 0.16 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. To use the interactive viewer, serve `docs/` locally or publish it through GitHub Pages.
+**[Open the live Runbook Structure diagrammer](https://canted.github.io/harmonomicon/)**
+
+The [activity package inspector](docs/README.md) renders candidate 0.16 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. Use the [live diagrammer](https://canted.github.io/harmonomicon/) in your browser, or follow the [local setup instructions](docs/README.md#run-locally). The live site is published from `docs/` on the repository’s default branch.
+
+### Runbook Structure screenshots
+
+**Group check-in:** collect private answers, then reveal them to the group.
+
+![Group check-in in the diagrammer, showing Answer followed by Reveal and the selected step inspector](docs/screenshots/check-in.jpg)
+
+**Two Truths and a Tall Tale:** a participant loop encloses Publish, Guess, and Reveal. The container declares repetition without expanding each participant’s turn.
+
+![Two Truths and a Tall Tale in the diagrammer, showing three nested steps inside the Turns participant loop](docs/screenshots/two-truths.jpg)
 
 ## Roadmap
 
