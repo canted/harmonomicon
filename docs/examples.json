@@ -12,6 +12,10 @@
     "title": "25/10 proposed digital translation"
   },
   {
+    "file": "examples/daily-music-journal.json",
+    "title": "Daily music journal: one host-scheduled instance"
+  },
+  {
     "file": "examples/daily-private-practice.json",
     "title": "Private daily writing circle"
   },
@@ -22,6 +26,10 @@
   {
     "file": "examples/daily-shared-prompt.json",
     "title": "Shared daily micro-story"
+  },
+  {
+    "file": "examples/feedback-round.json",
+    "title": "Feedback Round: open primary posts"
   },
   {
     "file": "examples/gratitude-pool.json",
@@ -78,6 +86,10 @@
   {
     "file": "examples/see-think-wonder.json",
     "title": "See, Think, Wonder"
+  },
+  {
+    "file": "examples/simplified-chorus.json",
+    "title": "Simplified The Art Before the Chorus"
   },
   {
     "file": "examples/single-source-creative-response.json",
