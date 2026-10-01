@@ -89,11 +89,11 @@ The [activity package inspector](docs/README.md) renders candidate 0.16 runbooks
 
 **Group check-in:** collect private answers, then reveal them to the group.
 
-![Group check-in in the diagrammer, showing Answer followed by Reveal and the selected step inspector](docs/screenshots/check-in.jpg)
+![Group check-in Runbook Structure diagram showing Answer followed by Reveal](docs/screenshots/check-in.jpg)
 
 **Two Truths and a Tall Tale:** a participant loop encloses Publish, Guess, and Reveal. The container declares repetition without expanding each participant’s turn.
 
-![Two Truths and a Tall Tale in the diagrammer, showing three nested steps inside the Turns participant loop](docs/screenshots/two-truths.jpg)
+![Two Truths and a Tall Tale Runbook Structure diagram showing three nested steps inside the Turns participant loop](docs/screenshots/two-truths.jpg)
 
 ## Roadmap
 
