@@ -1,0 +1,110 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.repeated-poll-and-pairs",
+  "version": "0.1.6",
+  "content": {
+    "language": "en",
+    "title": "Repeated choices and paired reflection",
+    "summary": "Two polls at fixed intervals, followed by private paired reflection.",
+    "setup": "Set the first opening and invite an even-sized group.",
+    "prompt": "Choose a direction to explore.",
+    "participant": "Choose once per window, then reflect with your partner.",
+    "completion": "Each poll closes on schedule and publishes counts; reflection closes after one minute.",
+    "access": "Poll choices are private until each reveal; final reflection is pair-private."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "clock@1",
+    "collect_group@1",
+    "collect_window@1",
+    "durable_state@1",
+    "for_windows@1",
+    "identity@1",
+    "instance_settings@1",
+    "partition@1",
+    "policy:roster_chunks@1",
+    "private_views@1",
+    "reveal@1",
+    "serial_events@1",
+    "tally@1",
+    "text@1"
+  ],
+  "settings": {
+    "starts_at": {
+      "type": "time"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "practice",
+        "op": "for_windows@1",
+        "startsAt": {
+          "setting": "starts_at"
+        },
+        "intervalMs": 20,
+        "windowMs": 10,
+        "occurrences": 2,
+        "prompt": "Waiting for the next choice window.",
+        "steps": [
+          {
+            "id": "entry",
+            "op": "collect_window@1",
+            "actors": "participants",
+            "prompt": "Choose a direction to explore.",
+            "fields": {
+              "choice": {
+                "type": "choice",
+                "visibility": "private",
+                "options": [
+                  "draw",
+                  "write",
+                  "listen"
+                ]
+              }
+            },
+            "completion": "none"
+          },
+          {
+            "id": "publish",
+            "op": "reveal@1",
+            "sources": [
+              "entry"
+            ]
+          },
+          {
+            "id": "count",
+            "op": "tally@1",
+            "source": "entry",
+            "field": "choice"
+          }
+        ]
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Form pairs.",
+        "afterMs": null
+      },
+      {
+        "id": "reflection",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Reflect with your partner.",
+        "close": "deadline",
+        "afterMs": 60000
+      }
+    ]
+  }
+}

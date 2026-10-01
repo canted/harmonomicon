@@ -1,0 +1,119 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.typed-continuation",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Choose and continue a supplied piece",
+    "summary": "Propose up to two typed continuations, select one, then use the actual selected contribution for a written next round.",
+    "setup": "The host supplies an authorized starting_piece binding, eligible actors and contribution/voting windows. Filling limits or receiving every vote does not close a window early.",
+    "prompt": "Choose and continue a supplied piece",
+    "participant": "Read/play the actual supplied piece. Offer up to two text/image/audio continuations in total. Vote privately, then write one continuation of the selected piece in the next round.",
+    "completion": "Present counts and selection; positive ties and nonempty zero-count outcomes choose randomly. No candidates gives no_candidates and blocks the next collection without fabricating source material.",
+    "access": "The actual supplied starting contribution and its author/origin are visible to every bound viewer when collection begins. Continuations remain author-private until eligible candidates and attribution appear at voting entry. Ballots stay private after counts and selection appear. The selected piece is visible as input to the next round; new written submissions remain private."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.23 composition.",
+    "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "audio_contributions@1",
+    "clock@1",
+    "contribution_inputs@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "policy:most_votes@1",
+    "policy:random_candidate@1",
+    "policy:random_tie@1",
+    "pool@2",
+    "present@3",
+    "private_views@1",
+    "select@3",
+    "serial_events@1",
+    "tally@4",
+    "text@1",
+    "vote@3"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "continuations",
+        "op": "pool@2",
+        "prompt": "Offer up to two text, image or audio continuations of the supplied starting piece.",
+        "kinds": [
+          "text",
+          "image",
+          "audio"
+        ],
+        "perActor": 2,
+        "visibility": "private",
+        "round": "one",
+        "input": {
+          "binding": "starting_piece"
+        }
+      },
+      {
+        "id": "vote",
+        "op": "vote@3",
+        "prompt": "Choose one actual contribution.",
+        "candidates": {
+          "source": "continuations"
+        },
+        "changes": "allowed",
+        "ballots": "private"
+      },
+      {
+        "id": "counts",
+        "op": "tally@4",
+        "source": "vote"
+      },
+      {
+        "id": "selected",
+        "op": "select@3",
+        "source": "counts",
+        "policy": "policy:most_votes@1",
+        "ties": "random",
+        "noVotes": "random"
+      },
+      {
+        "id": "result",
+        "op": "present@3",
+        "source": "selected",
+        "prompt": "Here are the counts, outcome and selected contribution, if any.",
+        "audience": "group"
+      },
+      {
+        "id": "next",
+        "op": "pool@2",
+        "prompt": "Write one continuation of the selected piece.",
+        "kinds": [
+          "text"
+        ],
+        "perActor": 1,
+        "visibility": "private",
+        "round": "two",
+        "input": {
+          "result": "selected"
+        }
+      }
+    ]
+  },
+  "inputs": {
+    "starting_piece": {
+      "type": "contribution",
+      "kinds": [
+        "text",
+        "image",
+        "audio"
+      ]
+    }
+  }
+}

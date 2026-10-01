@@ -1,0 +1,46 @@
+{
+  "id": "continuation_two",
+  "packageId": "org.harmonomicon.example.typed-continuation",
+  "version": "0.1.0",
+  "participants": [
+    "Alice",
+    "Bob",
+    "Carol"
+  ],
+  "organizer": "Organizer",
+  "hostBindings": {
+    "starting_piece": {
+      "instance": "continuation_one",
+      "result": "selected"
+    }
+  },
+  "hostInputs": {
+    "continuations": {
+      "actors": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ],
+      "opensAt": 100,
+      "closesAt": 200
+    },
+    "vote": {
+      "actors": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ],
+      "opensAt": 200,
+      "closesAt": 300
+    },
+    "next": {
+      "actors": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ],
+      "opensAt": 300,
+      "closesAt": 400
+    }
+  }
+}

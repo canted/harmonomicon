@@ -1,0 +1,79 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.daily-reveal",
+  "version": "1.0.7",
+  "content": {
+    "language": "en",
+    "title": "Daily reveal writing circle",
+    "summary": "Everyone writes privately during a window, then the group reads the entries together when it closes.",
+    "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+    "prompt": "Describe a place you would like to visit.",
+    "participant": "Submit one text entry in each open window. Others see that you submitted, but read your entry only after the window closes.",
+    "completion": "Entries from each window remain available after reveal. Missing entries do not block the next window.",
+    "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "instance_settings@1",
+    "for_windows@1",
+    "collect_window@1",
+    "completion_status@1",
+    "reveal@1"
+  ],
+  "settings": {
+    "starts_at": {
+      "type": "time"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "practice",
+        "op": "for_windows@1",
+        "startsAt": {
+          "setting": "starts_at"
+        },
+        "intervalMs": 86400000,
+        "windowMs": 72000000,
+        "occurrences": 3,
+        "prompt": "Describe a place you would like to visit.",
+        "steps": [
+          {
+            "id": "entry",
+            "op": "collect_window@1",
+            "actors": "participants",
+            "prompt": "Describe a place you would like to visit.",
+            "fields": {
+              "value": {
+                "type": "text",
+                "visibility": "private"
+              }
+            },
+            "completion": "group"
+          },
+          {
+            "id": "publish",
+            "op": "reveal@1",
+            "sources": [
+              "entry"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

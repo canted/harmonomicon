@@ -1,0 +1,86 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.typed-sharing",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Read, play and share contributions",
+    "summary": "Collect up to two typed contributions per person and share each successfully acknowledged item in accepted order.",
+    "setup": "The host supplies eligible actors and a contribution window. Filling the contribution limit does not close it early. Each reader claim and acknowledgment has a 30-second timeout.",
+    "prompt": "Read, play and share contributions",
+    "participant": "Submit up to two text, image or audio contributions in total. Later, claim a piece other than your own, read/play it, and acknowledge if it should be shared with attribution.",
+    "completion": "Iterate finally eligible accepted items in acceptance order. Claim or acknowledgment timeout skips publication; without a possible non-author reader, the item skips immediately. An empty pool creates no sharing rounds.",
+    "access": "Private contributions stay with their author. The non-author who claims an item receives its material and attribution. Successful acknowledgment shares that actual contribution with all bound viewers; timeout preserves privacy, while an assigned reader keeps access."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.23 composition.",
+    "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "acknowledge@2",
+    "assign_item@2",
+    "audio_contributions@1",
+    "clock@1",
+    "durable_state@1",
+    "for_items@2",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "policy:claim_reader@1",
+    "policy:pool_order@1",
+    "pool@2",
+    "private_views@1",
+    "reveal_item@2",
+    "serial_events@1",
+    "text@1"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "pieces",
+        "op": "pool@2",
+        "prompt": "Offer up to two text, image or audio pieces in total.",
+        "kinds": [
+          "text",
+          "image",
+          "audio"
+        ],
+        "perActor": 2,
+        "visibility": "private"
+      },
+      {
+        "id": "sharing",
+        "op": "for_items@2",
+        "source": "pieces",
+        "policy": "policy:pool_order@1",
+        "steps": [
+          {
+            "id": "claim",
+            "op": "assign_item@2",
+            "policy": "policy:claim_reader@1",
+            "prompt": "Claim this contribution if it is not your own.",
+            "afterMs": 30000
+          },
+          {
+            "id": "read",
+            "op": "acknowledge@2",
+            "source": "claim",
+            "prompt": "Read or play your assigned contribution, then acknowledge to share it with attribution.",
+            "afterMs": 30000
+          },
+          {
+            "id": "share",
+            "op": "reveal_item@2",
+            "source": "read"
+          }
+        ]
+      }
+    ]
+  }
+}

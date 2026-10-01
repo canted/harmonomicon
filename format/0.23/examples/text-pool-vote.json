@@ -1,0 +1,86 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.text-pool-vote",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Choose among written ideas",
+    "summary": "Each person may propose up to three independent written ideas; vote privately for one actual idea.",
+    "setup": "The host supplies eligible actors and contribution/voting windows. Filling contribution limits or receiving every vote does not close either window early.",
+    "prompt": "Choose among written ideas",
+    "participant": "Submit up to three written ideas. Choose one accepted idea; you may change your vote until closing.",
+    "completion": "Show the counts and selected contribution. Resolve positive ties randomly; with candidates but zero counted votes choose a candidate randomly. An empty candidate set gives no_candidates.",
+    "access": "Contributions stay with their author until eligible candidates and their attribution become visible to all bound viewers at voting entry. Individual ballots remain private after counts and the selected contribution are presented."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.23 composition.",
+    "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "clock@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "policy:most_votes@1",
+    "policy:random_candidate@1",
+    "policy:random_tie@1",
+    "pool@2",
+    "present@3",
+    "private_views@1",
+    "select@3",
+    "serial_events@1",
+    "tally@4",
+    "text@1",
+    "vote@3"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "pieces",
+        "op": "pool@2",
+        "prompt": "Offer up to three independent written ideas.",
+        "kinds": [
+          "text"
+        ],
+        "perActor": 3,
+        "visibility": "private"
+      },
+      {
+        "id": "vote",
+        "op": "vote@3",
+        "prompt": "Choose one actual contribution.",
+        "candidates": {
+          "source": "pieces"
+        },
+        "changes": "allowed",
+        "ballots": "private"
+      },
+      {
+        "id": "counts",
+        "op": "tally@4",
+        "source": "vote"
+      },
+      {
+        "id": "selected",
+        "op": "select@3",
+        "source": "counts",
+        "policy": "policy:most_votes@1",
+        "ties": "random",
+        "noVotes": "random"
+      },
+      {
+        "id": "result",
+        "op": "present@3",
+        "source": "selected",
+        "prompt": "Here are the counts, outcome and selected contribution, if any.",
+        "audience": "group"
+      }
+    ]
+  }
+}
