@@ -1,0 +1,99 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.pooledideasandpairs",
+  "version": "0.3.5",
+  "content": {
+    "language": "en",
+    "title": "Pooled ideas followed by pair discussion",
+    "summary": "An authored combination of an idea pool, individual reader access, staged sharing, and private pair discussion.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "Gratefulness Grab Bag",
+    "participant": "Follow the current step; claims and acknowledgments are recorded by the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "Pooled authorship metadata is withheld; group responses use the membership recorded for their round."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon composition validation example.",
+    "rights": "Original description; no contribution rights are specified."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "acknowledge@1",
+    "assign_item@1",
+    "clock@1",
+    "collect_group@1",
+    "durable_state@1",
+    "for_items@1",
+    "identity@1",
+    "partition@1",
+    "policy:claim_reader@1",
+    "policy:pool_order@1",
+    "policy:roster_chunks@1",
+    "pool@1",
+    "private_views@1",
+    "reveal_item@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "slips",
+        "op": "pool@1",
+        "prompt": "Contribute one idea.",
+        "perActor": 1,
+        "close": "all",
+        "afterMs": 60000
+      },
+      {
+        "id": "read_slips",
+        "op": "for_items@1",
+        "source": "slips",
+        "policy": "policy:pool_order@1",
+        "steps": [
+          {
+            "id": "claim",
+            "op": "assign_item@1",
+            "policy": "policy:claim_reader@1",
+            "prompt": "Claim this slip if it is not yours.",
+            "afterMs": 30000
+          },
+          {
+            "id": "read",
+            "op": "acknowledge@1",
+            "source": "claim",
+            "prompt": "Read the slip, then acknowledge to share its text.",
+            "afterMs": 30000
+          },
+          {
+            "id": "share",
+            "op": "reveal_item@1",
+            "source": "read"
+          }
+        ]
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Form pairs in enrollment order.",
+        "afterMs": null
+      },
+      {
+        "id": "discuss",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Discuss the revealed ideas with your assigned partner.",
+        "close": "organizer",
+        "afterMs": 60000
+      }
+    ]
+  },
+  "settings": {}
+}

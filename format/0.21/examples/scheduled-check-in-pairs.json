@@ -1,0 +1,106 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.scheduledcheckinpairs",
+  "version": "0.2.5",
+  "content": {
+    "language": "en",
+    "title": "Scheduled check-in and paired reflection",
+    "summary": "Reveal a scheduled check-in, then discuss privately in pairs.",
+    "setup": "Invite the group and choose when answers open and close.",
+    "prompt": "What made you smile today?",
+    "participant": "Send one text answer before the closing time. You can see your answer while the check-in is open.",
+    "completion": "After the check-in reveal, pairs may reflect until everyone responds or five minutes pass.",
+    "access": "Participants need a way to read the question and enter text. Missing an answer does not block the group."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "instance_settings@1",
+    "wait_until@1",
+    "collect_until@1",
+    "reveal@1",
+    "partition@1",
+    "policy:roster_chunks@1",
+    "collect_group@1"
+  ],
+  "settings": {
+    "opens_at": {
+      "type": "time"
+    },
+    "closes_at": {
+      "type": "time"
+    },
+    "question": {
+      "type": "text",
+      "default": "What made you smile today?"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "opening",
+        "op": "wait_until@1",
+        "until": {
+          "setting": "opens_at"
+        },
+        "prompt": {
+          "setting": "question"
+        }
+      },
+      {
+        "id": "answer",
+        "op": "collect_until@1",
+        "actors": "participants",
+        "prompt": {
+          "setting": "question"
+        },
+        "fields": {
+          "value": {
+            "type": "text",
+            "visibility": "private"
+          }
+        },
+        "until": {
+          "setting": "closes_at"
+        }
+      },
+      {
+        "id": "share",
+        "op": "reveal@1",
+        "sources": [
+          "answer"
+        ]
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Meet your pair.",
+        "afterMs": null
+      },
+      {
+        "id": "reflect",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "What stood out in the check-in?",
+        "close": "all",
+        "afterMs": 300000
+      }
+    ]
+  }
+}

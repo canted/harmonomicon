@@ -1,0 +1,53 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.timedstory",
+  "version": "0.4.5",
+  "content": {
+    "language": "en",
+    "title": "Timed cumulative story",
+    "summary": "Timed cumulative story coordinated through a composable runbook.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "Timed cumulative story",
+    "participant": "Follow the current prompt in the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "The app shows your own submissions and fields whose visibility permits it."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Harmonomicon text adaptation of the Family Dinner Project story activity; roster order and timeout omission are explicit digital choices.",
+    "rights": "Original description of the digital rules; no rights to source materials or participant contributions are granted.",
+    "sourceUrl": "https://thefamilydinnerproject.org/fun_content/story-by-sentence/"
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "append@1",
+    "for_each@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "turns",
+        "op": "for_each@1",
+        "over": "participants",
+        "steps": [
+          {
+            "id": "write",
+            "op": "append@1",
+            "prompt": "Add to the shared story during your turn.",
+            "afterMs": 60000
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {}
+}

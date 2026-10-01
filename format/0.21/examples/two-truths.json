@@ -1,0 +1,91 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.twotruths",
+  "version": "0.4.5",
+  "content": {
+    "language": "en",
+    "title": "Two Truths and a Tall Tale",
+    "summary": "Two Truths and a Tall Tale coordinated through a composable runbook.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "Two Truths and a Tall Tale",
+    "participant": "Follow the current prompt in the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "The app shows your own submissions and fields whose visibility permits it."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Harmonomicon digital adaptation; source supplies the human activity, while the package specifies the selected app rules.",
+    "rights": "Original description of the digital rules; no rights to source materials or participant contributions are granted.",
+    "sourceUrl": "https://thefamilydinnerproject.org/4week-program/support/games-and-activities/"
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "collect@1",
+    "for_each@1",
+    "reveal@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "turns",
+        "op": "for_each@1",
+        "over": "participants",
+        "steps": [
+          {
+            "id": "publish",
+            "op": "collect@1",
+            "actors": "turn",
+            "prompt": "Publish three statements and select the invented statement.",
+            "fields": {
+              "items": {
+                "type": "text_list",
+                "visibility": "group",
+                "count": 3
+              },
+              "answer": {
+                "type": "index",
+                "visibility": "private",
+                "indexOf": "items"
+              }
+            },
+            "close": "all",
+            "afterMs": null
+          },
+          {
+            "id": "guess",
+            "op": "collect@1",
+            "actors": "others",
+            "prompt": "Guess the invented statement.",
+            "fields": {
+              "guess": {
+                "type": "index",
+                "visibility": "private",
+                "indexOf": "publish.items"
+              }
+            },
+            "close": "turn",
+            "afterMs": null
+          },
+          {
+            "id": "reveal",
+            "op": "reveal@1",
+            "sources": [
+              "publish",
+              "guess"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {}
+}

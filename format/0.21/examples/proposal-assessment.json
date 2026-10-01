@@ -1,0 +1,127 @@
+{
+  "format": "harmonomicon.activity-package/0.21",
+  "id": "harmonomicon.proposalassessment",
+  "version": "0.1.5",
+  "content": {
+    "language": "en",
+    "title": "Peer proposal assessment",
+    "summary": "Collect proposals, route them to distinct reviewers, collect private numeric ratings, and publish exact ranked results.",
+    "setup": "Invite participants in the desired enrollment order.",
+    "prompt": "Contribute an idea and its first practical step.",
+    "participant": "Submit one idea, then rate only the item assigned for each named round.",
+    "completion": "The app publishes ranked results; missing ratings do not extend a deadline.",
+    "access": "Only assigned readers see an item before ranking. Raw ratings stay private to their contributor."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon assessment and paired-reflection composition example.",
+    "rights": "Original example wording; participant contribution rights are not specified."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "aggregate@1",
+    "clock@1",
+    "collect_group@1",
+    "durable_state@1",
+    "identity@1",
+    "integer_values@1",
+    "partition@1",
+    "policy:competition_rank_all_ties@1",
+    "policy:roster_chunks@1",
+    "policy:roster_offset@1",
+    "policy:sum_scores@1",
+    "pool@1",
+    "private_views@1",
+    "publish_ranking@1",
+    "rate@1",
+    "route@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "ideas",
+        "op": "pool@1",
+        "prompt": "Submit an idea and a first step.",
+        "perActor": 1,
+        "close": "deadline",
+        "afterMs": 300000
+      },
+      {
+        "id": "route_1",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_1",
+        "offset": 1
+      },
+      {
+        "id": "rate_1",
+        "op": "rate@1",
+        "source": "route_1",
+        "prompt": "Rate your assigned idea.",
+        "min": 0,
+        "max": 10,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "route_2",
+        "op": "route@1",
+        "source": "ideas",
+        "policy": "policy:roster_offset@1",
+        "round": "round_2",
+        "offset": 2
+      },
+      {
+        "id": "rate_2",
+        "op": "rate@1",
+        "source": "route_2",
+        "prompt": "Rate your assigned idea.",
+        "min": 0,
+        "max": 10,
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "totals",
+        "op": "aggregate@1",
+        "sources": [
+          "rate_1",
+          "rate_2"
+        ],
+        "policy": "policy:sum_scores@1",
+        "targetCount": null
+      },
+      {
+        "id": "results",
+        "op": "publish_ranking@1",
+        "source": "totals",
+        "limit": 12,
+        "policy": "policy:competition_rank_all_ties@1"
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Reflect with your partner.",
+        "afterMs": null
+      },
+      {
+        "id": "reflection",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "What would improve the proposals?",
+        "close": "all",
+        "afterMs": 60000
+      }
+    ]
+  },
+  "settings": {}
+}

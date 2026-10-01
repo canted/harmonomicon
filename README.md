@@ -10,7 +10,7 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current candidate:** [0.20](format/0.20/README.md) composes typed text/image/audio sources, saved non-self assignment and independent linked responses with existing forms, schedules, groups and scoring. Small trusted host inputs supply effective actors and resolved dates; solo use and organizer participation are explicit. Roles, calendars, discussion and media infrastructure remain host responsibilities. The [pre-1 review assessment](format/0.20/readiness-assessment.md) distinguishes demonstrated core coverage from unsupported capabilities and optional parity. No 1.0 transition is automatic.
+**Current candidate:** [0.21](format/0.21/README.md) adds contribution-backed voting, optional vote changes, private ballots with separately presented totals, structured outcomes/tie policies and explicit finite linked rounds. It retains 0.20 typed exchange and host controls. The [supported profile](format/0.21/readiness-assessment.md) and [prospective host app review packet](format/0.21/HOST-REVIEW.md) distinguish core adoption support from product parity. Host accounts, calendars, media and notifications remain external; no 1.0 decision is implied. The package inspector and illustrative sections below remain pinned to the retained 0.20 catalog.
 
 ## A simple example: one question for a group
 
