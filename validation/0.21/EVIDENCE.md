@@ -29,6 +29,18 @@ A separate read-only reviewer confirmed the six required capabilities and instru
 
 A temporary new-test assertion expected an earlier wording of the revised workshop prompt; it was corrected to the actual reviewed prompt without changing runtime behavior or weakening the behavioral assertions. The complete final host suite verifies the corrected fixture.
 
+## Parent-coordinated independent review of `72804f8`
+
+The parent reported an independent runtime review of the pinned candidate with no concrete correctness findings. That review reran the full engine/schema and both durable-host suites, plus five replacement/deadline races per host and additional privacy, identity and retry probes. Historical candidate files remained unchanged. This is independent local-profile verification, not a production-readiness claim.
+
+A separate contract/authoring review (`01a0f945-8f60-728b-8e2b-0524377c900b`) confirmed the six required capabilities, four witnesses, executable packet consistency and honest migration accounting, then identified three corrections:
+
+- The inherited schema required `participants.max >= 2`, while both validators accepted the supported explicit solo `{min:1,max:1}` setup. Only the 0.21 schema now permits a maximum of one. A regression checks schema, both semantic validators and complete solo vote/selection execution agree. Old candidate schemas and operation semantics are unchanged.
+- The predefined poll's access text now describes literal option identities/labels rather than attributed contributions, and its presentation prompt handles selected, tied and empty outcomes neutrally. Its package revision advances to `0.1.1` because reviewed content changed.
+- The roadmap's current-format sentence now identifies 0.21.
+
+Targeted voting/schema tests, the complete engine/schema/44-trace compatibility suite and the relevant aggregate voting/continuation tests in both durable hosts were rerun after these corrections. The final correction pin is supplied to the parent for review recheck before the native Markdown Library attachment is saved.
+
 ## Review boundary
 
 The pinned candidate is prepared for independent runtime review and user review. Local evidence does not certify production auth/transport, distributed ordering, performance/load, arbitrary storage failures, media rendering safety, prospective host app integration or nontechnical authoring usability. [Supported profile](../../format/0.21/readiness-assessment.md) and [decision record](../../format/0.21/DECISIONS.md) distinguish required core capability from deferred designated-person ties/result-derived eligibility and product parity. No merge, push, publication, deployment, prospective host app contact or 1.0 claim occurred.

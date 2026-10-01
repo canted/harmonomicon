@@ -1,7 +1,7 @@
 {
   "format": "harmonomicon.activity-package/0.21",
   "id": "org.harmonomicon.example.predefined-vote",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "content": {
     "language": "en",
     "title": "Choose a conversation subject",
@@ -10,7 +10,7 @@
     "prompt": "Choose a conversation subject",
     "participant": "Follow each instruction; submit or vote before its window closes.",
     "completion": "Finish after showing the vote result, including an unresolved tie or empty outcome when appropriate.",
-    "access": "Ballots stay private. Presented totals disclose counted participation and attributed candidates."
+    "access": "Ballots stay private. Options are visible when voting is entered; presented totals disclose counted participation and the option labels and identities."
   },
   "provenance": {
     "kind": "original",
@@ -76,7 +76,7 @@
         "id": "poll_result",
         "op": "present@1",
         "source": "poll_choice",
-        "prompt": "Here is the subject chosen by the group.",
+        "prompt": "Here is the vote result, including any selected subject, unresolved tie or empty outcome.",
         "audience": "group"
       }
     ]

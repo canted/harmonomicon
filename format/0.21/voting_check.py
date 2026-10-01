@@ -276,6 +276,26 @@ def random_properties(node):
             assert other(repeated) == restored
 
 
+def solo_profile(node, schema=None):
+    """An explicitly solo maximum must agree across schema and both engines."""
+    p = package('predefined-vote')
+    p['participants'] = {'min':1,'max':1}
+    validation = {'action':'validate','package':p}
+    assert run(validation) == node(validation) == {'outcome':'valid'}
+    if schema is not None:
+        import jsonschema
+        jsonschema.validate(p,schema)
+    request = dict(package=p,participants=['solo'],organizer='solo',events=[
+        ballot('solo-ballot','solo',0,'vote','repair'),
+        event('solo-close','system',1,'vote',kind='close')])
+    result = run(request)
+    assert result == node(request) and result['outcomes'] == ['accepted','accepted']
+    output = record(result,'select@1')['output']
+    assert output['totalVotes'] == 1 and output['selected']['ref'] == {'source':'vote','itemId':'repair'}
+    assert result['views'][-1]['solo']['phase'] == 'complete'
+    print('Explicit solo min/max 1 agrees across schema, validators and execution')
+
+
 def check(node, schema=None):
     cases = json.loads((HERE/'conformance/voting-cases.json').read_text())
     for case in cases:
@@ -287,6 +307,7 @@ def check(node, schema=None):
     execution_boundaries(node)
     workshop_boundaries(node)
     random_properties(node)
+    solo_profile(node,schema)
     if schema is not None:
         import jsonschema
         for name in ['predefined-vote','contribution-contest','creative-continuation','proposal-workshop']:

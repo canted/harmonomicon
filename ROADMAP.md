@@ -1,6 +1,6 @@
 # Format roadmap
 
-Harmonomicon's current format is candidate 0.20. The earlier 0.x formats are historical candidates. The overall goal is an expressive activity language and runtime for many user-authored, composable, adjustable group activities within a host app. Cross-platform portability is a secondary potential benefit with uncertain demand. The scope and release criteria for 1.0 are not yet defined; the readiness discussion below is provisional planning.
+Harmonomicon's current format is candidate 0.21. The earlier 0.x formats are historical candidates. The overall goal is an expressive activity language and runtime for many user-authored, composable, adjustable group activities within a host app. Cross-platform portability is a secondary potential benefit with uncertain demand. The scope and release criteria for 1.0 are not yet defined; the readiness discussion below is provisional planning.
 
 ## Three different versions
 

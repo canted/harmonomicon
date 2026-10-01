@@ -40,3 +40,7 @@ Additional workshop probes check that an unresolved tie also blocks planning whi
 The contribution examples explicitly disclose that eligible material and attribution become public on entering voting, even before the configured voting opening. Empty or unresolved outcomes block only dependent collections; later instructions still run. The instructions remain collect, vote, count, select, show, and continue. Host actor sets and resolved dates are instance inputs; ballots use stable references. Authors do not write a vote-replacement procedure, random algorithm, expression, hidden successor dispatch, or executable template.
 
 Run `PYTHONDONTWRITEBYTECODE=1 python3 format/0.21/check.py`. Install [validation requirements](../requirements-validation.txt) in a Python environment and add `--schema` for schema verification. `python3 format/0.21/voting_check.py` runs the new suite with schema checking directly. See [voting contracts](../voting-notes.md), [design checkpoint](../DESIGN-CHECKPOINT.md), and [durable host evidence](../../../validation/0.21/README.md) for the execution boundary and remaining limits.
+
+## Explicit solo-schema regression
+
+The reviewed 0.21 schema accepts `participants:{min:1,max:1}`, matching both semantic validators under host controls. `voting_check.solo_profile` validates the exact solo envelope through schema and both validators, then executes a solo ballot/close/selection in both engines with identical state and one counted vote. Previous candidate schemas remain historical and unchanged.
