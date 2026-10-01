@@ -1,0 +1,27 @@
+{
+  "reviewed_implementation": "68d3f8322bee337a27ea52c9af94d330ff8116e8",
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "directory_id": "libdir_970ada95688481918d42bc0672172e8a",
+  "files": [
+    {
+      "name": "HOST-REVIEW-SUMMARY.md",
+      "local_path": "/Users/will/Documents/Codex/2026-10-01/task-2/harmonomicon-0.23/format/0.23/HOST-REVIEW-SUMMARY.md",
+      "file_id": "file_00000000037081fb9927ee4be2fd8059",
+      "library_file_id": "libfile_8d187820767881919e09cef347aadef6",
+      "version": 0,
+      "sha256": "1a9c0e7a60d0dbf5542512f256bdf499e91405b93ddb20d7026b07546da403b7",
+      "bytes": 4094
+    },
+    {
+      "name": "typed-sharing.json",
+      "local_path": "/Users/will/Documents/Codex/2026-10-01/task-2/harmonomicon-0.23/format/0.23/examples/typed-sharing.json",
+      "file_id": "file_00000000a0d881fb87558be013104572",
+      "library_file_id": "libfile_23e6978822448191a77908f4bb982a48",
+      "version": 0,
+      "sha256": "4cff2b6e4197687443c1ca51012d5663ec28e73cc586a742d426a148825d7427",
+      "bytes": 3072
+    }
+  ],
+  "existing_0_22_artifacts_replaced": false
+}

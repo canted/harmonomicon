@@ -1,6 +1,6 @@
 # Candidate 0.23: generic typed pooling
 
-**Status:** local incremental pre-1 candidate based on completed independently reviewed [0.22](../0.22/README.md), implemented and validated locally, prepared for independent review. No merge/publication/deployment or 1.0 decision.
+**Status:** local incremental pre-1 candidate based on completed independently reviewed [0.22](../0.22/README.md), implemented and validated locally, cleared by fresh independent runtime and authoring reviews at `68d3f8322bee337a27ea52c9af94d330ff8116e8`, prepared for user review. No merge/publication/deployment or 1.0 decision.
 
 Authors can configure one typed pool independently for accepted text/image/audio kinds and up to eight contributions per person. The same actual items can feed compatible iteration, qualified voting or one-source assignment/response. Shared quotas, accepted order, attribution, privacy and media authority stay explicit; existing operation versions retain their exact meanings.
 
@@ -9,6 +9,7 @@ Authors can configure one typed pool independently for accepted text/image/audio
 - [Mixed typed sharing](examples/typed-sharing.json), [three written ideas](examples/text-pool-vote.json), [one image](examples/image-pool-vote.json), [two recordings](examples/audio-pool-sharing.json)
 - [Different source-response/private-pairs workshop](examples/typed-response-workshop.json), [supplied typed continuation](examples/typed-continuation.json)
 - [Conformance](conformance/README.md), [durable evidence](../../validation/0.23/EVIDENCE.md), [supported profile](readiness-assessment.md)
+- [Concise host review packet](HOST-REVIEW-SUMMARY.md), [full executable packet](HOST-REVIEW.md), [independent review](../../validation/0.23/INDEPENDENT-REVIEW.md)
 - [Compatibility](COMPATIBILITY.md), [migration accounting](MIGRATION.md), [decision record](DECISIONS.md), [design checkpoint](DESIGN-CHECKPOINT.md)
 
 ```sh

@@ -1,6 +1,6 @@
 # Host review packet — candidate 0.23
 
-Prepared for user submission; not sent. Candidate 0.23 is an incremental local candidate based on completed independently reviewed 0.22. [Evidence](../../validation/0.23/EVIDENCE.md), [profile](readiness-assessment.md), [compatibility](COMPATIBILITY.md) and [decision record](DECISIONS.md) state the demonstrated boundary. The final 0.23 implementation pin still needs fresh independent runtime review.
+Prepared for user submission; not sent. Candidate 0.23 is an incremental local candidate based on completed independently reviewed 0.22. [Evidence](../../validation/0.23/EVIDENCE.md), [profile](readiness-assessment.md), [compatibility](COMPATIBILITY.md) and [decision record](DECISIONS.md) state the demonstrated boundary. Fresh independent runtime and authoring reviews cleared implementation `68d3f8322bee337a27ea52c9af94d330ff8116e8`; see the [review record](../../validation/0.23/INDEPENDENT-REVIEW.md).
 
 ## Activity to try
 
