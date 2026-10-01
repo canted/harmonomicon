@@ -1,0 +1,93 @@
+{
+  "format": "harmonomicon.activity-package/0.22",
+  "id": "org.harmonomicon.example.idea-response-and-pairs",
+  "version": "0.1.4",
+  "content": {
+    "language": "en",
+    "title": "Idea exchange and paired reflection",
+    "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+    "setup": "Enroll a fixed group; each participant may contribute one source.",
+    "prompt": "Describe an image or idea in text.",
+    "participant": "Respond to the one source assigned to you before the window closes.",
+    "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+    "access": "Your assigned source and response are private until the explicit result reveal."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+    "rights": "Original example description. Rights to participant contributions are not specified by this package."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "assign_sources@1",
+    "clock@1",
+    "durable_state@1",
+    "identity@1",
+    "policy:next_nonself_source@1",
+    "pool@1",
+    "private_views@1",
+    "respond@1",
+    "reveal_responses@1",
+    "serial_events@1",
+    "text@1",
+    "partition@1",
+    "policy:roster_chunks@1",
+    "collect_group@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "sources",
+        "op": "pool@1",
+        "prompt": "Describe an image or idea in text.",
+        "perActor": 1,
+        "close": "deadline",
+        "afterMs": 10
+      },
+      {
+        "id": "distribution",
+        "op": "assign_sources@1",
+        "source": "sources",
+        "recipients": "contributors",
+        "policy": "policy:next_nonself_source@1",
+        "cardinality": "one",
+        "reuse": "allowed",
+        "unmatched": "skip"
+      },
+      {
+        "id": "response",
+        "op": "respond@1",
+        "source": "distribution",
+        "prompt": "Create a text response to your assigned source.",
+        "close": "all",
+        "afterMs": 10
+      },
+      {
+        "id": "results",
+        "op": "reveal_responses@1",
+        "source": "response"
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Form pairs.",
+        "afterMs": null
+      },
+      {
+        "id": "reflection",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Reflect privately with your partner.",
+        "close": "deadline",
+        "afterMs": 10
+      }
+    ]
+  },
+  "settings": {}
+}
