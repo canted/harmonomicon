@@ -48,6 +48,8 @@ def valid_png(data):
         if length > MAX_IMAGE_BYTES or end > len(data):
             return False
         kind = data[pos + 4:pos + 8]
+        # PNG names are raw ASCII letters; reserved third byte must be uppercase.
+        if not (all(65 <= c <= 90 or 97 <= c <= 122 for c in kind) and 65 <= kind[2] <= 90): return False
         body = data[pos + 8:pos + 8 + length]
         crc = int.from_bytes(data[pos + 8 + length:end], "big")
         if zlib.crc32(kind + body) & 0xffffffff != crc:

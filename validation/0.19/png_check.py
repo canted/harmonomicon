@@ -16,7 +16,32 @@ def image(raw=None,width=1,height=1,channels=3,split=False,interleave=False,anci
  if ancillary:parts.append(chunk(b'tEXt',b'label\0after'))
  parts.append(chunk(b'IEND',b''));return b''.join(parts)
 def fixtures():
- return [('rgb',image(),True),('rgba',image(channels=4),True),('contiguous-idat',image(split=True),True),('ancillary-before-after',image(split=True,ancillary=True),True),('max-rgba',image(width=1024,height=1024,channels=4),True),('all-filter-types',image(raw=b''.join(bytes([i,0,0,0]) for i in range(5)),height=5),True),('noncontiguous-idat',image(split=True,interleave=True),False),('decoded-output-bomb',image(raw=bytes(8*1024*1024)),False),('oversized-decoded-stream',image(raw=bytes(5)),False),('short-decoded-stream',image(raw=bytes(3)),False),('invalid-filter',image(raw=bytes([5,0,0,0])),False),('crc-error',image()[:-1]+b'\x01',False),('trailing-bytes',image()+b'extra',False),('missing-iend',image()[:-12],False),('unsupported-dimensions',image(width=1025),False)]
+ result=[('rgb',image(),True),('rgba',image(channels=4),True),('contiguous-idat',image(split=True),True),('ancillary-before-after',image(split=True,ancillary=True),True),('max-rgba',image(width=1024,height=1024,channels=4),True),('all-filter-types',image(raw=b''.join(bytes([i,0,0,0]) for i in range(5)),height=5),True),('noncontiguous-idat',image(split=True,interleave=True),False),('decoded-output-bomb',image(raw=bytes(8*1024*1024)),False),('oversized-decoded-stream',image(raw=bytes(5)),False),('short-decoded-stream',image(raw=bytes(3)),False),('invalid-filter',image(raw=bytes([5,0,0,0])),False),('crc-error',image()[:-1]+b'\x01',False),('trailing-bytes',image()+b'extra',False),('missing-iend',image()[:-12],False),('unsupported-dimensions',image(width=1025),False)]
+ # Raw chunk names must be four ASCII letters with uppercase reserved third byte.
+ # Recompute CRCs so these witnesses reach name validation rather than CRC failure.
+ def rename(blob,target,position):
+  parts=[SIGNATURE];pos=8
+  while pos<len(blob):
+   size=int.from_bytes(blob[pos:pos+4],'big');kind=blob[pos+4:pos+8];body=blob[pos+8:pos+8+size]
+   if kind==target:
+    name=bytearray(kind);name[position]|=128;kind=bytes(name)
+   parts.append(chunk(kind,body));pos+=12+size
+  return b''.join(parts)
+ for name in [b'IHDR',b'IDAT',b'IEND']:
+  for pos in range(4):result.append((name.decode()+'-highbit-'+str(pos),rename(image(),name,pos),False))
+ def reserved(blob):
+  parts=[SIGNATURE];pos=8
+  while pos<len(blob):
+   size=int.from_bytes(blob[pos:pos+4],'big');kind=blob[pos+4:pos+8];body=blob[pos+8:pos+8+size]
+   if kind==b'tEXt':kind=b'tExt'
+   parts.append(chunk(kind,body));pos+=12+size
+  return b''.join(parts)
+ result.append(('reserved-third-bit-ancillary',reserved(image(ancillary=True)),False))
+ # Empty IDAT chunks are valid when contiguous with the rest of the image stream.
+ good=image();first=8+25;size=int.from_bytes(good[first:first+4],'big');end=first+12+size
+ result.append(('contiguous-empty-idat',good[:first]+chunk(b'IDAT',b'')+good[first:end]+chunk(b'IDAT',b'')+good[end:],True))
+ return result
+
 def python_validator(authority=zlib):
  # Compile only the checked-in function, avoiding CLI/server side effects.
  tree=ast.parse((HERE/'python_host.py').read_text());function=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='valid_png');namespace={'zlib':authority,'MAX_IMAGE_BYTES':524288};exec(compile(ast.Module(body=[function],type_ignores=[]),str(HERE/'python_host.py'),'exec'),namespace);return namespace['valid_png']

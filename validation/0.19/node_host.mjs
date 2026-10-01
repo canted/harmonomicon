@@ -45,6 +45,9 @@ function validPng(data) {
     const length = data.readUInt32BE(pos), end = pos + 12 + length;
     if (length > MAX_IMAGE_BYTES || end > data.length) return false;
     const kind = data.subarray(pos + 4, pos + 8);
+    // Validate raw bytes before ascii decoding, which clears high bits.
+    if (![...kind].every(c => c >= 65 && c <= 90 || c >= 97 && c <= 122)
+        || kind[2] < 65 || kind[2] > 90) return false;
     const body = data.subarray(pos + 8, pos + 8 + length);
     if (crc32(Buffer.concat([kind, body])) !== data.readUInt32BE(pos + 8 + length)) return false;
     const name = kind.toString('ascii');
