@@ -1,11 +1,11 @@
 {
   "format": "harmonomicon.activity-package/0.21",
   "id": "harmonomicon.crowdscoring",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "content": {
     "language": "en",
-    "title": "25/10 proposed digital translation",
-    "summary": "Collect proposals, route them to distinct reviewers, collect private numeric ratings, and publish exact ranked results.",
+    "title": "Rate and Rank Ideas",
+    "summary": "Adapted from Liberating Structures 25/10: collect ideas, route them to distinct reviewers, collect private numeric ratings, and publish exact ranked results.",
     "setup": "Invite participants in the desired enrollment order.",
     "prompt": "Contribute an idea and its first practical step.",
     "participant": "Submit one idea, then rate only the item assigned for each named round.",

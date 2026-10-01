@@ -1,6 +1,6 @@
 # Scoring examples and their boundaries
 
-## 25/10 proposed digital translation
+## Rate and Rank Ideas
 
 The [Liberating Structures procedure](https://www.liberatingstructures.com/25-10-crowdsourcing) uses face-to-face idea cards, five 1–5 ratings, and a high-score reveal. When a card has an irregular rating count, the source suggests averaging and multiplying by five. It gives a minimum group size of fifteen and does not recommend online use because of logistics.
 
