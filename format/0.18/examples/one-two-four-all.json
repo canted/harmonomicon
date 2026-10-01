@@ -1,0 +1,116 @@
+{
+  "format": "harmonomicon.activity-package/0.18",
+  "id": "harmonomicon.onetwofourall",
+  "version": "0.3.2",
+  "content": {
+    "language": "en",
+    "title": "1-2-4-All fixed digital rooms",
+    "summary": "1-2-4-All fixed digital rooms coordinated through declared pool or group steps.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "1-2-4-All fixed digital rooms",
+    "participant": "Follow the current step; claims and acknowledgments are recorded by the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "Pooled authorship metadata is withheld; group responses use the membership recorded for their round."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "sourceUrl": "https://www.liberatingstructures.com/1-2-4-all/",
+    "credit": "Harmonomicon digital adaptation. The source supplies the human procedure; ordering, claims, acknowledgments and digital views are declared choices.",
+    "rights": "Original description of digital rules; no rights to source material or contributions are granted."
+  },
+  "participants": {
+    "min": 8,
+    "max": 8
+  },
+  "requires": [
+    "clock@1",
+    "collect_group@1",
+    "durable_state@1",
+    "identity@1",
+    "partition@1",
+    "pause@1",
+    "policy:roster_chunks@1",
+    "private_views@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "invitation",
+        "op": "pause@1",
+        "prompt": "Consider the shared challenge.",
+        "afterMs": 60000
+      },
+      {
+        "id": "solo_rooms",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 1,
+        "maxSize": 1,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "solo",
+        "op": "collect_group@1",
+        "source": "solo_rooms",
+        "prompt": "Reflect privately.",
+        "close": "deadline",
+        "afterMs": 60000
+      },
+      {
+        "id": "pairs_rooms",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "pairs",
+        "op": "collect_group@1",
+        "source": "pairs_rooms",
+        "prompt": "Compare ideas with your partner.",
+        "close": "deadline",
+        "afterMs": 120000
+      },
+      {
+        "id": "quartets_rooms",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 4,
+        "maxSize": 4,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "quartets",
+        "op": "collect_group@1",
+        "source": "quartets_rooms",
+        "prompt": "Build a synthesis within your quartet.",
+        "close": "deadline",
+        "afterMs": 300000
+      },
+      {
+        "id": "everyone_rooms",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 8,
+        "maxSize": 8,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "everyone",
+        "op": "collect_group@1",
+        "source": "everyone_rooms",
+        "prompt": "Share selected ideas with the full group.",
+        "close": "deadline",
+        "afterMs": 420000
+      }
+    ]
+  },
+  "settings": {}
+}

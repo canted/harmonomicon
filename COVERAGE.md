@@ -91,3 +91,44 @@ The proposed [25/10 digital target](format/0.16/scoring-notes.md) now has five d
 A second [proposal assessment](format/0.16/examples/proposal-assessment.json) uses two rounds, a 0–10 scale, summed scores, and private paired follow-up. Another witness uses integers in an ordinary form without scoring. Rating races, stale rounds, fractional/Boolean rejection, zero versus missing ratings, unpublished aggregate privacy, worker jumps, restart, opaque IDs, and transfer are checked.
 
 The [legacy checklist](format/0.16/MIGRATION.md) remains **one complete migration and nineteen incomplete**, with none dropped from scope. Ranked item scores do not supply caption ballots, team-owned progress streams, weighted grading, arbitrary reviewer allocation, or recurrence. The [next milestone](ROADMAP.md#path-from-013-to-10) addresses fixed repeated practice before longer/media flows.
+
+## Composed candidate 0.17 evidence
+
+Candidate 0.17 supplies bounded fixed recurrence through `for_windows@1` and `collect_window@1`, with public per-person completion status only when declared. Eighteen packages and twenty-seven traces pass independent interpreters and durable hosts. All twenty-two 0.16 traces preserve their outcomes/views. Eighty-four invalid definitions and maximum-clock/366-window/late-continuation probes check the bounded grammar and timing.
+
+The three text daily-practice packages now have complete comparison evidence against the legacy reference and actual retained 0.12 hosts in both languages. Nine scenarios cover original fixtures, actual day-sized gaps and histories, stale actions and accepted retries, all visibility modes, maximum closing times and restart. Separate worker/race/unsupported/transfer probes check durable enforcement. A repeated choice/tally schedule followed by paired reflection demonstrates reuse beyond the migrated practices.
+
+The [legacy inventory](format/0.17/MIGRATION.md) now records **four complete migrations and sixteen incomplete**, with no example silently dropped. Image recurrence still lacks authorized media values; fixed elapsed intervals do not provide local-calendar scheduling or notification delivery. Ongoing streams, linked sources, richer assignment, host roles and mutable lifecycle rules remain distinct work.
+
+For readiness review, exact product parity and core experience are separate. A simplified creative response can use one assigned non-self source rather than two offered alternatives. The next bounded milestone targets explicit distribution algorithms and authoritative source-linked responses. Optional choice/exposure balancing remains deferred; a simplified package will not be labeled a complete Chorus or legacy offered-response migration.
+
+## Composed candidate 0.18 evidence
+
+Candidate 0.18 adds `assign_sources@1`, `respond@1` and `reveal_responses@1`. Two named policies select one non-self source from a closed text pool: next contributing person in roster order, or a precisely specified seeded sampler. Packages explicitly choose participants/contributors as recipients and declare one-source cardinality, allowed reuse and unmatched skip. Saved assignments and consumed generator state survive retry and restart. Neither policy promises balanced exposure or cryptographic randomness.
+
+Twenty examples and thirty-four traces pass independent interpreters and durable hosts; all twenty-seven 0.17 traces keep their outcomes/views. One hundred nine invalid definitions, twelve schema-negative witnesses, exact sampler/rejection vectors, seed-restore checks and linked-response privacy/deadline probes exercise the new slice. Durable evidence includes assignment reads racing workers, response races, changed process seed without reroll, host-generated seed persistence and an authored random response/pairs transfer.
+
+| Activity witness | Core experience now expressible | Remaining scope |
+|---|---|---|
+| Simplified Chorus-like creative response | One saved randomized non-self text source, independent source-bound text response, deadline and attributed linked reveal. | Actual image/audio/video, late cover threshold, replacements/moderation, host participation and mutable dates. Two alternatives, participant choice and exposure balancing remain optional refinements. Full Chorus parity is not asserted. |
+| Legacy paired story response and caption family | General source distribution and authoritative response relations now exist. | Exact balanced two-offer selection, legacy schedule/insufficient-source branch, media and caption ballot rules remain unported. |
+| Idea exchange with paired continuation | Deterministic non-self source assignment, independent text review, all-matched-response close and later pair-private reflection. | Human evaluation, reviewer balancing and scoring are not inferred. |
+
+The [legacy checklist](format/0.18/MIGRATION.md) remains **four complete and sixteen incomplete**, with no false migration credit for simplified rules. The next proposed core milestone is authorized PNG values in scheduled/recurring forms: image check-in and image daily-practice each lack only media support. Ongoing multi-entry streams and permissions/lifecycle remain further gaps. Upload processing, drafts, notifications and publishing app records remain host integration concerns. Readiness will assess useful core scope and explicit unsupported capabilities, without requiring exact optional app replication or automatically promoting any candidate to 1.0.
+
+## Composed candidate 0.19: typed image forms
+
+| Witness | Verified result | Limit |
+|---|---|---|
+| Image check-in | Host-authorized private image value, deadline reveal; full selected legacy timing/setup/phase/order/privacy compared in both actual host implementations. | PNG is the local byte profile, not the language type. |
+| Daily image prompt | Group-immediate image values and occurrence-bound completion/missed history reproduce the selected legacy package; full day-sized comparisons, replay and restart. | Fixed bounded recurrence; no dynamic calendar scheduling. |
+| Private recurring images | Independent additional package conceals each new contribution until its window reveal; historical reveal does not expose another unpublished reference. | This distinct authored variant is not counted as a legacy migration. |
+| New image-to-story combination | Uploaded ready images, typed form, explicit reveal and cumulative text continuation transfer/run with no interpreter changes. | Package exchange does not migrate live state or stored blobs. |
+
+The candidate has 23 examples, 38 engine traces, 114 invalid definitions and all 34 prior traces preserved. Both durable hosts pass actual bytes, authority/privacy, partial-success retries, races, workers and restart. Six legacy packages are now fully compared; fourteen remain incomplete. Image pools/routing/linked responses, ongoing streams, replacement/moderation, host participation and live schedule changes remain unsupported. Rich offers/choice/exposure balancing remain optional parity. The [pre-1 readiness assessment](format/0.19/readiness-assessment.md) recommends a current held-out coverage challenge and supported-profile review before automatically adding more capabilities. No completeness or 1.0 decision is implied.
+
+## Candidate 0.19 held-out profile review
+
+The [pinned review](experiments/format-0.19-readiness/README.md) adds four authored cross-family arrangements, all passing schema, independent engines, every-boundary restart and both durable hosts. Six direct limits and a real-byte workaround establish that typed image identity cannot flow into source assignment; a reference string assigned as text grants no image read access. Images/forms and text exchange can coexist, but this is not image-source exchange.
+
+The [concrete pre-1 inventory](experiments/format-0.19-readiness/inventory.md) separates supported activity families, important missing primitives, optional parity, host responsibilities and nonfunctional limits. It recommends deciding whether single-source image exchange belongs in the initial core before further expansion; ongoing streams and enforced feedback permissions are separate scope decisions. No 1.0 readiness declaration follows. Independent review confirmed the PNG implementation defects closed at `eab8745`; they are not classified as optional scope.

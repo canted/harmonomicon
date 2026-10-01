@@ -1,0 +1,74 @@
+{
+  "format": "harmonomicon.activity-package/0.18",
+  "id": "org.harmonomicon.example.single-source-creative-response",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Single-source creative response",
+    "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+    "setup": "Enroll a fixed group; each participant may contribute one source.",
+    "prompt": "Describe an image or idea in text.",
+    "participant": "Respond to the one source assigned to you before the window closes.",
+    "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+    "access": "Your assigned source and response are private until the explicit result reveal."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+    "rights": "Original example description. Rights to participant contributions are not specified by this package."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "assign_sources@1",
+    "clock@1",
+    "durable_state@1",
+    "identity@1",
+    "policy:seeded_nonself_source@1",
+    "pool@1",
+    "private_views@1",
+    "respond@1",
+    "reveal_responses@1",
+    "seeded_assignment@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "sources",
+        "op": "pool@1",
+        "prompt": "Describe an image or idea in text.",
+        "perActor": 1,
+        "close": "deadline",
+        "afterMs": 10
+      },
+      {
+        "id": "distribution",
+        "op": "assign_sources@1",
+        "source": "sources",
+        "recipients": "contributors",
+        "policy": "policy:seeded_nonself_source@1",
+        "cardinality": "one",
+        "reuse": "allowed",
+        "unmatched": "skip"
+      },
+      {
+        "id": "response",
+        "op": "respond@1",
+        "source": "distribution",
+        "prompt": "Create a text response to your assigned source.",
+        "close": "deadline",
+        "afterMs": 10
+      },
+      {
+        "id": "results",
+        "op": "reveal_responses@1",
+        "source": "response"
+      }
+    ]
+  },
+  "settings": {}
+}

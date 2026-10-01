@@ -12,8 +12,36 @@
     "title": "25/10 proposed digital translation"
   },
   {
+    "file": "examples/daily-private-practice.json",
+    "title": "Private daily writing circle"
+  },
+  {
+    "file": "examples/daily-reveal.json",
+    "title": "Daily reveal writing circle"
+  },
+  {
+    "file": "examples/daily-shared-prompt.json",
+    "title": "Shared daily micro-story"
+  },
+  {
     "file": "examples/gratitude-pool.json",
     "title": "Gratefulness Grab Bag"
+  },
+  {
+    "file": "examples/idea-response-and-pairs.json",
+    "title": "Idea exchange and paired reflection"
+  },
+  {
+    "file": "examples/image-check-in.json",
+    "title": "Image One-question group check-in"
+  },
+  {
+    "file": "examples/image-daily-private.json",
+    "title": "Image Daily reveal writing circle"
+  },
+  {
+    "file": "examples/image-daily-prompt.json",
+    "title": "Image daily shared prompt"
   },
   {
     "file": "examples/list-game.json",
@@ -36,6 +64,10 @@
     "title": "Peer proposal assessment"
   },
   {
+    "file": "examples/repeated-poll-and-pairs.json",
+    "title": "Repeated choices and paired reflection"
+  },
+  {
     "file": "examples/scheduled-check-in-pairs.json",
     "title": "Scheduled check-in and paired reflection"
   },
@@ -46,6 +78,10 @@
   {
     "file": "examples/see-think-wonder.json",
     "title": "See, Think, Wonder"
+  },
+  {
+    "file": "examples/single-source-creative-response.json",
+    "title": "Single-source creative response"
   },
   {
     "file": "examples/timed-story.json",

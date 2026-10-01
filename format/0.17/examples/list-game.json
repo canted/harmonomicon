@@ -1,0 +1,89 @@
+{
+  "format": "harmonomicon.activity-package/0.17",
+  "id": "harmonomicon.listgame",
+  "version": "0.4.1",
+  "content": {
+    "language": "en",
+    "title": "List Game",
+    "summary": "List Game coordinated through a composable runbook.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "List Game",
+    "participant": "Follow the current prompt in the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "The app shows your own submissions and fields whose visibility permits it."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "credit": "Harmonomicon digital adaptation; source supplies the human activity, while the package specifies the selected app rules.",
+    "rights": "Original description of the digital rules; no rights to source materials or participant contributions are granted.",
+    "sourceUrl": "https://thefamilydinnerproject.org/4week-program/support/games-and-activities/"
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "collect@1",
+    "for_each@1",
+    "reveal@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "turns",
+        "op": "for_each@1",
+        "over": "participants",
+        "steps": [
+          {
+            "id": "publish",
+            "op": "collect@1",
+            "actors": "turn",
+            "prompt": "Publish five items and a hidden category.",
+            "fields": {
+              "items": {
+                "type": "text_list",
+                "visibility": "group",
+                "count": 5
+              },
+              "answer": {
+                "type": "text",
+                "visibility": "private"
+              }
+            },
+            "close": "all",
+            "afterMs": null
+          },
+          {
+            "id": "guess",
+            "op": "collect@1",
+            "actors": "others",
+            "prompt": "Guess the category.",
+            "fields": {
+              "guess": {
+                "type": "text",
+                "visibility": "private"
+              }
+            },
+            "close": "turn",
+            "afterMs": null
+          },
+          {
+            "id": "reveal",
+            "op": "reveal@1",
+            "sources": [
+              "publish",
+              "guess"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {}
+}

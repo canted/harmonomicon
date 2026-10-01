@@ -1,0 +1,371 @@
+[
+  {
+    "id": "all-early-private-until-deadline",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "organizer",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "opensAt": 10,
+      "closesAt": 20,
+      "prompt": "A chosen question \ud83c\udfa8"
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "early",
+          "type": "submit",
+          "actor": "a",
+          "at": 9,
+          "payload": {
+            "value": "Early"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "b",
+          "type": "submit",
+          "actor": "b",
+          "at": 10,
+          "payload": {
+            "value": "Book"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 11,
+          "payload": {
+            "value": "Tea"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "manual",
+          "type": "advance",
+          "actor": "organizer",
+          "at": 12,
+          "payload": {}
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "duplicate",
+          "type": "submit",
+          "actor": "a",
+          "at": 13,
+          "payload": {
+            "value": "New"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "bad-value",
+          "type": "submit",
+          "actor": "b",
+          "at": 14,
+          "payload": {
+            "value": ""
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 19
+        }
+      },
+      {
+        "event": {
+          "eventId": "late",
+          "type": "submit",
+          "actor": "b",
+          "at": 20,
+          "payload": {
+            "value": "Late"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 21,
+          "payload": {
+            "value": "Tea"
+          }
+        },
+        "outcome": "replayed"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 22,
+          "payload": {
+            "value": "Changed"
+          }
+        },
+        "outcome": "rejected"
+      }
+    ]
+  },
+  {
+    "id": "empty-read-jumps-both-boundaries",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "organizer",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "opensAt": 10,
+      "closesAt": 20
+    },
+    "actions": [
+      {
+        "view": {
+          "actor": "a",
+          "at": 100
+        }
+      }
+    ]
+  },
+  {
+    "id": "opening-at-creation-and-partial-read-close",
+    "instance": {
+      "createdAt": 10,
+      "organizer": "organizer",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "opensAt": 10,
+      "closesAt": 20
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 10,
+          "payload": {
+            "value": "At opening"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "view": {
+          "actor": "b",
+          "at": 20
+        }
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 21,
+          "payload": {
+            "value": "At opening"
+          }
+        },
+        "outcome": "replayed"
+      }
+    ]
+  },
+  {
+    "id": "maximum-safe-closing-time",
+    "instance": {
+      "createdAt": 9007199254740989,
+      "organizer": "organizer",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "opensAt": 9007199254740990,
+      "closesAt": 9007199254740991
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 9007199254740990,
+          "payload": {
+            "value": "Last opening"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "last",
+          "type": "tick",
+          "actor": "system",
+          "at": 9007199254740991,
+          "payload": {}
+        },
+        "outcome": "accepted"
+      }
+    ]
+  },
+  {
+    "id": "original-collection",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "host",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "opensAt": 10,
+      "closesAt": 20
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "open",
+          "type": "tick",
+          "actor": "system",
+          "at": 10,
+          "payload": {}
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "answer-a",
+          "type": "submit",
+          "actor": "a",
+          "at": 12,
+          "payload": {
+            "value": "A warm cup of tea"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "answer-a",
+          "type": "submit",
+          "actor": "a",
+          "at": 13,
+          "payload": {
+            "value": "A warm cup of tea"
+          }
+        },
+        "outcome": "replayed"
+      },
+      {
+        "event": {
+          "eventId": "answer-b",
+          "type": "submit",
+          "actor": "b",
+          "at": 20,
+          "payload": {
+            "value": "A good book"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "answer-a",
+          "type": "submit",
+          "actor": "a",
+          "at": 21,
+          "payload": {
+            "value": "A warm cup of tea"
+          }
+        },
+        "outcome": "replayed"
+      },
+      {
+        "event": {
+          "eventId": "answer-a",
+          "type": "submit",
+          "actor": "a",
+          "at": 22,
+          "payload": {
+            "value": "Changed answer"
+          }
+        },
+        "outcome": "rejected"
+      }
+    ]
+  },
+  {
+    "id": "original-collection-read-close",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "host",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "opensAt": 10,
+      "closesAt": 20
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "open",
+          "type": "tick",
+          "actor": "system",
+          "at": 10,
+          "payload": {}
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "answer-a",
+          "type": "submit",
+          "actor": "a",
+          "at": 12,
+          "payload": {
+            "value": "A warm cup of tea"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "view": {
+          "actor": "b",
+          "at": 20
+        },
+        "expect": {
+          "phase": "closed",
+          "submissionCount": 1,
+          "entries": [
+            {
+              "actor": "a",
+              "value": "A warm cup of tea"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,80 @@
+{
+  "format": "harmonomicon.activity-package/0.17",
+  "id": "harmonomicon.gratitudepool",
+  "version": "0.3.1",
+  "content": {
+    "language": "en",
+    "title": "Gratefulness Grab Bag",
+    "summary": "Gratefulness Grab Bag coordinated through declared pool or group steps.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "Gratefulness Grab Bag",
+    "participant": "Follow the current step; claims and acknowledgments are recorded by the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "Pooled authorship metadata is withheld; group responses use the membership recorded for their round."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "sourceUrl": "https://thefamilydinnerproject.org/fun_content/gratefulness-grab-bag/",
+    "credit": "Harmonomicon digital adaptation. The source supplies the human procedure; ordering, claims, acknowledgments and digital views are declared choices.",
+    "rights": "Original description of digital rules; no rights to source material or contributions are granted."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "acknowledge@1",
+    "assign_item@1",
+    "clock@1",
+    "durable_state@1",
+    "for_items@1",
+    "identity@1",
+    "policy:claim_reader@1",
+    "policy:pool_order@1",
+    "pool@1",
+    "private_views@1",
+    "reveal_item@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "slips",
+        "op": "pool@1",
+        "prompt": "Submit two independent gratitude slips.",
+        "perActor": 2,
+        "close": "all",
+        "afterMs": 60000
+      },
+      {
+        "id": "read_slips",
+        "op": "for_items@1",
+        "source": "slips",
+        "policy": "policy:pool_order@1",
+        "steps": [
+          {
+            "id": "claim",
+            "op": "assign_item@1",
+            "policy": "policy:claim_reader@1",
+            "prompt": "Claim this slip if it is not yours.",
+            "afterMs": 30000
+          },
+          {
+            "id": "read",
+            "op": "acknowledge@1",
+            "source": "claim",
+            "prompt": "Read the slip, then acknowledge to share its text.",
+            "afterMs": 30000
+          },
+          {
+            "id": "share",
+            "op": "reveal_item@1",
+            "source": "read"
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {}
+}

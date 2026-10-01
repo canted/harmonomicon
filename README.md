@@ -2,13 +2,15 @@
 
 ![Harmonomicon pixel logo with the Harmonia symbol above the wordmark](assets/harmonomicon-logo.svg)
 
-Harmonomicon describes a common format for group activities coordinated by software. An **activity package** describes one activity so different apps can run it. It tells the app what to show, when people can act, what each person can see, and how the activity moves from one step to the next.
+Harmonomicon aims to provide an expressive activity language and runtime so a host app can support many user-authored group activities. Authors can compose reusable steps and adjust their settings to create different activities within the app. An **activity package** describes what to show, when people can act, what each person can see, and how the activity moves from one step to the next.
+
+The primary goal is in-app composability: new arrangements of supported operations should require activity data rather than new app code. Running packages across different apps is a secondary potential benefit; demand for cross-platform portability is uncertain. Independent implementations remain useful evidence that the rules are explicit and reproducible. [App integration and prompting](research/app-integration-and-prompting.md) records possible directions and unresolved choices.
 
 Think of an icebreaker in a group chat, a collaborative drawing game on a website, or a daily creative prompt sent by an app. The app might send a prompt, collect contributions, pass a turn, or reveal a result. An activity package puts those instructions and rules together so they can be reused.
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current candidate:** [0.16](format/0.16/README.md) lets a package assemble reusable steps into a runbook. It can collect contributions, reveal them, count choices, append to a shared story, and repeat steps for each participant. It also supports item pools, reader claims, private group rounds, and scheduled collection with saved instance settings. It now supports bounded numeric ratings and ranked results. Recurrence, media, and ongoing activity streams still need work before the [1.0 goal](ROADMAP.md#goal-for-10) is met.
+**Current candidate:** [0.19](format/0.19/README.md) lets authors compose text and typed-image forms, saved settings, scheduled/repeated windows, explicit privacy/reveal, source distribution and linked text response, groups and scoring. Image contributions require host authorization; the reference upload profile accepts bounded PNGs without restricting the language to that encoding. The [pre-1 review assessment](format/0.19/readiness-assessment.md) distinguishes demonstrated core coverage from unsupported capabilities and optional parity. No 1.0 transition is automatic.
 
 ## A simple example: one question for a group
 
@@ -24,7 +26,7 @@ The package would describe the activity in terms like these:
 | Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
 | What happens if someone misses it | The reveal still happens after one hour |
 
-The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.16 package](format/0.16/examples/check-in.json) if it supports those operations.
+The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.19 package](format/0.19/examples/check-in.json) if it supports those operations.
 
 ![Runbook structure generated from the check-in package: answer then reveal](docs/previews/check-in.svg)
 
@@ -32,14 +34,14 @@ The runbook has two steps: **collect answers**, then **reveal answers**. The col
 
 Imagine a group of eight people gathering ideas before discussing them in pairs. Each person contributes one idea to a shared pool. Participants take turns claiming and reading ideas from other people, then discuss the shared ideas with an assigned partner.
 
-The [Pooled ideas followed by pair discussion package](format/0.16/examples/pooled-ideas-and-pairs.json) combines these steps:
+The [Pooled ideas followed by pair discussion package](format/0.19/examples/pooled-ideas-and-pairs.json) combines these steps:
 
 1. **Pool ideas:** each participant contributes one text idea. Collection closes when everyone has contributed or one minute has passed. The app withholds pooled authorship metadata.
 2. **Read and share each idea:** for each pooled item, a participant can claim it if it is not their own. The reader acknowledges reading it, then the app reveals its text. Claiming and reading each have a 30-second timeout.
 3. **Form pairs:** the app groups participants in enrollment order, with two people per pair.
 4. **Discuss privately:** partners discuss the revealed ideas in their assigned group. This step closes when the organizer advances or one minute has passed; responses are visible within the recorded pair membership.
 
-The runbook composes an idea pool, a repeated claim/read/share sequence, pair assignment, and private group collection. The package declares the ordering, assignment policies, visibility, and closing rules; an app host implements those reusable operations. This combination is supported by candidate 0.16 and exercised in the [local trial](validation/0.16/README.md).
+The runbook composes an idea pool, a repeated claim/read/share sequence, pair assignment, and private group collection. The package declares the ordering, assignment policies, visibility, and closing rules; an app host implements those reusable operations. This combination is supported by candidate 0.19 and exercised in the [local trial](validation/0.19/README.md).
 
 ![Pooled ideas followed by pair discussion Runbook Structure diagram, showing the idea pool, nested claim/read/share steps, pair formation, and discussion](docs/screenshots/pooled-ideas-and-pairs.jpg)
 
@@ -57,31 +59,35 @@ An activity package brings together:
 
 The app that runs a package is called an **app host**. It provides accounts, storage, scheduling, messages, and screens. It also executes the steps the package declares. The app host must say when it cannot provide a required feature or rule. Apps can be written in different programming languages and still use the same package when they implement the same behavior.
 
-## Candidate 0.16 format
+## Candidate 0.19 format
 
 A package now contains a **runbook**: an ordered list of steps. Each step names an operation and supplies its settings. The package decides the sequence; the app implements the reusable operations.
 
-For example, the [Two Truths package](format/0.16/examples/two-truths.json) repeats three steps for each speaker: collect visible statements with a private answer, collect private guesses from everybody else, and reveal the answer and guesses when the speaker advances. The [List Game package](format/0.16/examples/list-game.json) uses the same operations with five items and text guesses. A [poll](format/0.16/examples/choice-poll.json) uses collection, reveal, and counting. A [prompted routine](format/0.16/examples/see-think-wonder.json) uses three collections that the organizer advances. A [timed story](format/0.16/examples/timed-story.json) repeats a text-append step for each participant.
+For example, the [Two Truths package](format/0.19/examples/two-truths.json) repeats three steps for each speaker: collect visible statements with a private answer, collect private guesses from everybody else, and reveal the answer and guesses when the speaker advances. The [List Game package](format/0.19/examples/list-game.json) uses the same operations with five items and text guesses. A [poll](format/0.19/examples/choice-poll.json) uses collection, reveal, and counting. A [prompted routine](format/0.19/examples/see-think-wonder.json) uses three collections that the organizer advances. A [timed story](format/0.19/examples/timed-story.json) repeats a text-append step for each participant.
 
-The [authoring guide](format/0.16/authoring.md) shows how these packages are written. The [specification](format/0.16/README.md), [schema](format/0.16/package.schema.json), and [operation rules](format/0.16/operations.md) define what an app must do. The [conformance cases](format/0.16/conformance/README.md) are sample actions and expected results that check an implementation.
+The [authoring guide](format/0.19/authoring.md) shows how these packages are written. The [specification](format/0.19/README.md), [schema](format/0.19/package.schema.json), and [operation rules](format/0.19/operations.md) define what an app must do. The [conformance cases](format/0.19/conformance/README.md) are sample actions and expected results that check an implementation.
 
-In the [local trial](validation/0.16/README.md), separate Python and Node.js apps run the same composed packages with their own databases. The trial also creates a new package that performs a check-in followed by a story relay, transfers it between the apps, and runs it without changing either interpreter. The trial also transfers a new pooled-ideas-then-pairs arrangement. Tests check private group history, competing item IDs and reader claims, deadlines, retries, and restart.
+In the [local trial](validation/0.19/README.md), separate Python and Node.js apps run the same composed packages with their own databases. The trial also creates a new package that performs a check-in followed by a story relay, transfers it between the apps, and runs it without changing either interpreter. The trial also transfers a new pooled-ideas-then-pairs arrangement. Tests check private group history, competing item IDs and reader claims, deadlines, retries, and restart.
 
-New packages add a [two-item gratitude pool](format/0.16/examples/gratitude-pool.json), [changing partner rounds](format/0.16/examples/partner-rounds.json), [timed solo/pair/quartet rounds](format/0.16/examples/one-two-four-all.json), and [pooled ideas followed by paired reflection](format/0.16/examples/pooled-ideas-and-pairs.json). The package states how items are ordered and how groups are chosen; it does not infer those rules from instructions.
+New packages add a [two-item gratitude pool](format/0.19/examples/gratitude-pool.json), [changing partner rounds](format/0.19/examples/partner-rounds.json), [timed solo/pair/quartet rounds](format/0.19/examples/one-two-four-all.json), and [pooled ideas followed by paired reflection](format/0.19/examples/pooled-ideas-and-pairs.json). The package states how items are ordered and how groups are chosen; it does not infer those rules from instructions.
 
-The [migration checklist](format/0.16/MIGRATION.md) accounts for all twenty earlier examples. It records available steps and missing rules; the scheduled check-in is now a complete migration, with nineteen remaining. Fourteen current runbook examples demonstrate selected digital activities, rather than all earlier functionality.
+The [migration checklist](format/0.19/MIGRATION.md) accounts for all twenty earlier examples. It records available steps and missing rules; the scheduled text check-in, three text daily-practice activities, image check-in and image daily prompt are complete migrations, with fourteen remaining. Twenty-three current runbook examples demonstrate selected digital activities, rather than all earlier functionality.
 
 The [earlier 0.12 candidate](format/0.12/README.md) contains ten complete activity behaviors and PNG support. Its richer examples remain useful for testing which rules the runbook needs next. Support for one candidate does not imply support for the other.
 
-A [scheduled check-in](format/0.16/examples/scheduled-check-in.json) keeps collection open until a chosen closing time, even when everyone answers early. Its package declares opening time, closing time, and question settings for the organizer to choose when starting it. The app validates and saves those choices. Another [package](format/0.16/examples/scheduled-check-in-pairs.json) follows the reveal with private paired reflection using the same scheduling rules.
+A [scheduled check-in](format/0.19/examples/scheduled-check-in.json) keeps collection open until a chosen closing time, even when everyone answers early. Its package declares opening time, closing time, and question settings for the organizer to choose when starting it. The app validates and saves those choices. Another [package](format/0.19/examples/scheduled-check-in-pairs.json) follows the reveal with private paired reflection using the same scheduling rules.
 
-A [proposal assessment](format/0.16/examples/proposal-assessment.json) shows another combination: collect ideas, assign each idea to two different reviewers, collect private 0–10 ratings, publish ranked totals, then invite private paired reflection. The package states the routing rule, score calculation, and what happens if a reviewer misses a deadline. Individual ratings stay private even after totals appear. A [25/10 digital translation](format/0.16/examples/crowd-scoring.json) uses five rounds and exact scaled averages; its [notes](format/0.16/scoring-notes.md) explain the digital choices.
+A [proposal assessment](format/0.19/examples/proposal-assessment.json) shows another combination: collect ideas, assign each idea to two different reviewers, collect private 0–10 ratings, publish ranked totals, then invite private paired reflection. The package states the routing rule, score calculation, and what happens if a reviewer misses a deadline. Individual ratings stay private even after totals appear. A [25/10 digital translation](format/0.19/examples/crowd-scoring.json) uses five rounds and exact scaled averages; its [notes](format/0.19/scoring-notes.md) explain the digital choices.
+
+Three daily-practice packages retain [private entries](format/0.19/examples/daily-private-practice.json), [reveal at closing](format/0.19/examples/daily-reveal.json), or [immediate group sharing](format/0.19/examples/daily-shared-prompt.json). Each uses explicit fixed windows and public completion status. A [repeated poll and pairs](format/0.19/examples/repeated-poll-and-pairs.json) combines the same schedule with choice tallies and later pair-private reflection. Fixed intervals do not follow local calendar dates or imply notification delivery.
+
+A [single-source creative response](format/0.19/examples/single-source-creative-response.json) assigns each contributor one randomized non-self text source, saves the assignment, and collects an independent linked response. An [idea exchange and pairs](format/0.19/examples/idea-response-and-pairs.json) uses a deterministic next-contributor policy and continues into private paired reflection. Both declare one-source cardinality, reuse and unmatched behavior explicitly. These are simplified activities; [distribution notes](format/0.19/distribution-notes.md) distinguish them from faithful Chorus or two-offer legacy behavior.
 
 ## Package inspector
 
 **[Open the live Runbook Structure diagrammer](https://canted.github.io/harmonomicon/)**
 
-The [activity package inspector](docs/README.md) renders candidate 0.16 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. Use the [live diagrammer](https://canted.github.io/harmonomicon/) in your browser, or follow the [local setup instructions](docs/README.md#run-locally). The live site is published from `docs/` on the repository’s default branch.
+The [activity package inspector](docs/README.md) renders candidate 0.19 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. Use the [live diagrammer](https://canted.github.io/harmonomicon/) in your browser, or follow the [local setup instructions](docs/README.md#run-locally). The live site is published from `docs/` on the repository’s default branch.
 
 ### Runbook Structure screenshots
 
@@ -95,7 +101,7 @@ The [activity package inspector](docs/README.md) renders candidate 0.16 runbooks
 
 ## Roadmap
 
-The [format roadmap](ROADMAP.md) records the candidate evidence and the requirements for 1.0, including composable packages. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
+The [format roadmap](ROADMAP.md) records candidate evidence, proposed readiness criteria, and a user review checkpoint before any 1.0 decision. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
 
 ## Research
 

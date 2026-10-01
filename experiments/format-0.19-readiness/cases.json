@@ -1,0 +1,674 @@
+[
+  {
+    "id": "moodboard",
+    "people": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "settings": {
+      "starts_at": 10
+    },
+    "trustedMedia": [
+      {
+        "actor": "a",
+        "ref": "image:a",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "b",
+        "ref": "image:b",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "c",
+        "ref": "image:c",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "d",
+        "ref": "image:d",
+        "kind": "image",
+        "ready": true
+      }
+    ],
+    "events": [
+      {
+        "eventId": "a0",
+        "actor": "a",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "choice": "draw",
+          "image": {
+            "ref": "image:a"
+          },
+          "energy": 3
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b0",
+        "actor": "b",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "choice": "write",
+          "image": {
+            "ref": "image:b"
+          },
+          "energy": 8
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "end0",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "c1",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:1",
+        "payload": {
+          "choice": "draw",
+          "image": {
+            "ref": "image:c"
+          },
+          "energy": 5
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "end1",
+        "actor": "system",
+        "at": 40,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "note",
+        "actor": "a",
+        "at": 41,
+        "step": "reflection",
+        "payload": {
+          "text": "Our private reflection"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "end",
+        "actor": "system",
+        "at": 50,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "record": "entry:0",
+        "entries": [
+          {
+            "actor": "a",
+            "value": {
+              "energy": 3
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "d",
+        "record": "entry:0",
+        "count": 2,
+        "revealed": true
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "record": "entry:1",
+        "statuses": [
+          {
+            "actor": "a",
+            "status": "missed"
+          },
+          {
+            "actor": "b",
+            "status": "missed"
+          },
+          {
+            "actor": "c",
+            "status": "complete"
+          },
+          {
+            "actor": "d",
+            "status": "missed"
+          }
+        ]
+      },
+      {
+        "after": 5,
+        "actor": "b",
+        "record": "reflection",
+        "entries": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Our private reflection"
+            }
+          }
+        ]
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "record": "reflection",
+        "entries": []
+      },
+      {
+        "after": 6,
+        "actor": "a",
+        "phase": "complete"
+      }
+    ]
+  },
+  {
+    "id": "photo-poll-story",
+    "people": [
+      "a",
+      "b"
+    ],
+    "trustedMedia": [
+      {
+        "actor": "a",
+        "ref": "image:a",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "b",
+        "ref": "image:b",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "c",
+        "ref": "image:c",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "d",
+        "ref": "image:d",
+        "kind": "image",
+        "ready": true
+      }
+    ],
+    "events": [
+      {
+        "eventId": "photo-a",
+        "actor": "a",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": {
+            "ref": "image:a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "photo-b",
+        "actor": "b",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": {
+            "ref": "image:b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "votea",
+        "actor": "a",
+        "at": 0,
+        "step": "vote",
+        "payload": {
+          "choice": "Park"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "voteb",
+        "actor": "b",
+        "at": 0,
+        "step": "vote",
+        "payload": {
+          "choice": "Cafe"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "close",
+        "actor": "organizer",
+        "at": 0,
+        "step": "vote",
+        "payload": {},
+        "type": "advance"
+      },
+      {
+        "eventId": "sa",
+        "actor": "a",
+        "at": 0,
+        "step": "write:0",
+        "payload": {
+          "text": "Start"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "sb",
+        "actor": "b",
+        "at": 0,
+        "step": "write:1",
+        "payload": {
+          "text": "Finish"
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "record": "answer",
+        "entries": []
+      },
+      {
+        "after": 1,
+        "actor": "b",
+        "record": "answer",
+        "count": 2,
+        "revealed": true
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "record": "count",
+        "counts": [
+          {
+            "value": "Museum",
+            "count": 0
+          },
+          {
+            "value": "Park",
+            "count": 1
+          },
+          {
+            "value": "Cafe",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "after": 6,
+        "actor": "organizer",
+        "phase": "complete",
+        "story": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Start"
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "text": "Finish"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "photo-text-exchange",
+    "people": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "seed": 1,
+    "trustedMedia": [
+      {
+        "actor": "a",
+        "ref": "image:a",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "b",
+        "ref": "image:b",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "c",
+        "ref": "image:c",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "d",
+        "ref": "image:d",
+        "kind": "image",
+        "ready": true
+      }
+    ],
+    "events": [
+      {
+        "eventId": "photo-a",
+        "actor": "a",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": {
+            "ref": "image:a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "photo-b",
+        "actor": "b",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": {
+            "ref": "image:b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "photo-c",
+        "actor": "c",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": {
+            "ref": "image:c"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "photo-d",
+        "actor": "d",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": {
+            "ref": "image:d"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 0,
+        "step": "sources",
+        "payload": {
+          "itemId": "a",
+          "text": "Idea a"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 0,
+        "step": "sources",
+        "payload": {
+          "itemId": "b",
+          "text": "Idea b"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-c",
+        "actor": "c",
+        "at": 0,
+        "step": "sources",
+        "payload": {
+          "itemId": "c",
+          "text": "Idea c"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-d",
+        "actor": "d",
+        "at": 0,
+        "step": "sources",
+        "payload": {
+          "itemId": "d",
+          "text": "Idea d"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "open",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "rd",
+        "actor": "d",
+        "at": 11,
+        "step": "response",
+        "payload": {
+          "itemId": "b",
+          "text": "Response B"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "ra",
+        "actor": "a",
+        "at": 12,
+        "step": "response",
+        "payload": {
+          "itemId": "d",
+          "text": "Response D"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "end",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 8,
+        "actor": "a",
+        "record": "distribution",
+        "assignment": {
+          "itemId": "d",
+          "text": "Idea d"
+        }
+      },
+      {
+        "after": 9,
+        "actor": "a",
+        "record": "response",
+        "entries": []
+      },
+      {
+        "after": 11,
+        "actor": "organizer",
+        "record": "response",
+        "count": 2,
+        "revealed": true
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "phase": "complete"
+      }
+    ]
+  },
+  {
+    "id": "pair-decision",
+    "people": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "events": [
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 0,
+        "step": "reflection",
+        "payload": {
+          "text": "Private pair idea"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "next",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "choice",
+        "actor": "c",
+        "at": 10,
+        "step": "vote",
+        "payload": {
+          "choice": "Park"
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "done",
+        "actor": "organizer",
+        "at": 10,
+        "step": "vote",
+        "payload": {},
+        "type": "advance"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "record": "reflection",
+        "entries": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Private pair idea"
+            }
+          }
+        ]
+      },
+      {
+        "after": 0,
+        "actor": "c",
+        "record": "reflection",
+        "entries": []
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "record": "count",
+        "counts": [
+          {
+            "value": "Museum",
+            "count": 0
+          },
+          {
+            "value": "Park",
+            "count": 1
+          },
+          {
+            "value": "Cafe",
+            "count": 0
+          }
+        ]
+      },
+      {
+        "after": 3,
+        "actor": "a",
+        "phase": "complete"
+      }
+    ]
+  }
+]

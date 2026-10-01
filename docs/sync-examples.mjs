@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here, '../format/0.16/examples');
+const source = path.join(here, '../format/0.19/examples');
 const target = path.join(here, 'examples');
 fs.mkdirSync(target, {recursive:true});
 const files = fs.readdirSync(source).filter(name => name.endsWith('.json')).sort();
@@ -16,4 +16,4 @@ const catalog = files.map(file => {
   return {file:`examples/${file}`, title:pkg.content.title};
 });
 fs.writeFileSync(path.join(here, 'examples.json'), JSON.stringify(catalog, null, 2) + '\n');
-console.log(`Synced ${catalog.length} packages from format/0.16/examples.`);
+console.log(`Synced ${catalog.length} packages from format/0.19/examples.`);

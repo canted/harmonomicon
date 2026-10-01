@@ -1,0 +1,97 @@
+{
+  "format": "harmonomicon.activity-package/0.19",
+  "id": "review.pair-decision",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Private pair deliberation followed by full-group decision",
+    "summary": "Discuss privately in fixed pairs, then vote in a full-group outing decision.",
+    "setup": "Enroll an even roster for deterministic pairs.",
+    "prompt": "Impromptu Networking digital rounds",
+    "participant": "Add one pair note and later one full-group ballot.",
+    "completion": "Pair discussion ends at its deadline; organizer closes the full-group ballot and publishes counts.",
+    "access": "Pair notes remain visible only in their original pair; the later full-group ballot does not widen that access."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Constructed Harmonomicon candidate 0.19 review arrangement; not source-equivalent or product-endorsed.",
+    "rights": "Original review arrangement. Participant media rights and retention are host responsibilities."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "assign_sources@1",
+    "clock@1",
+    "collect@1",
+    "collect_group@1",
+    "durable_state@1",
+    "identity@1",
+    "partition@1",
+    "policy:next_nonself_source@1",
+    "policy:roster_chunks@1",
+    "pool@1",
+    "private_views@1",
+    "respond@1",
+    "reveal@1",
+    "reveal_responses@1",
+    "serial_events@1",
+    "tally@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Form pairs.",
+        "afterMs": null
+      },
+      {
+        "id": "reflection",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Reflect privately with your partner.",
+        "close": "deadline",
+        "afterMs": 10
+      },
+      {
+        "id": "vote",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "Choose an outing.",
+        "fields": {
+          "choice": {
+            "type": "choice",
+            "visibility": "private",
+            "options": [
+              "Museum",
+              "Park",
+              "Cafe"
+            ]
+          }
+        },
+        "close": "organizer",
+        "afterMs": 60000
+      },
+      {
+        "id": "showvote",
+        "op": "reveal@1",
+        "sources": [
+          "vote"
+        ]
+      },
+      {
+        "id": "count",
+        "op": "tally@1",
+        "source": "vote",
+        "field": "choice"
+      }
+    ]
+  },
+  "settings": {}
+}

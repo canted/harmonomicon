@@ -1,0 +1,123 @@
+{
+  "format": "harmonomicon.activity-package/0.19",
+  "id": "review.moodboard",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Recurring moodboard, choice summary and paired reflection",
+    "summary": "Contribute mixed image, energy and direction entries in two fixed windows, then reflect in pairs.",
+    "setup": "Enroll an even fixed roster and bind the first opening time.",
+    "prompt": "Choose a direction to explore.",
+    "participant": "Upload a ready image and submit the exact form once in each window; then add one pair note.",
+    "completion": "Each window closes at its deadline; the pair reflection closes after its own deadline.",
+    "access": "Energy and completion status are public; image and direction stay private until that window reveals. Pair notes stay in their original pair."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Constructed Harmonomicon candidate 0.19 review arrangement; not source-equivalent or product-endorsed.",
+    "rights": "Original review arrangement. Participant media rights and retention are host responsibilities."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "clock@1",
+    "collect_group@1",
+    "collect_window@1",
+    "durable_state@1",
+    "for_windows@1",
+    "identity@1",
+    "instance_settings@1",
+    "partition@1",
+    "policy:roster_chunks@1",
+    "private_views@1",
+    "reveal@1",
+    "serial_events@1",
+    "tally@1",
+    "text@1",
+    "image_contributions@1",
+    "integer_values@1",
+    "completion_status@1"
+  ],
+  "settings": {
+    "starts_at": {
+      "type": "time"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "practice",
+        "op": "for_windows@1",
+        "startsAt": {
+          "setting": "starts_at"
+        },
+        "intervalMs": 20,
+        "windowMs": 10,
+        "occurrences": 2,
+        "prompt": "Waiting for the next choice window.",
+        "steps": [
+          {
+            "id": "entry",
+            "op": "collect_window@1",
+            "actors": "participants",
+            "prompt": "Choose a direction to explore.",
+            "fields": {
+              "choice": {
+                "type": "choice",
+                "visibility": "private",
+                "options": [
+                  "draw",
+                  "write",
+                  "listen"
+                ]
+              },
+              "image": {
+                "type": "image_ref",
+                "visibility": "private"
+              },
+              "energy": {
+                "type": "integer",
+                "visibility": "group",
+                "min": 0,
+                "max": 10
+              }
+            },
+            "completion": "group"
+          },
+          {
+            "id": "publish",
+            "op": "reveal@1",
+            "sources": [
+              "entry"
+            ]
+          },
+          {
+            "id": "count",
+            "op": "tally@1",
+            "source": "entry",
+            "field": "choice"
+          }
+        ]
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Form pairs.",
+        "afterMs": null
+      },
+      {
+        "id": "reflection",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Reflect with your partner.",
+        "close": "deadline",
+        "afterMs": 10
+      }
+    ]
+  }
+}

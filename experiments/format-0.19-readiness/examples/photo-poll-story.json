@@ -1,0 +1,109 @@
+{
+  "format": "harmonomicon.activity-package/0.19",
+  "id": "review.photo-poll-story",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Photo introduction, decision poll and group story",
+    "summary": "Share photos, choose a group outing and write a cumulative story in roster turns.",
+    "setup": "Enroll a fixed roster and upload ready images through the host.",
+    "prompt": "Group check-in",
+    "participant": "Submit one photo, then one outing choice, then a story line on your turn.",
+    "completion": "Photo close reveals accepted photos; organizer closes the poll; the final story turn ends the activity.",
+    "access": "Own photos stay private until collection closes; ballots reveal when the organizer closes the poll; story lines are shared."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Constructed Harmonomicon candidate 0.19 review arrangement; not source-equivalent or product-endorsed.",
+    "rights": "Original review arrangement. Participant media rights and retention are host responsibilities."
+  },
+  "participants": {
+    "min": 2,
+    "max": 12
+  },
+  "requires": [
+    "append@1",
+    "clock@1",
+    "collect@1",
+    "durable_state@1",
+    "for_each@1",
+    "identity@1",
+    "image_contributions@1",
+    "private_views@1",
+    "reveal@1",
+    "serial_events@1",
+    "tally@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "answer",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "What made you smile today?",
+        "fields": {
+          "answer": {
+            "type": "image_ref",
+            "visibility": "private"
+          }
+        },
+        "close": "all",
+        "afterMs": 3600000
+      },
+      {
+        "id": "reveal",
+        "op": "reveal@1",
+        "sources": [
+          "answer"
+        ]
+      },
+      {
+        "id": "vote",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "Choose an outing.",
+        "fields": {
+          "choice": {
+            "type": "choice",
+            "visibility": "private",
+            "options": [
+              "Museum",
+              "Park",
+              "Cafe"
+            ]
+          }
+        },
+        "close": "organizer",
+        "afterMs": 60000
+      },
+      {
+        "id": "showvote",
+        "op": "reveal@1",
+        "sources": [
+          "vote"
+        ]
+      },
+      {
+        "id": "count",
+        "op": "tally@1",
+        "source": "vote",
+        "field": "choice"
+      },
+      {
+        "id": "turns",
+        "op": "for_each@1",
+        "over": "participants",
+        "steps": [
+          {
+            "id": "write",
+            "op": "append@1",
+            "prompt": "Add to the shared story during your turn.",
+            "afterMs": 60000
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {}
+}
