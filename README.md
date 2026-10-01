@@ -28,22 +28,20 @@ The runbook has two steps: **collect answers**, then **reveal answers**. The col
 
 ![Runbook structure generated from the check-in package: answer then reveal](docs/previews/check-in.svg)
 
-## A richer example: image caption contest
+## A richer example: Pooled ideas followed by pair discussion
 
-Imagine a group caption contest run in an app. Instead of everyone captioning the same picture, participants first upload several images. The app then gives each image contributor two images uploaded by other people. They choose one and write a caption. More than one person may caption the same image.
+Imagine a group of eight people gathering ideas before discussing them in pairs. Each person contributes one idea to a shared pool. Participants take turns claiming and reading ideas from other people, then discuss the shared ideas with an assigned partner.
 
-The activity has a few stages:
+The [Pooled ideas followed by pair discussion package](format/0.16/examples/pooled-ideas-and-pairs.json) combines these steps:
 
-1. Participants upload one image each before the image deadline.
-2. After the image deadline, if at least three images are available, the app offers each contributor two images from other people. It favors images that have been offered fewer times.
-3. Each contributor chooses one offered image and submits a caption. Captions stay private during this stage.
-4. At the caption deadline, the app reveals the image-caption pairs. Participants vote for a caption by someone else; the app shows totals and any tied winners when voting closes.
+1. **Pool ideas:** each participant contributes one text idea. Collection closes when everyone has contributed or one minute has passed. The app withholds pooled authorship metadata.
+2. **Read and share each idea:** for each pooled item, a participant can claim it if it is not their own. The reader acknowledges reading it, then the app reveals its text. Claiming and reading each have a 30-second timeout.
+3. **Form pairs:** the app groups participants in enrollment order, with two people per pair.
+4. **Discuss privately:** partners discuss the revealed ideas in their assigned group. This step closes when the organizer advances or one minute has passed; responses are visible within the recorded pair membership.
 
-The package says when each stage starts and ends, how the app chooses image offers, who can see captions before the reveal, and how votes are counted. It also says what happens if fewer than three images arrive or someone never submits a caption. In format 0.12, fewer than three images ends the activity without a group reveal; missing captions do not delay the deadline. A future runbook could select a different recovery step. Repeated requests for an offer should return the same two images, so a participant does not get a new choice by refreshing the screen.
+The runbook composes an idea pool, a repeated claim/read/share sequence, pair assignment, and private group collection. The package declares the ordering, assignment policies, visibility, and closing rules; an app host implements those reusable operations. This combination is supported by candidate 0.16 and exercised in the [local trial](validation/0.16/README.md).
 
-The earlier [0.12 image-caption vote package](format/0.12/examples/image-caption-vote.json) runs this through one predefined behavior, with stored PNG images and audience-controlled access. Expressing its image assignments and voting as reusable runbook steps is part of the remaining work. Candidate 0.16 does not yet run this caption contest.
-
-Other packages could describe a hidden drawing handoff in a browser, a recurring photo challenge, or an online game jam with progress posts and a final submission window. The activity package covers what the app asks, records, assigns, and shares, even when participants make something away from the screen.
+![Pooled ideas followed by pair discussion Runbook Structure diagram, showing the idea pool, nested claim/read/share steps, pair formation, and discussion](docs/screenshots/pooled-ideas-and-pairs.jpg)
 
 ## What goes in a package?
 
