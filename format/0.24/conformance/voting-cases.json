@@ -1,0 +1,4337 @@
+[
+  {
+    "id": "predefined-identity-forbidden-change-and-retry",
+    "package": "predefined-vote",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "foreign",
+        "actor": "a",
+        "at": 0,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "future",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "scalar",
+        "actor": "a",
+        "at": 0,
+        "step": "vote",
+        "payload": {
+          "candidate": 0
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "unknown",
+        "actor": "a",
+        "at": 0,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "missing"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 1,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "change",
+        "actor": "a",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "garden"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 3,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "garden"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "c",
+        "actor": "c",
+        "at": 3,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "late",
+        "actor": "a",
+        "at": 20,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "garden"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 21,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "rejected",
+      "replayed",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "replayed"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "count"
+        ],
+        "missing": true
+      },
+      {
+        "after": 8,
+        "actor": "organizer",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          3,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "vote",
+                  "itemId": "repair"
+                },
+                "label": "Repairing things"
+              },
+              "count": 2
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "vote",
+                  "itemId": "garden"
+                },
+                "label": "Repairing things"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "vote",
+                  "itemId": "share"
+                },
+                "label": "Sharing resources"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 3,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "source": "vote",
+              "itemId": "repair"
+            },
+            "label": "Repairing things"
+          },
+          "tied": []
+        }
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "output"
+        ],
+        "missing": true
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          2,
+          "output"
+        ],
+        "missing": true
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.predefined-vote",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a conversation subject",
+        "summary": "A private poll over predefined named options; votes cannot be changed.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a conversation subject",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an unresolved tie or empty outcome when appropriate.",
+        "access": "Ballots stay private. Presented totals disclose counted participation and attributed candidates."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the subject for our next conversation.",
+            "candidates": {
+              "options": [
+                {
+                  "id": "repair",
+                  "label": "Repairing things"
+                },
+                {
+                  "id": "garden",
+                  "label": "Repairing things"
+                },
+                {
+                  "id": "share",
+                  "label": "Sharing resources"
+                }
+              ]
+            },
+            "changes": "forbidden",
+            "ballots": "private"
+          },
+          {
+            "id": "poll_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "poll_choice",
+            "op": "select@1",
+            "source": "poll_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "poll_result",
+            "op": "present@1",
+            "source": "poll_choice",
+            "prompt": "Here is the subject chosen by the group.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 20
+      }
+    }
+  },
+  {
+    "id": "current-ballots-private-public-totals",
+    "package": "contribution-contest",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "A",
+          "value": {
+            "kind": "text",
+            "text": "Same label"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "B",
+          "value": {
+            "kind": "text",
+            "text": "Same label"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-c",
+        "actor": "c",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "C",
+          "value": {
+            "kind": "text",
+            "text": "Third place"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "early",
+        "actor": "a",
+        "at": 10,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "old",
+        "actor": "a",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "replacement",
+        "actor": "a",
+        "at": 13,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "old",
+        "actor": "a",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "foreign",
+        "actor": "b",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "continuations_two",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "extra",
+        "actor": "b",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "B",
+            "actor": "b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "c",
+        "actor": "c",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "after",
+        "actor": "a",
+        "at": 20,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "replayed",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "candidates"
+        ],
+        "equals": [
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "A"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "Same label"
+            },
+            "round": "contest"
+          },
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "B"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "Same label"
+            },
+            "round": "contest"
+          },
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "C"
+            },
+            "actor": "c",
+            "value": {
+              "kind": "text",
+              "text": "Third place"
+            },
+            "round": "contest"
+          }
+        ]
+      },
+      {
+        "after": 7,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "candidate": {
+              "source": "entries",
+              "itemId": "B"
+            }
+          }
+        ]
+      },
+      {
+        "after": 12,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "A"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "Same label"
+                },
+                "round": "contest"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "B"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "Same label"
+                },
+                "round": "contest"
+              },
+              "count": 2
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "C"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "text",
+                  "text": "Third place"
+                },
+                "round": "contest"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 3,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "source": "entries",
+              "itemId": "B"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "Same label"
+            },
+            "round": "contest"
+          },
+          "tied": []
+        }
+      },
+      {
+        "after": 12,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "candidate": {
+              "source": "entries",
+              "itemId": "B"
+            }
+          }
+        ]
+      },
+      {
+        "after": 12,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 12,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "count"
+        ],
+        "missing": true
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.contribution-contest",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a place to explore",
+        "summary": "Vote on accepted text, image, and audio contributions, then see totals and the selected piece.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a place to explore",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an empty outcome when no eligible contributions or counted votes are available.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "audio_contributions@1",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "entries",
+            "op": "artifact_pool@2",
+            "round": "contest",
+            "prompt": "Submit one short text, image, or audio piece about a place that matters to you.",
+            "input": null,
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the contribution you would most like the group to explore.",
+            "candidates": {
+              "source": "entries"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "contest_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "contest_choice",
+            "op": "select@1",
+            "source": "contest_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "contest_result",
+            "op": "present@1",
+            "source": "contest_choice",
+            "prompt": "Here are the totals and the selected contribution.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "entries": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 12,
+        "closesAt": 20
+      }
+    }
+  },
+  {
+    "id": "totals-and-explicit-ballot-reveal",
+    "package": "predefined-vote",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 1,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "garden"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "revealed"
+        ],
+        "equals": true
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "candidate": {
+              "source": "vote",
+              "itemId": "repair"
+            }
+          },
+          {
+            "actor": "b",
+            "candidate": {
+              "source": "vote",
+              "itemId": "garden"
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          2,
+          "output",
+          "totalVotes"
+        ],
+        "equals": 2
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.predefined-vote",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a conversation subject",
+        "summary": "A private poll over predefined named options; votes cannot be changed.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a conversation subject",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an unresolved tie or empty outcome when appropriate.",
+        "access": "Ballots stay private. Presented totals disclose counted participation and attributed candidates."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@1",
+        "private_views@1",
+        "reveal_ballots@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the subject for our next conversation.",
+            "candidates": {
+              "options": [
+                {
+                  "id": "repair",
+                  "label": "Repairing things"
+                },
+                {
+                  "id": "garden",
+                  "label": "Growing a garden"
+                },
+                {
+                  "id": "share",
+                  "label": "Sharing resources"
+                }
+              ]
+            },
+            "changes": "forbidden",
+            "ballots": "private"
+          },
+          {
+            "id": "totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "show_totals",
+            "op": "present@1",
+            "source": "totals",
+            "prompt": "These are the totals.",
+            "audience": "group"
+          },
+          {
+            "id": "ballots",
+            "op": "reveal_ballots@1",
+            "source": "vote"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 20
+      }
+    }
+  },
+  {
+    "id": "explicit-group-ballot-visibility",
+    "package": "predefined-vote",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 1,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "vote",
+            "itemId": "repair"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "candidate": {
+              "source": "vote",
+              "itemId": "repair"
+            }
+          }
+        ]
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.predefined-vote",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a conversation subject",
+        "summary": "A private poll over predefined named options; votes cannot be changed.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a conversation subject",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an unresolved tie or empty outcome when appropriate.",
+        "access": "Ballots stay private. Presented totals disclose counted participation and attributed candidates."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the subject for our next conversation.",
+            "candidates": {
+              "options": [
+                {
+                  "id": "repair",
+                  "label": "Repairing things"
+                },
+                {
+                  "id": "garden",
+                  "label": "Growing a garden"
+                },
+                {
+                  "id": "share",
+                  "label": "Sharing resources"
+                }
+              ]
+            },
+            "changes": "forbidden",
+            "ballots": "group"
+          },
+          {
+            "id": "poll_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "poll_choice",
+            "op": "select@1",
+            "source": "poll_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "poll_result",
+            "op": "present@1",
+            "source": "poll_choice",
+            "prompt": "Here is the subject chosen by the group.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 20
+      }
+    }
+  },
+  {
+    "id": "source-and-voter-effective-eligibility",
+    "package": "contribution-contest",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "a-source",
+        "actor": "a",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "A",
+          "value": {
+            "kind": "text",
+            "text": "A idea"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b-source",
+        "actor": "b",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "B",
+          "value": {
+            "kind": "text",
+            "text": "B idea"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "c-source",
+        "actor": "c",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "C",
+          "value": {
+            "kind": "text",
+            "text": "C idea"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "withdraw-author",
+        "actor": "system",
+        "at": 2,
+        "step": "entries",
+        "payload": {
+          "actors": [
+            "a",
+            "c"
+          ],
+          "opensAt": 0,
+          "closesAt": 10
+        },
+        "type": "configure"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "excluded-candidate",
+        "actor": "b",
+        "at": 10,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "C"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "c",
+        "actor": "c",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "C"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "withdraw-voter",
+        "actor": "system",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "actors": [
+            "a",
+            "c"
+          ],
+          "opensAt": 10,
+          "closesAt": 20
+        },
+        "type": "configure"
+      },
+      {
+        "eventId": "withdrawn",
+        "actor": "b",
+        "at": 13,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 4,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "candidates"
+        ],
+        "equals": [
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "A"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "A idea"
+            },
+            "round": "contest"
+          },
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "C"
+            },
+            "actor": "c",
+            "value": {
+              "kind": "text",
+              "text": "C idea"
+            },
+            "round": "contest"
+          }
+        ]
+      },
+      {
+        "after": 9,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "eligible"
+        ],
+        "equals": false
+      },
+      {
+        "after": 11,
+        "actor": "organizer",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "A"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "A idea"
+                },
+                "round": "contest"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "C"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "text",
+                  "text": "C idea"
+                },
+                "round": "contest"
+              },
+              "count": 1
+            }
+          ],
+          "totalVotes": 2,
+          "status": "tie",
+          "selected": null,
+          "tied": [
+            {
+              "ref": {
+                "source": "entries",
+                "itemId": "A"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "A idea"
+              },
+              "round": "contest"
+            },
+            {
+              "ref": {
+                "source": "entries",
+                "itemId": "C"
+              },
+              "actor": "c",
+              "value": {
+                "kind": "text",
+                "text": "C idea"
+              },
+              "round": "contest"
+            }
+          ]
+        }
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.contribution-contest",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a place to explore",
+        "summary": "Vote on accepted text, image, and audio contributions, then see totals and the selected piece.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a place to explore",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an empty outcome when no eligible contributions or counted votes are available.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "audio_contributions@1",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "entries",
+            "op": "artifact_pool@2",
+            "round": "contest",
+            "prompt": "Submit one short text, image, or audio piece about a place that matters to you.",
+            "input": null,
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the contribution you would most like the group to explore.",
+            "candidates": {
+              "source": "entries"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "contest_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "contest_choice",
+            "op": "select@1",
+            "source": "contest_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "contest_result",
+            "op": "present@1",
+            "source": "contest_choice",
+            "prompt": "Here are the totals and the selected contribution.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "entries": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "tieChoices": [
+      0
+    ]
+  },
+  {
+    "id": "unresolved-tie-blocks-linked-round",
+    "package": "creative-continuation",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations_one",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "text",
+            "text": "A verse"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations_one",
+        "payload": {
+          "itemId": "other",
+          "value": {
+            "kind": "text",
+            "text": "B verse"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a-vote",
+        "actor": "a",
+        "at": 11,
+        "step": "vote_one",
+        "payload": {
+          "candidate": {
+            "source": "continuations_one",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b-vote",
+        "actor": "b",
+        "at": 11,
+        "step": "vote_one",
+        "payload": {
+          "candidate": {
+            "source": "continuations_one",
+            "itemId": "other"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "blocked",
+        "actor": "c",
+        "at": 21,
+        "step": "continuations_two",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "text",
+            "text": "Invented follow-on"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-40",
+        "actor": "system",
+        "at": 40,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "continuations_one",
+                  "itemId": "same"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "A verse"
+                },
+                "round": "verse_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "continuations_one",
+                  "itemId": "other"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "B verse"
+                },
+                "round": "verse_one"
+              },
+              "count": 1
+            }
+          ],
+          "totalVotes": 2,
+          "status": "tie",
+          "selected": null,
+          "tied": [
+            {
+              "ref": {
+                "source": "continuations_one",
+                "itemId": "same"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "A verse"
+              },
+              "round": "verse_one"
+            },
+            {
+              "ref": {
+                "source": "continuations_one",
+                "itemId": "other"
+              },
+              "actor": "b",
+              "value": {
+                "kind": "text",
+                "text": "B verse"
+              },
+              "round": "verse_one"
+            }
+          ]
+        }
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "blocked"
+        ],
+        "equals": true
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "input",
+          "status"
+        ],
+        "equals": "tie"
+      },
+      {
+        "after": 7,
+        "actor": "c",
+        "path": [
+          "records",
+          9,
+          "output",
+          "status"
+        ],
+        "equals": "no_candidates"
+      },
+      {
+        "after": 5,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "input",
+          "predecessorRound"
+        ],
+        "equals": "verse_one"
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.creative-continuation",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue the station song",
+        "summary": "Write, vote, and select twice; the selected first continuation explicitly supplies the second round.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Continue the station song",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing both round results. An unresolved or empty preceding result blocks only the collection that depends on it; later instructions still run and can show the resulting empty outcome.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. Selected source material is visible in the next round."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations_one",
+            "op": "artifact_pool@2",
+            "round": "verse_one",
+            "prompt": "Propose one continuation of the opening piece.",
+            "input": {
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the old station began to sing."
+              }
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote_one",
+            "op": "vote@1",
+            "prompt": "Choose the continuation that should become our next starting piece.",
+            "candidates": {
+              "source": "continuations_one"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@2",
+            "source": "vote_one"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@1",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@1",
+            "source": "one_choice",
+            "prompt": "Read the continuation selected for the next round.",
+            "audience": "group"
+          },
+          {
+            "id": "continuations_two",
+            "op": "artifact_pool@2",
+            "round": "verse_two",
+            "prompt": "Continue the selected piece from the preceding round.",
+            "input": {
+              "result": "one_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote_two",
+            "op": "vote@1",
+            "prompt": "Choose the continuation that should conclude our two-round piece.",
+            "candidates": {
+              "source": "continuations_two"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "two_totals",
+            "op": "tally@2",
+            "source": "vote_two"
+          },
+          {
+            "id": "two_choice",
+            "op": "select@1",
+            "source": "two_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "two_result",
+            "op": "present@1",
+            "source": "two_choice",
+            "prompt": "Here is the final selected continuation and its vote totals.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "continuations_one": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote_one": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      },
+      "continuations_two": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 20,
+        "closesAt": 30
+      },
+      "vote_two": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 30,
+        "closesAt": 40
+      }
+    }
+  },
+  {
+    "id": "no-votes-blocks-linked-round",
+    "package": "creative-continuation",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations_one",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "text",
+            "text": "A verse"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          4,
+          "output",
+          "status"
+        ],
+        "equals": "no_votes"
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "blocked"
+        ],
+        "equals": true
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "input",
+          "candidate"
+        ],
+        "equals": null
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "input",
+          "predecessorRound"
+        ],
+        "equals": "verse_one"
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.creative-continuation",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue the station song",
+        "summary": "Write, vote, and select twice; the selected first continuation explicitly supplies the second round.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Continue the station song",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing both round results. An unresolved or empty preceding result blocks only the collection that depends on it; later instructions still run and can show the resulting empty outcome.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. Selected source material is visible in the next round."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations_one",
+            "op": "artifact_pool@2",
+            "round": "verse_one",
+            "prompt": "Propose one continuation of the opening piece.",
+            "input": {
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the old station began to sing."
+              }
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote_one",
+            "op": "vote@1",
+            "prompt": "Choose the continuation that should become our next starting piece.",
+            "candidates": {
+              "source": "continuations_one"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@2",
+            "source": "vote_one"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@1",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "one_result",
+            "op": "present@1",
+            "source": "one_choice",
+            "prompt": "Read the continuation selected for the next round.",
+            "audience": "group"
+          },
+          {
+            "id": "continuations_two",
+            "op": "artifact_pool@2",
+            "round": "verse_two",
+            "prompt": "Continue the selected piece from the preceding round.",
+            "input": {
+              "result": "one_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote_two",
+            "op": "vote@1",
+            "prompt": "Choose the continuation that should conclude our two-round piece.",
+            "candidates": {
+              "source": "continuations_two"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "two_totals",
+            "op": "tally@2",
+            "source": "vote_two"
+          },
+          {
+            "id": "two_choice",
+            "op": "select@1",
+            "source": "two_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "two_result",
+            "op": "present@1",
+            "source": "two_choice",
+            "prompt": "Here is the final selected continuation and its vote totals.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "continuations_one": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote_one": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      },
+      "continuations_two": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 20,
+        "closesAt": 30
+      },
+      "vote_two": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 30,
+        "closesAt": 40
+      }
+    }
+  },
+  {
+    "id": "empty-candidate-set",
+    "package": "contribution-contest",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "absent",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "candidates"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": []
+        }
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.contribution-contest",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a place to explore",
+        "summary": "Vote on accepted text, image, and audio contributions, then see totals and the selected piece.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a place to explore",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an empty outcome when no eligible contributions or counted votes are available.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "audio_contributions@1",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "entries",
+            "op": "artifact_pool@2",
+            "round": "contest",
+            "prompt": "Submit one short text, image, or audio piece about a place that matters to you.",
+            "input": null,
+            "kinds": [
+              "text",
+              "image",
+              "audio"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the contribution you would most like the group to explore.",
+            "candidates": {
+              "source": "entries"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "contest_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "contest_choice",
+            "op": "select@1",
+            "source": "contest_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "contest_result",
+            "op": "present@1",
+            "source": "contest_choice",
+            "prompt": "Here are the totals and the selected contribution.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "entries": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    }
+  },
+  {
+    "id": "random-tie-and-explicit-next-round-input",
+    "package": "creative-continuation",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "a-one",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations_one",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "text",
+            "text": "A verse"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b-one",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations_one",
+        "payload": {
+          "itemId": "other",
+          "value": {
+            "kind": "text",
+            "text": "B verse"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "vote-a-one",
+        "actor": "a",
+        "at": 11,
+        "step": "vote_one",
+        "payload": {
+          "candidate": {
+            "source": "continuations_one",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "vote-b-one",
+        "actor": "b",
+        "at": 11,
+        "step": "vote_one",
+        "payload": {
+          "candidate": {
+            "source": "continuations_one",
+            "itemId": "other"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a-two",
+        "actor": "a",
+        "at": 21,
+        "step": "continuations_two",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "text",
+            "text": "A continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b-two",
+        "actor": "b",
+        "at": 21,
+        "step": "continuations_two",
+        "payload": {
+          "itemId": "other",
+          "value": {
+            "kind": "text",
+            "text": "B continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-30",
+        "actor": "system",
+        "at": 30,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "stale",
+        "actor": "a",
+        "at": 31,
+        "step": "vote_two",
+        "payload": {
+          "candidate": {
+            "source": "continuations_one",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "vote-a-two",
+        "actor": "a",
+        "at": 31,
+        "step": "vote_two",
+        "payload": {
+          "candidate": {
+            "source": "continuations_two",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "vote-b-two",
+        "actor": "b",
+        "at": 31,
+        "step": "vote_two",
+        "payload": {
+          "candidate": {
+            "source": "continuations_two",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-40",
+        "actor": "system",
+        "at": 40,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "continuations_one",
+                  "itemId": "same"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "A verse"
+                },
+                "round": "verse_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "continuations_one",
+                  "itemId": "other"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "B verse"
+                },
+                "round": "verse_one"
+              },
+              "count": 1
+            }
+          ],
+          "totalVotes": 2,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "source": "continuations_one",
+              "itemId": "other"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "B verse"
+            },
+            "round": "verse_one"
+          },
+          "tied": [
+            {
+              "ref": {
+                "source": "continuations_one",
+                "itemId": "same"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "A verse"
+              },
+              "round": "verse_one"
+            },
+            {
+              "ref": {
+                "source": "continuations_one",
+                "itemId": "other"
+              },
+              "actor": "b",
+              "value": {
+                "kind": "text",
+                "text": "B verse"
+              },
+              "round": "verse_one"
+            }
+          ]
+        }
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "input"
+        ],
+        "equals": {
+          "status": "selected",
+          "predecessorRound": "verse_one",
+          "candidate": {
+            "ref": {
+              "source": "continuations_one",
+              "itemId": "other"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "B verse"
+            },
+            "round": "verse_one"
+          }
+        }
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "round"
+        ],
+        "equals": "verse_two"
+      },
+      {
+        "after": 12,
+        "actor": "c",
+        "path": [
+          "records",
+          9,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "continuations_two",
+                  "itemId": "same"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "A continuation"
+                },
+                "round": "verse_two"
+              },
+              "count": 2
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "continuations_two",
+                  "itemId": "other"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "B continuation"
+                },
+                "round": "verse_two"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 2,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "source": "continuations_two",
+              "itemId": "same"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "A continuation"
+            },
+            "round": "verse_two"
+          },
+          "tied": []
+        }
+      },
+      {
+        "after": 12,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.creative-continuation",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue the station song",
+        "summary": "Write, vote, and select twice; the selected first continuation explicitly supplies the second round.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Continue the station song",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing both round results. An unresolved or empty preceding result blocks only the collection that depends on it; later instructions still run and can show the resulting empty outcome.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. Selected source material is visible in the next round."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations_one",
+            "op": "artifact_pool@2",
+            "round": "verse_one",
+            "prompt": "Propose one continuation of the opening piece.",
+            "input": {
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the old station began to sing."
+              }
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote_one",
+            "op": "vote@1",
+            "prompt": "Choose the continuation that should become our next starting piece.",
+            "candidates": {
+              "source": "continuations_one"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@2",
+            "source": "vote_one"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@1",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "one_result",
+            "op": "present@1",
+            "source": "one_choice",
+            "prompt": "Read the continuation selected for the next round.",
+            "audience": "group"
+          },
+          {
+            "id": "continuations_two",
+            "op": "artifact_pool@2",
+            "round": "verse_two",
+            "prompt": "Continue the selected piece from the preceding round.",
+            "input": {
+              "result": "one_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote_two",
+            "op": "vote@1",
+            "prompt": "Choose the continuation that should conclude our two-round piece.",
+            "candidates": {
+              "source": "continuations_two"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "two_totals",
+            "op": "tally@2",
+            "source": "vote_two"
+          },
+          {
+            "id": "two_choice",
+            "op": "select@1",
+            "source": "two_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "two_result",
+            "op": "present@1",
+            "source": "two_choice",
+            "prompt": "Here is the final selected continuation and its vote totals.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "continuations_one": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote_one": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      },
+      "continuations_two": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 20,
+        "closesAt": 30
+      },
+      "vote_two": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 30,
+        "closesAt": 40
+      }
+    },
+    "tieChoices": [
+      1
+    ]
+  },
+  {
+    "id": "text-image-audio-candidates",
+    "package": "contribution-contest",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "foreign",
+        "actor": "a",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "bad",
+          "value": {
+            "kind": "image",
+            "ref": "photo-b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "pending",
+        "actor": "a",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "bad",
+          "value": {
+            "kind": "audio",
+            "ref": "pending"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "image",
+        "actor": "a",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "photo",
+          "value": {
+            "kind": "image",
+            "ref": "photo-a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "audio",
+        "actor": "b",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "clip",
+          "value": {
+            "kind": "audio",
+            "ref": "clip-b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "text",
+        "actor": "c",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "note",
+          "value": {
+            "kind": "text",
+            "text": "A note"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "clip"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "candidates"
+        ],
+        "equals": [
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "photo"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "image",
+              "ref": "photo-a"
+            },
+            "round": "contest"
+          },
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "clip"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "audio",
+              "ref": "clip-b"
+            },
+            "round": "contest"
+          },
+          {
+            "ref": {
+              "source": "entries",
+              "itemId": "note"
+            },
+            "actor": "c",
+            "value": {
+              "kind": "text",
+              "text": "A note"
+            },
+            "round": "contest"
+          }
+        ]
+      },
+      {
+        "after": 7,
+        "actor": "organizer",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "photo"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "image",
+                  "ref": "photo-a"
+                },
+                "round": "contest"
+              },
+              "count": 0
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "clip"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "audio",
+                  "ref": "clip-b"
+                },
+                "round": "contest"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "note"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "text",
+                  "text": "A note"
+                },
+                "round": "contest"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 1,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "source": "entries",
+              "itemId": "clip"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "audio",
+              "ref": "clip-b"
+            },
+            "round": "contest"
+          },
+          "tied": []
+        }
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.contribution-contest",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a place to explore",
+        "summary": "Vote on accepted text, image, and audio contributions, then see totals and the selected piece.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a place to explore",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an empty outcome when no eligible contributions or counted votes are available.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@2",
+        "audio_contributions@1",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "entries",
+            "op": "artifact_pool@2",
+            "round": "contest",
+            "prompt": "Submit one short text, image, or audio piece about a place that matters to you.",
+            "input": null,
+            "kinds": [
+              "text",
+              "image",
+              "audio"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the contribution you would most like the group to explore.",
+            "candidates": {
+              "source": "entries"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "contest_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "contest_choice",
+            "op": "select@1",
+            "source": "contest_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "contest_result",
+            "op": "present@1",
+            "source": "contest_choice",
+            "prompt": "Here are the totals and the selected contribution.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "entries": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "trustedMedia": [
+      {
+        "actor": "a",
+        "ref": "photo-a",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "b",
+        "ref": "photo-b",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "b",
+        "ref": "clip-b",
+        "kind": "audio",
+        "ready": true
+      },
+      {
+        "actor": "a",
+        "ref": "pending",
+        "kind": "audio",
+        "ready": false
+      }
+    ]
+  },
+  {
+    "id": "prior-version-typed-pool-candidates",
+    "package": "contribution-contest",
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "source",
+        "actor": "a",
+        "at": 1,
+        "step": "entries",
+        "payload": {
+          "itemId": "A",
+          "value": {
+            "kind": "text",
+            "text": "Original pool"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "vote",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "entries",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "source": "entries",
+                  "itemId": "A"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "Original pool"
+                },
+                "round": null
+              },
+              "count": 1
+            }
+          ],
+          "totalVotes": 1,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "source": "entries",
+              "itemId": "A"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "Original pool"
+            },
+            "round": null
+          },
+          "tied": []
+        }
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.contribution-contest",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Choose a place to explore",
+        "summary": "Vote on accepted text, image, and audio contributions, then see totals and the selected piece.",
+        "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Choose a place to explore",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after showing the vote result, including an empty outcome when no eligible contributions or counted votes are available.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "audio_contributions@1",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1",
+        "artifact_pool@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "entries",
+            "op": "artifact_pool@1",
+            "prompt": "Submit one short text, image, or audio piece about a place that matters to you.",
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose the contribution you would most like the group to explore.",
+            "candidates": {
+              "source": "entries"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "contest_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "contest_choice",
+            "op": "select@1",
+            "source": "contest_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random"
+          },
+          {
+            "id": "contest_result",
+            "op": "present@1",
+            "source": "contest_choice",
+            "prompt": "Here are the totals and the selected contribution.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "entries": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    }
+  },
+  {
+    "id": "held-out-proposal-planning-and-pair-exercise",
+    "package": "proposal-workshop",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "organizer": "organizer",
+    "events": [
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "proposals",
+        "payload": {
+          "itemId": "A",
+          "value": {
+            "kind": "text",
+            "text": "Add a repair table"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "proposals",
+        "payload": {
+          "itemId": "B",
+          "value": {
+            "kind": "text",
+            "text": "Add plants"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "vote-a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "proposals",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "vote-b",
+        "actor": "b",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "proposals",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "vote-c",
+        "actor": "c",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "proposals",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "vote-d",
+        "actor": "d",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "proposals",
+            "itemId": "A"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "plan-a",
+        "actor": "a",
+        "at": 21,
+        "step": "plans",
+        "payload": {
+          "itemId": "plan-a",
+          "value": {
+            "kind": "text",
+            "text": "a first step"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "plan-b",
+        "actor": "b",
+        "at": 21,
+        "step": "plans",
+        "payload": {
+          "itemId": "plan-b",
+          "value": {
+            "kind": "text",
+            "text": "b first step"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "plan-c",
+        "actor": "c",
+        "at": 21,
+        "step": "plans",
+        "payload": {
+          "itemId": "plan-c",
+          "value": {
+            "kind": "text",
+            "text": "c first step"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "plan-d",
+        "actor": "d",
+        "at": 21,
+        "step": "plans",
+        "payload": {
+          "itemId": "plan-d",
+          "value": {
+            "kind": "text",
+            "text": "d first step"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-30",
+        "actor": "system",
+        "at": 30,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "pair-a",
+        "actor": "a",
+        "at": 31,
+        "step": "exercise",
+        "payload": {
+          "text": "Try a shared repair hour."
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "pair-c",
+        "actor": "c",
+        "at": 31,
+        "step": "exercise",
+        "payload": {
+          "text": "Track repairs for one week."
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-60030",
+        "actor": "system",
+        "at": 60030,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 7,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "input"
+        ],
+        "equals": {
+          "status": "selected",
+          "predecessorRound": "proposing",
+          "candidate": {
+            "ref": {
+              "source": "proposals",
+              "itemId": "A"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "Add a repair table"
+            },
+            "round": "proposing"
+          }
+        }
+      },
+      {
+        "after": 13,
+        "actor": "a",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Try a shared repair hour."
+            }
+          }
+        ]
+      },
+      {
+        "after": 13,
+        "actor": "c",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 15,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ],
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.proposal-workshop",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Turn a proposal into a shared experiment",
+        "summary": "Select a workspace proposal and develop first steps in pairs; if no proposal is selected, discuss what is needed before choosing.",
+        "setup": "Invite an even roster of 4 to 12 participants so everyone can work in an exact pair. Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Turn a proposal into a shared experiment",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after the pair exercise. An unresolved or empty vote blocks first-step planning and produces no plans. The pair exercise still runs to discuss what is needed before choosing a proposal.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. First-step plans are group-visible; discussion notes stay within each assigned pair."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 4,
+        "max": 12
+      },
+      "requires": [
+        "artifact_pool@2",
+        "clock@1",
+        "collect_group@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "partition@1",
+        "policy:most_votes@1",
+        "policy:roster_chunks@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "proposals",
+            "op": "artifact_pool@2",
+            "round": "proposing",
+            "prompt": "Propose one small change that would make our shared workspace more welcoming.",
+            "input": null,
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose one proposal to develop together.",
+            "candidates": {
+              "source": "proposals"
+            },
+            "changes": "forbidden",
+            "ballots": "private"
+          },
+          {
+            "id": "proposal_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "proposal_choice",
+            "op": "select@1",
+            "source": "proposal_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "proposal_result",
+            "op": "present@1",
+            "source": "proposal_choice",
+            "prompt": "Here is the proposal decision and its vote totals.",
+            "audience": "group"
+          },
+          {
+            "id": "plans",
+            "op": "artifact_pool@2",
+            "round": "planning",
+            "prompt": "Using the selected proposal as your source, offer one concrete first step.",
+            "input": {
+              "result": "proposal_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "group"
+          },
+          {
+            "id": "pairs",
+            "op": "partition@1",
+            "policy": "policy:roster_chunks@1",
+            "minSize": 2,
+            "maxSize": 2,
+            "prompt": "Work with the partner shown by the host.",
+            "afterMs": null
+          },
+          {
+            "id": "exercise",
+            "op": "collect_group@1",
+            "source": "pairs",
+            "prompt": "If first-step plans are available, compare them with your partner and describe one experiment and how you would notice whether it helped. If planning was blocked because no proposal was selected, discuss what is needed before choosing a proposal and record your next step.",
+            "close": "deadline",
+            "afterMs": 60000
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "hostInputs": {
+      "proposals": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      },
+      "plans": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "opensAt": 20,
+        "closesAt": 30
+      }
+    }
+  },
+  {
+    "id": "empty-proposal-still-runs-pair-discussion",
+    "package": "proposal-workshop",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.proposal-workshop",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Turn a proposal into a shared experiment",
+        "summary": "Select a workspace proposal and develop first steps in pairs; if no proposal is selected, discuss what is needed before choosing.",
+        "setup": "Invite an even roster of 4 to 12 participants so everyone can work in an exact pair. Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+        "prompt": "Turn a proposal into a shared experiment",
+        "participant": "Follow each instruction; submit or vote before its window closes.",
+        "completion": "Finish after the pair exercise. An unresolved or empty vote blocks first-step planning and produces no plans. The pair exercise still runs to discuss what is needed before choosing a proposal.",
+        "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. First-step plans are group-visible; discussion notes stay within each assigned pair."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original Harmonomicon candidate 0.22 activity example.",
+        "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+      },
+      "participants": {
+        "min": 4,
+        "max": 12
+      },
+      "requires": [
+        "artifact_pool@2",
+        "clock@1",
+        "collect_group@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "partition@1",
+        "policy:most_votes@1",
+        "policy:roster_chunks@1",
+        "present@1",
+        "private_views@1",
+        "select@1",
+        "serial_events@1",
+        "tally@2",
+        "text@1",
+        "vote@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "proposals",
+            "op": "artifact_pool@2",
+            "round": "proposing",
+            "prompt": "Propose one small change that would make our shared workspace more welcoming.",
+            "input": null,
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@1",
+            "prompt": "Choose one proposal to develop together.",
+            "candidates": {
+              "source": "proposals"
+            },
+            "changes": "forbidden",
+            "ballots": "private"
+          },
+          {
+            "id": "proposal_totals",
+            "op": "tally@2",
+            "source": "vote"
+          },
+          {
+            "id": "proposal_choice",
+            "op": "select@1",
+            "source": "proposal_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "proposal_result",
+            "op": "present@1",
+            "source": "proposal_choice",
+            "prompt": "Here is the proposal decision and its vote totals.",
+            "audience": "group"
+          },
+          {
+            "id": "plans",
+            "op": "artifact_pool@2",
+            "round": "planning",
+            "prompt": "Using the selected proposal as your source, offer one concrete first step.",
+            "input": {
+              "result": "proposal_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "group"
+          },
+          {
+            "id": "pairs",
+            "op": "partition@1",
+            "policy": "policy:roster_chunks@1",
+            "minSize": 2,
+            "maxSize": 2,
+            "prompt": "Work with the partner shown by the host.",
+            "afterMs": null
+          },
+          {
+            "id": "exercise",
+            "op": "collect_group@1",
+            "source": "pairs",
+            "prompt": "If first-step plans are available, compare them with your partner and describe one experiment and how you would notice whether it helped. If planning was blocked because no proposal was selected, discuss what is needed before choosing a proposal and record your next step.",
+            "close": "deadline",
+            "afterMs": 60000
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "organizer": "organizer",
+    "hostInputs": {
+      "proposals": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      },
+      "plans": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "opensAt": 20,
+        "closesAt": 30
+      }
+    },
+    "events": [
+      {
+        "eventId": "close-empty",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "invented-plan",
+        "actor": "a",
+        "at": 11,
+        "step": "plans",
+        "payload": {
+          "itemId": "fake",
+          "value": {
+            "kind": "text",
+            "text": "No proposal source"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "pair-note",
+        "actor": "a",
+        "at": 12,
+        "step": "exercise",
+        "payload": {
+          "text": "We need proposals with clearer first steps before choosing."
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "finish",
+        "actor": "system",
+        "at": 60010,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "active"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "exercise"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "prompt"
+        ],
+        "equals": "If first-step plans are available, compare them with your partner and describe one experiment and how you would notice whether it helped. If planning was blocked because no proposal was selected, discuss what is needed before choosing a proposal and record your next step."
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          4,
+          "output",
+          "status"
+        ],
+        "equals": "no_candidates"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "blocked"
+        ],
+        "equals": true
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "input"
+        ],
+        "equals": {
+          "status": "no_candidates",
+          "predecessorRound": "proposing",
+          "candidate": null
+        }
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "b",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "We need proposals with clearer first steps before choosing."
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "organizer",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  }
+]

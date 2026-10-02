@@ -1,0 +1,117 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "org.harmonomicon.example.proposal-workshop",
+  "version": "0.1.2",
+  "content": {
+    "language": "en",
+    "title": "Turn a proposal into a shared experiment",
+    "summary": "Select a workspace proposal and develop first steps in pairs; if no proposal is selected, discuss what is needed before choosing.",
+    "setup": "Invite an even roster of 4 to 12 participants so everyone can work in an exact pair. Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+    "prompt": "Turn a proposal into a shared experiment",
+    "participant": "Follow each instruction; submit or vote before its window closes.",
+    "completion": "Finish after the pair exercise. An unresolved or empty vote blocks first-step planning and produces no plans. The pair exercise still runs to discuss what is needed before choosing a proposal.",
+    "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. First-step plans are group-visible; discussion notes stay within each assigned pair."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.22 activity example.",
+    "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "artifact_pool@2",
+    "clock@1",
+    "collect_group@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "partition@1",
+    "policy:most_votes@1",
+    "policy:roster_chunks@1",
+    "present@1",
+    "private_views@1",
+    "select@1",
+    "serial_events@1",
+    "tally@2",
+    "text@1",
+    "vote@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "proposals",
+        "op": "artifact_pool@2",
+        "round": "proposing",
+        "prompt": "Propose one small change that would make our shared workspace more welcoming.",
+        "input": null,
+        "kinds": [
+          "text"
+        ],
+        "visibility": "private"
+      },
+      {
+        "id": "vote",
+        "op": "vote@1",
+        "prompt": "Choose one proposal to develop together.",
+        "candidates": {
+          "source": "proposals"
+        },
+        "changes": "forbidden",
+        "ballots": "private"
+      },
+      {
+        "id": "proposal_totals",
+        "op": "tally@2",
+        "source": "vote"
+      },
+      {
+        "id": "proposal_choice",
+        "op": "select@1",
+        "source": "proposal_totals",
+        "policy": "policy:most_votes@1",
+        "ties": "unresolved"
+      },
+      {
+        "id": "proposal_result",
+        "op": "present@1",
+        "source": "proposal_choice",
+        "prompt": "Here is the proposal decision and its vote totals.",
+        "audience": "group"
+      },
+      {
+        "id": "plans",
+        "op": "artifact_pool@2",
+        "round": "planning",
+        "prompt": "Using the selected proposal as your source, offer one concrete first step.",
+        "input": {
+          "result": "proposal_choice"
+        },
+        "kinds": [
+          "text"
+        ],
+        "visibility": "group"
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Work with the partner shown by the host.",
+        "afterMs": null
+      },
+      {
+        "id": "exercise",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "If first-step plans are available, compare them with your partner and describe one experiment and how you would notice whether it helped. If planning was blocked because no proposal was selected, discuss what is needed before choosing a proposal and record your next step.",
+        "close": "deadline",
+        "afterMs": 60000
+      }
+    ]
+  },
+  "settings": {}
+}

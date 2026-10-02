@@ -1,0 +1,22 @@
+{
+  "localPath": "/Users/will/Documents/Codex/2026-10-02/task-2/harmonomicon-0.24/format/0.24/CREATIVE-RELAY-RULES.md",
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "path": "/CREATIVE-RELAY-RULES.md",
+  "file_id": "file_0000000050f481f5b953b223267b2042",
+  "library_file_id": "libfile_e2527ce6243081918c76b871db6a02e3",
+  "file_name": "CREATIVE-RELAY-RULES.md",
+  "current_version_number": 0,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "0"
+    }
+  ],
+  "directory_id": "libdir_970ada95688481918d42bc0672172e8a",
+  "mime_type": "text/markdown",
+  "library_artifact_type": "report",
+  "file_size_bytes": 2278,
+  "external_connectors_accessed": false
+}
