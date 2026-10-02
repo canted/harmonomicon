@@ -2,6 +2,8 @@
 
 ![Harmonomicon pixel logo with the Harmonia symbol above the wordmark](assets/harmonomicon-logo.svg)
 
+A language for guided human activities
+
 Harmonomicon aims to provide an expressive activity language and runtime so a host app can support many user-authored group activities. Authors can compose reusable steps and adjust their settings to create different activities within the app. An **activity package** describes what to show, when people can act, what each person can see, and how the activity moves from one step to the next.
 
 The primary goal is in-app composability: new arrangements of supported operations should require activity data rather than new app code. Running packages across different apps is a secondary potential benefit; demand for cross-platform portability is uncertain. Independent implementations remain useful evidence that the rules are explicit and reproducible. [App integration and prompting](research/app-integration-and-prompting.md) records possible directions and unresolved choices.
