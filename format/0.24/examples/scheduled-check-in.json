@@ -1,0 +1,86 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "org.harmonomicon.example.group-check-in",
+  "version": "1.2.7",
+  "content": {
+    "language": "en",
+    "title": "One-question group check-in",
+    "summary": "Everyone answers one question privately; the group sees the answers at a set time.",
+    "setup": "Invite the group and choose when answers open and close.",
+    "prompt": "What made you smile today?",
+    "participant": "Send one text answer before the closing time. You can see your answer while the check-in is open.",
+    "completion": "At the closing time, all submitted answers appear for the group. Missing answers do not delay the reveal.",
+    "access": "Participants need a way to read the question and enter text. Missing an answer does not block the group."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "instance_settings@1",
+    "wait_until@1",
+    "collect_until@1",
+    "reveal@1"
+  ],
+  "settings": {
+    "opens_at": {
+      "type": "time"
+    },
+    "closes_at": {
+      "type": "time"
+    },
+    "question": {
+      "type": "text",
+      "default": "What made you smile today?"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "opening",
+        "op": "wait_until@1",
+        "until": {
+          "setting": "opens_at"
+        },
+        "prompt": {
+          "setting": "question"
+        }
+      },
+      {
+        "id": "answer",
+        "op": "collect_until@1",
+        "actors": "participants",
+        "prompt": {
+          "setting": "question"
+        },
+        "fields": {
+          "value": {
+            "type": "text",
+            "visibility": "private"
+          }
+        },
+        "until": {
+          "setting": "closes_at"
+        }
+      },
+      {
+        "id": "share",
+        "op": "reveal@1",
+        "sources": [
+          "answer"
+        ]
+      }
+    ]
+  }
+}

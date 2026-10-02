@@ -1,0 +1,7243 @@
+[
+  {
+    "id": "two-truths-privacy-rotation",
+    "package": "two-truths",
+    "events": [
+      {
+        "eventId": "p",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "publish:0",
+        "payload": {
+          "items": [
+            "Ski",
+            "Cook",
+            "Mars"
+          ],
+          "answer": 2
+        }
+      },
+      {
+        "eventId": "gself",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "invalid",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": 3
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 3,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "step": "guess:0",
+        "payload": {
+          "guess": true
+        }
+      },
+      {
+        "eventId": "g2",
+        "type": "submit",
+        "actor": "b",
+        "at": 5,
+        "step": "guess:0",
+        "payload": {
+          "guess": 0
+        }
+      },
+      {
+        "eventId": "wrongadvance",
+        "type": "advance",
+        "actor": "c",
+        "at": 6,
+        "step": "guess:0",
+        "payload": {}
+      },
+      {
+        "eventId": "done",
+        "type": "advance",
+        "actor": "a",
+        "at": 6,
+        "step": "guess:0",
+        "payload": {}
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "c",
+        "at": 7,
+        "step": "guess:0",
+        "payload": {
+          "guess": 1
+        }
+      },
+      {
+        "eventId": "bp",
+        "type": "submit",
+        "actor": "b",
+        "at": 8,
+        "step": "publish:1",
+        "payload": {
+          "items": [
+            "One",
+            "Two",
+            "Three"
+          ],
+          "answer": 0
+        }
+      },
+      {
+        "eventId": "bd",
+        "type": "advance",
+        "actor": "b",
+        "at": 9,
+        "step": "guess:1",
+        "payload": {}
+      },
+      {
+        "eventId": "cp",
+        "type": "submit",
+        "actor": "c",
+        "at": 10,
+        "step": "publish:2",
+        "payload": {
+          "items": [
+            "Four",
+            "Five",
+            "Six"
+          ],
+          "answer": 1
+        }
+      },
+      {
+        "eventId": "cd",
+        "type": "advance",
+        "actor": "c",
+        "at": 11,
+        "step": "guess:2",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "rejected",
+      "accepted",
+      "replayed",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value"
+        ],
+        "equals": {
+          "items": [
+            "Ski",
+            "Cook",
+            "Mars"
+          ]
+        }
+      },
+      {
+        "after": 0,
+        "actor": "organizer",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "missing": true
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "value": {
+              "guess": 2
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "equals": 2
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "value": {
+              "guess": 2
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "publish:1"
+      },
+      {
+        "after": 13,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "list-game-same-operations",
+    "package": "list-game",
+    "events": [
+      {
+        "eventId": "p",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "publish:0",
+        "payload": {
+          "items": [
+            "Torch",
+            "Map",
+            "Water",
+            "Snack",
+            "Coat"
+          ],
+          "answer": "hiking kit"
+        }
+      },
+      {
+        "eventId": "bad",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": 2
+        }
+      },
+      {
+        "eventId": "g",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "guess:0",
+        "payload": {
+          "guess": "camping gear"
+        }
+      },
+      {
+        "eventId": "r",
+        "type": "advance",
+        "actor": "a",
+        "at": 3,
+        "step": "guess:0",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "missing": true
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries",
+          0,
+          "value",
+          "answer"
+        ],
+        "equals": "hiking kit"
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "publish:1"
+      }
+    ]
+  },
+  {
+    "id": "poll-timed-reveal-tally",
+    "package": "choice-poll",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "vote",
+        "payload": {
+          "choice": "Park"
+        }
+      },
+      {
+        "eventId": "bad",
+        "type": "submit",
+        "actor": "c",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "choice": "Beach"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "vote",
+        "payload": {
+          "choice": "Museum"
+        }
+      },
+      {
+        "eventId": "unauthorized",
+        "type": "advance",
+        "actor": "a",
+        "at": 3,
+        "step": "vote",
+        "payload": {}
+      },
+      {
+        "eventId": "boundary",
+        "type": "submit",
+        "actor": "c",
+        "at": 60000,
+        "step": "vote",
+        "payload": {
+          "choice": "Park"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 60001,
+        "step": "vote",
+        "payload": {
+          "choice": "Museum"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "rejected",
+      "replayed"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "counts"
+        ],
+        "equals": [
+          {
+            "value": "Museum",
+            "count": 1
+          },
+          {
+            "value": "Park",
+            "count": 1
+          },
+          {
+            "value": "Cafe",
+            "count": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "poll-organizer-empty-close",
+    "package": "choice-poll",
+    "events": [
+      {
+        "eventId": "r",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 1,
+        "step": "vote",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "counts"
+        ],
+        "equals": [
+          {
+            "value": "Museum",
+            "count": 0
+          },
+          {
+            "value": "Park",
+            "count": 0
+          },
+          {
+            "value": "Cafe",
+            "count": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "manual-three-prompt-routine",
+    "package": "see-think-wonder",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "see",
+        "payload": {
+          "response": "A red roof"
+        }
+      },
+      {
+        "eventId": "wrong",
+        "type": "advance",
+        "actor": "a",
+        "at": 2,
+        "step": "see",
+        "payload": {}
+      },
+      {
+        "eventId": "one",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 3,
+        "step": "see",
+        "payload": {}
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 4,
+        "step": "think",
+        "payload": {
+          "response": "A house"
+        }
+      },
+      {
+        "eventId": "two",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 5,
+        "step": "think",
+        "payload": {}
+      },
+      {
+        "eventId": "three",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 6,
+        "step": "wonder",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "response": "A red roof"
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "think"
+      },
+      {
+        "after": 4,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "wonder"
+      },
+      {
+        "after": 5,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "cumulative-story-timeout",
+    "package": "timed-story",
+    "events": [
+      {
+        "eventId": "wrong",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "step": "write:0",
+        "payload": {
+          "text": "wrong turn"
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "step": "write:0",
+        "payload": {
+          "text": "Once upon a time"
+        }
+      },
+      {
+        "eventId": "timeout",
+        "type": "tick",
+        "actor": "system",
+        "at": 60002,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "b",
+        "at": 60003,
+        "step": "write:1",
+        "payload": {
+          "text": "late line"
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 60004,
+        "step": "write:2",
+        "payload": {
+          "text": "the end"
+        }
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "story"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Once upon a time"
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "write:2"
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 4,
+        "actor": "b",
+        "path": [
+          "story"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Once upon a time"
+            }
+          },
+          {
+            "actor": "c",
+            "value": {
+              "text": "the end"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "check-in-all-complete",
+    "package": "check-in",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "answer",
+        "payload": {
+          "answer": "a"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "step": "answer",
+        "payload": {
+          "answer": "b"
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 1,
+        "step": "answer",
+        "payload": {
+          "answer": "c"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "records",
+          0,
+          "count"
+        ],
+        "equals": 3
+      }
+    ]
+  },
+  {
+    "id": "gratitude-pool-private-readers",
+    "package": "gratitude-pool",
+    "events": [
+      {
+        "eventId": "slip-x1",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "slips",
+        "payload": {
+          "itemId": "x1",
+          "text": "Tea"
+        }
+      },
+      {
+        "eventId": "collision",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "step": "slips",
+        "payload": {
+          "itemId": "x1",
+          "text": "Different"
+        }
+      },
+      {
+        "eventId": "slip-x2",
+        "type": "submit",
+        "actor": "b",
+        "at": 2,
+        "step": "slips",
+        "payload": {
+          "itemId": "x2",
+          "text": "Music"
+        }
+      },
+      {
+        "eventId": "slip-x3",
+        "type": "submit",
+        "actor": "c",
+        "at": 3,
+        "step": "slips",
+        "payload": {
+          "itemId": "x3",
+          "text": "Sun"
+        }
+      },
+      {
+        "eventId": "slip-x4",
+        "type": "submit",
+        "actor": "a",
+        "at": 4,
+        "step": "slips",
+        "payload": {
+          "itemId": "x4",
+          "text": "Friends"
+        }
+      },
+      {
+        "eventId": "slip-x5",
+        "type": "submit",
+        "actor": "b",
+        "at": 5,
+        "step": "slips",
+        "payload": {
+          "itemId": "x5",
+          "text": "Books"
+        }
+      },
+      {
+        "eventId": "slip-x6",
+        "type": "submit",
+        "actor": "c",
+        "at": 6,
+        "step": "slips",
+        "payload": {
+          "itemId": "x6",
+          "text": "Walking"
+        }
+      },
+      {
+        "eventId": "own-claim",
+        "type": "claim",
+        "actor": "a",
+        "at": 8,
+        "step": "claim:0",
+        "payload": {}
+      },
+      {
+        "eventId": "take0",
+        "type": "claim",
+        "actor": "b",
+        "at": 9,
+        "step": "claim:0",
+        "payload": {}
+      },
+      {
+        "eventId": "race-loser",
+        "type": "claim",
+        "actor": "c",
+        "at": 9,
+        "step": "claim:0",
+        "payload": {}
+      },
+      {
+        "eventId": "wrong-ack",
+        "type": "advance",
+        "actor": "c",
+        "at": 10,
+        "step": "read:0",
+        "payload": {}
+      },
+      {
+        "eventId": "ack0",
+        "type": "advance",
+        "actor": "b",
+        "at": 10,
+        "step": "read:0",
+        "payload": {}
+      },
+      {
+        "eventId": "take1",
+        "type": "claim",
+        "actor": "a",
+        "at": 13,
+        "step": "claim:1",
+        "payload": {}
+      },
+      {
+        "eventId": "ack1",
+        "type": "advance",
+        "actor": "a",
+        "at": 14,
+        "step": "read:1",
+        "payload": {}
+      },
+      {
+        "eventId": "take2",
+        "type": "claim",
+        "actor": "b",
+        "at": 15,
+        "step": "claim:2",
+        "payload": {}
+      },
+      {
+        "eventId": "ack2",
+        "type": "advance",
+        "actor": "b",
+        "at": 16,
+        "step": "read:2",
+        "payload": {}
+      },
+      {
+        "eventId": "take3",
+        "type": "claim",
+        "actor": "b",
+        "at": 17,
+        "step": "claim:3",
+        "payload": {}
+      },
+      {
+        "eventId": "ack3",
+        "type": "advance",
+        "actor": "b",
+        "at": 18,
+        "step": "read:3",
+        "payload": {}
+      },
+      {
+        "eventId": "take4",
+        "type": "claim",
+        "actor": "c",
+        "at": 19,
+        "step": "claim:4",
+        "payload": {}
+      },
+      {
+        "eventId": "ack4",
+        "type": "advance",
+        "actor": "c",
+        "at": 20,
+        "step": "read:4",
+        "payload": {}
+      },
+      {
+        "eventId": "take5",
+        "type": "claim",
+        "actor": "a",
+        "at": 21,
+        "step": "claim:5",
+        "payload": {}
+      },
+      {
+        "eventId": "ack5",
+        "type": "advance",
+        "actor": "a",
+        "at": 22,
+        "step": "read:5",
+        "payload": {}
+      },
+      {
+        "eventId": "take0",
+        "type": "claim",
+        "actor": "b",
+        "at": 30,
+        "step": "claim:0",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "replayed"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "itemId": "x1",
+            "text": "Tea"
+          }
+        ]
+      },
+      {
+        "after": 6,
+        "actor": "a",
+        "path": [
+          "canClaim"
+        ],
+        "equals": false
+      },
+      {
+        "after": 6,
+        "actor": "b",
+        "path": [
+          "canClaim"
+        ],
+        "equals": true
+      },
+      {
+        "after": 8,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "reader"
+        ],
+        "equals": "b"
+      },
+      {
+        "after": 8,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "item"
+        ],
+        "equals": {
+          "itemId": "x1",
+          "text": "Tea"
+        }
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "item"
+        ],
+        "missing": true
+      },
+      {
+        "after": 8,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "item"
+        ],
+        "missing": true
+      },
+      {
+        "after": 11,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "itemId": "x1",
+            "text": "Tea"
+          },
+          {
+            "itemId": "x3",
+            "text": "Sun"
+          },
+          {
+            "itemId": "x6",
+            "text": "Walking"
+          }
+        ]
+      },
+      {
+        "after": 11,
+        "actor": "c",
+        "path": [
+          "step"
+        ],
+        "equals": "claim:1"
+      },
+      {
+        "after": 22,
+        "actor": "organizer",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 22,
+        "actor": "organizer",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "itemId": "x1",
+            "text": "Tea"
+          },
+          {
+            "itemId": "x2",
+            "text": "Music"
+          },
+          {
+            "itemId": "x3",
+            "text": "Sun"
+          },
+          {
+            "itemId": "x4",
+            "text": "Friends"
+          },
+          {
+            "itemId": "x5",
+            "text": "Books"
+          },
+          {
+            "itemId": "x6",
+            "text": "Walking"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pool-quota-and-empty-source",
+    "package": "gratitude-pool",
+    "events": [
+      {
+        "eventId": "one",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "slips",
+        "payload": {
+          "itemId": "x",
+          "text": "One"
+        }
+      },
+      {
+        "eventId": "two",
+        "type": "submit",
+        "actor": "a",
+        "at": 2,
+        "step": "slips",
+        "payload": {
+          "itemId": "y",
+          "text": "Two"
+        }
+      },
+      {
+        "eventId": "three",
+        "type": "submit",
+        "actor": "a",
+        "at": 3,
+        "step": "slips",
+        "payload": {
+          "itemId": "z",
+          "text": "Three"
+        }
+      },
+      {
+        "eventId": "timeout",
+        "type": "tick",
+        "actor": "system",
+        "at": 60000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "no-reader",
+        "type": "tick",
+        "actor": "system",
+        "at": 90000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "take1",
+        "type": "claim",
+        "actor": "b",
+        "at": 90001,
+        "step": "claim:1",
+        "payload": {}
+      },
+      {
+        "eventId": "no-ack",
+        "type": "tick",
+        "actor": "system",
+        "at": 120001,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "count"
+        ],
+        "equals": 2
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "claim:1"
+      },
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "pool-empty-completes",
+    "package": "gratitude-pool",
+    "events": [
+      {
+        "eventId": "empty",
+        "type": "tick",
+        "actor": "system",
+        "at": 60000,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          0,
+          "count"
+        ],
+        "equals": 0
+      }
+    ]
+  },
+  {
+    "id": "transition-partners-stable-privacy",
+    "package": "partner-rounds",
+    "events": [
+      {
+        "eventId": "start",
+        "type": "tick",
+        "actor": "system",
+        "at": 30000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "forbidden",
+        "type": "partition",
+        "actor": "a",
+        "at": 30000,
+        "step": "partners1",
+        "payload": {
+          "groups": [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "c",
+              "d"
+            ]
+          ]
+        }
+      },
+      {
+        "eventId": "duplicate",
+        "type": "partition",
+        "actor": "organizer",
+        "at": 30000,
+        "step": "partners1",
+        "payload": {
+          "groups": [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "a",
+              "d"
+            ]
+          ]
+        }
+      },
+      {
+        "eventId": "missing",
+        "type": "partition",
+        "actor": "organizer",
+        "at": 30000,
+        "step": "partners1",
+        "payload": {
+          "groups": [
+            [
+              "a",
+              "b"
+            ]
+          ]
+        }
+      },
+      {
+        "eventId": "groups1",
+        "type": "partition",
+        "actor": "organizer",
+        "at": 30000,
+        "step": "partners1",
+        "payload": {
+          "groups": [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "c",
+              "d"
+            ]
+          ]
+        }
+      },
+      {
+        "eventId": "a1",
+        "type": "submit",
+        "actor": "a",
+        "at": 30001,
+        "step": "round1",
+        "payload": {
+          "text": "A first pair note"
+        }
+      },
+      {
+        "eventId": "c1",
+        "type": "submit",
+        "actor": "c",
+        "at": 30002,
+        "step": "round1",
+        "payload": {
+          "text": "C first pair note"
+        }
+      },
+      {
+        "eventId": "b1",
+        "type": "submit",
+        "actor": "b",
+        "at": 30003,
+        "step": "round1",
+        "payload": {
+          "text": "B first pair note"
+        }
+      },
+      {
+        "eventId": "duplicate-note",
+        "type": "submit",
+        "actor": "a",
+        "at": 30004,
+        "step": "round1",
+        "payload": {
+          "text": "Another"
+        }
+      },
+      {
+        "eventId": "round1-close",
+        "type": "tick",
+        "actor": "system",
+        "at": 150000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "groups2",
+        "type": "partition",
+        "actor": "organizer",
+        "at": 150000,
+        "step": "partners2",
+        "payload": {
+          "groups": [
+            [
+              "a",
+              "c"
+            ],
+            [
+              "b",
+              "d"
+            ]
+          ]
+        }
+      },
+      {
+        "eventId": "c2",
+        "type": "submit",
+        "actor": "c",
+        "at": 150001,
+        "step": "round2",
+        "payload": {
+          "text": "C second pair note"
+        }
+      },
+      {
+        "eventId": "a1",
+        "type": "submit",
+        "actor": "a",
+        "at": 150002,
+        "step": "round1",
+        "payload": {
+          "text": "A first pair note"
+        }
+      },
+      {
+        "eventId": "late",
+        "type": "submit",
+        "actor": "a",
+        "at": 150002,
+        "step": "round1",
+        "payload": {
+          "text": "Late first note"
+        }
+      },
+      {
+        "eventId": "round2-close",
+        "type": "tick",
+        "actor": "system",
+        "at": 270000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "groups3",
+        "type": "partition",
+        "actor": "organizer",
+        "at": 270000,
+        "step": "partners3",
+        "payload": {
+          "groups": [
+            [
+              "a",
+              "d"
+            ],
+            [
+              "b",
+              "c"
+            ]
+          ]
+        }
+      },
+      {
+        "eventId": "b3",
+        "type": "submit",
+        "actor": "b",
+        "at": 270001,
+        "step": "round3",
+        "payload": {
+          "text": "B third pair note"
+        }
+      },
+      {
+        "eventId": "round3-close",
+        "type": "tick",
+        "actor": "system",
+        "at": 390000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "finish",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 390001,
+        "step": "close",
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "replayed",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "groups"
+        ],
+        "equals": [
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "groups"
+        ],
+        "equals": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ]
+      },
+      {
+        "after": 7,
+        "actor": "b",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "A first pair note"
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "text": "B first pair note"
+            }
+          }
+        ]
+      },
+      {
+        "after": 7,
+        "actor": "c",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "c",
+            "value": {
+              "text": "C first pair note"
+            }
+          }
+        ]
+      },
+      {
+        "after": 7,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "records",
+          4,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "c",
+            "value": {
+              "text": "C second pair note"
+            }
+          }
+        ]
+      },
+      {
+        "after": 11,
+        "actor": "b",
+        "path": [
+          "records",
+          4,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 11,
+        "actor": "c",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "c",
+            "value": {
+              "text": "C first pair note"
+            }
+          }
+        ]
+      },
+      {
+        "after": 18,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ],
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ]
+  },
+  {
+    "id": "one-two-four-all-timers-and-rooms",
+    "package": "one-two-four-all",
+    "events": [
+      {
+        "eventId": "start",
+        "type": "tick",
+        "actor": "system",
+        "at": 60000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "solo",
+        "type": "submit",
+        "actor": "a",
+        "at": 60001,
+        "step": "solo",
+        "payload": {
+          "text": "My solo thought"
+        }
+      },
+      {
+        "eventId": "pairs-open",
+        "type": "tick",
+        "actor": "system",
+        "at": 120000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "pair",
+        "type": "submit",
+        "actor": "a",
+        "at": 120001,
+        "step": "pairs",
+        "payload": {
+          "text": "Our pair idea"
+        }
+      },
+      {
+        "eventId": "late-pair",
+        "type": "submit",
+        "actor": "b",
+        "at": 240000,
+        "step": "pairs",
+        "payload": {
+          "text": "Too late"
+        }
+      },
+      {
+        "eventId": "quartet",
+        "type": "submit",
+        "actor": "a",
+        "at": 240001,
+        "step": "quartets",
+        "payload": {
+          "text": "Our quartet idea"
+        }
+      },
+      {
+        "eventId": "all-open",
+        "type": "tick",
+        "actor": "system",
+        "at": 540000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "all",
+        "type": "submit",
+        "actor": "c",
+        "at": 540001,
+        "step": "everyone",
+        "payload": {
+          "text": "A public synthesis"
+        }
+      },
+      {
+        "eventId": "finish",
+        "type": "tick",
+        "actor": "system",
+        "at": 960000,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          4,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Our pair idea"
+            }
+          }
+        ]
+      },
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 5,
+        "actor": "d",
+        "path": [
+          "records",
+          6,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Our quartet idea"
+            }
+          }
+        ]
+      },
+      {
+        "after": 5,
+        "actor": "e",
+        "path": [
+          "records",
+          6,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 7,
+        "actor": "h",
+        "path": [
+          "records",
+          8,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "c",
+            "value": {
+              "text": "A public synthesis"
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ],
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h"
+    ]
+  },
+  {
+    "package": "scheduled-check-in",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "settings": {
+      "opens_at": 10,
+      "closes_at": 20,
+      "question": "A new question 🎨"
+    },
+    "id": "scheduled-all-early-deadline-only",
+    "events": [
+      {
+        "eventId": "early",
+        "type": "submit",
+        "actor": "a",
+        "at": 9,
+        "step": "answer",
+        "payload": {
+          "value": "Too soon"
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "answer",
+        "payload": {
+          "value": "Tea"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 11,
+        "step": "answer",
+        "payload": {
+          "value": "Book"
+        }
+      },
+      {
+        "eventId": "manual",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 12,
+        "step": "answer",
+        "payload": {}
+      },
+      {
+        "eventId": "repeat",
+        "type": "submit",
+        "actor": "a",
+        "at": 13,
+        "step": "answer",
+        "payload": {
+          "value": "Other"
+        }
+      },
+      {
+        "eventId": "closed",
+        "type": "submit",
+        "actor": "a",
+        "at": 20,
+        "step": "answer",
+        "payload": {
+          "value": "Late"
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 21,
+        "step": "answer",
+        "payload": {
+          "value": "Tea"
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 22,
+        "step": "answer",
+        "payload": {
+          "value": "Changed"
+        }
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "replayed",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "opening"
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "prompt"
+        ],
+        "equals": "A new question 🎨"
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "answer"
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "deadline"
+        ],
+        "equals": 20
+      },
+      {
+        "after": 2,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 5,
+        "actor": "b",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 5,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "value": "Tea"
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "value": "Book"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "package": "scheduled-check-in",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "settings": {
+      "opens_at": 10,
+      "closes_at": 20,
+      "question": "A new question 🎨"
+    },
+    "id": "scheduled-partial-boundary",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 19,
+        "step": "answer",
+        "payload": {
+          "value": "Just in time"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 20,
+        "step": "answer",
+        "payload": {
+          "value": "Too late"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "count"
+        ],
+        "equals": 1
+      },
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "package": "scheduled-check-in",
+    "participants": [
+      "a",
+      "b"
+    ],
+    "settings": {
+      "opens_at": 10,
+      "closes_at": 20,
+      "question": "A new question 🎨"
+    },
+    "id": "scheduled-empty-worker-jump",
+    "events": [
+      {
+        "eventId": "jump",
+        "type": "tick",
+        "actor": "system",
+        "at": 100,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "count"
+        ],
+        "equals": 0
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "revealed"
+        ],
+        "equals": true
+      }
+    ]
+  },
+  {
+    "package": "scheduled-check-in-pairs",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "settings": {
+      "opens_at": 10,
+      "closes_at": 20,
+      "question": "A new question 🎨"
+    },
+    "id": "scheduled-check-in-then-pairs",
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "answer",
+        "payload": {
+          "value": "First"
+        }
+      },
+      {
+        "eventId": "open-pairs",
+        "type": "tick",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "note",
+        "type": "submit",
+        "actor": "a",
+        "at": 21,
+        "step": "reflect",
+        "payload": {
+          "text": "Private pair note"
+        }
+      },
+      {
+        "eventId": "done",
+        "type": "tick",
+        "actor": "system",
+        "at": 300020,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "reflect"
+      },
+      {
+        "after": 2,
+        "actor": "b",
+        "path": [
+          "records",
+          3,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "Private pair note"
+            }
+          }
+        ]
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          3,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 2,
+        "actor": "organizer",
+        "path": [
+          "records",
+          3,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 3,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "five-routed-independent-ratings",
+    "package": "crowd-scoring",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "events": [
+      {
+        "eventId": "idea-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-b",
+          "text": "Proposal b"
+        }
+      },
+      {
+        "eventId": "idea-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-a",
+          "text": "Proposal a"
+        }
+      },
+      {
+        "eventId": "idea-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-c",
+          "text": "Proposal c"
+        }
+      },
+      {
+        "eventId": "idea-d",
+        "type": "submit",
+        "actor": "d",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-d",
+          "text": "Proposal d"
+        }
+      },
+      {
+        "eventId": "idea-e",
+        "type": "submit",
+        "actor": "e",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-e",
+          "text": "Proposal e"
+        }
+      },
+      {
+        "eventId": "idea-f",
+        "type": "submit",
+        "actor": "f",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-f",
+          "text": "Proposal f"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 300000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "bad-0",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": true
+        }
+      },
+      {
+        "eventId": "bad-1",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 2.5
+        }
+      },
+      {
+        "eventId": "bad-2",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 6
+        }
+      },
+      {
+        "eventId": "bad-3",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_2",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "bad-4",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_1",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-1-a",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-1-b",
+        "type": "submit",
+        "actor": "c",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_1",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-1-c",
+        "type": "submit",
+        "actor": "d",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_1",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-1-d",
+        "type": "submit",
+        "actor": "e",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_1",
+          "score": 3
+        }
+      },
+      {
+        "eventId": "rating-1-e",
+        "type": "submit",
+        "actor": "f",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_1",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "rating-1-f",
+        "type": "submit",
+        "actor": "a",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_1",
+          "score": 1
+        }
+      },
+      {
+        "eventId": "end-1",
+        "type": "tick",
+        "actor": "system",
+        "at": 360000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-2-a",
+        "type": "submit",
+        "actor": "c",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_2",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-2-b",
+        "type": "submit",
+        "actor": "d",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_2",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-2-c",
+        "type": "submit",
+        "actor": "e",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_2",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-2-d",
+        "type": "submit",
+        "actor": "f",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_2",
+          "score": 3
+        }
+      },
+      {
+        "eventId": "rating-2-e",
+        "type": "submit",
+        "actor": "a",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_2",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "rating-2-f",
+        "type": "submit",
+        "actor": "b",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_2",
+          "score": 1
+        }
+      },
+      {
+        "eventId": "end-2",
+        "type": "tick",
+        "actor": "system",
+        "at": 420000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-3-a",
+        "type": "submit",
+        "actor": "d",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_3",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-3-b",
+        "type": "submit",
+        "actor": "e",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_3",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-3-c",
+        "type": "submit",
+        "actor": "f",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_3",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-3-d",
+        "type": "submit",
+        "actor": "a",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_3",
+          "score": 3
+        }
+      },
+      {
+        "eventId": "rating-3-e",
+        "type": "submit",
+        "actor": "b",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_3",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "rating-3-f",
+        "type": "submit",
+        "actor": "c",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_3",
+          "score": 1
+        }
+      },
+      {
+        "eventId": "end-3",
+        "type": "tick",
+        "actor": "system",
+        "at": 480000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-4-a",
+        "type": "submit",
+        "actor": "e",
+        "at": 480000,
+        "step": "rate_4",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_4",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-4-b",
+        "type": "submit",
+        "actor": "f",
+        "at": 480000,
+        "step": "rate_4",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_4",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-4-c",
+        "type": "submit",
+        "actor": "a",
+        "at": 480000,
+        "step": "rate_4",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_4",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-4-d",
+        "type": "submit",
+        "actor": "b",
+        "at": 480000,
+        "step": "rate_4",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_4",
+          "score": 3
+        }
+      },
+      {
+        "eventId": "rating-4-e",
+        "type": "submit",
+        "actor": "c",
+        "at": 480000,
+        "step": "rate_4",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_4",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "rating-4-f",
+        "type": "submit",
+        "actor": "d",
+        "at": 480000,
+        "step": "rate_4",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_4",
+          "score": 1
+        }
+      },
+      {
+        "eventId": "end-4",
+        "type": "tick",
+        "actor": "system",
+        "at": 540000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-5-a",
+        "type": "submit",
+        "actor": "f",
+        "at": 540000,
+        "step": "rate_5",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_5",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-5-b",
+        "type": "submit",
+        "actor": "a",
+        "at": 540000,
+        "step": "rate_5",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_5",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-5-c",
+        "type": "submit",
+        "actor": "b",
+        "at": 540000,
+        "step": "rate_5",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_5",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "rating-5-d",
+        "type": "submit",
+        "actor": "c",
+        "at": 540000,
+        "step": "rate_5",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_5",
+          "score": 3
+        }
+      },
+      {
+        "eventId": "rating-5-e",
+        "type": "submit",
+        "actor": "d",
+        "at": 540000,
+        "step": "rate_5",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_5",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "rating-5-f",
+        "type": "submit",
+        "actor": "e",
+        "at": 540000,
+        "step": "rate_5",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_5",
+          "score": 1
+        }
+      },
+      {
+        "eventId": "end-5",
+        "type": "tick",
+        "actor": "system",
+        "at": 600000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-1-a",
+        "type": "submit",
+        "actor": "b",
+        "at": 600000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-1-a",
+        "type": "submit",
+        "actor": "b",
+        "at": 600000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 1
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "replayed",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 6,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "assignments"
+        ],
+        "equals": [
+          {
+            "itemId": "i-a",
+            "text": "Proposal a"
+          }
+        ]
+      },
+      {
+        "after": 6,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "assignments"
+        ],
+        "equals": []
+      },
+      {
+        "after": 17,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 17,
+        "actor": "a",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "itemId": "i-f",
+              "round": "round_1",
+              "score": 1
+            }
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          11,
+          "ranking"
+        ],
+        "equals": [
+          {
+            "itemId": "i-a",
+            "text": "Proposal a",
+            "count": 5,
+            "total": 25,
+            "score": {
+              "numerator": 25,
+              "denominator": 1
+            },
+            "rank": 1
+          },
+          {
+            "itemId": "i-b",
+            "text": "Proposal b",
+            "count": 5,
+            "total": 20,
+            "score": {
+              "numerator": 20,
+              "denominator": 1
+            },
+            "rank": 2
+          },
+          {
+            "itemId": "i-c",
+            "text": "Proposal c",
+            "count": 5,
+            "total": 20,
+            "score": {
+              "numerator": 20,
+              "denominator": 1
+            },
+            "rank": 2
+          },
+          {
+            "itemId": "i-d",
+            "text": "Proposal d",
+            "count": 5,
+            "total": 15,
+            "score": {
+              "numerator": 15,
+              "denominator": 1
+            },
+            "rank": 4
+          },
+          {
+            "itemId": "i-e",
+            "text": "Proposal e",
+            "count": 5,
+            "total": 10,
+            "score": {
+              "numerator": 10,
+              "denominator": 1
+            },
+            "rank": 5
+          },
+          {
+            "itemId": "i-f",
+            "text": "Proposal f",
+            "count": 5,
+            "total": 5,
+            "score": {
+              "numerator": 5,
+              "denominator": 1
+            },
+            "rank": 6
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "partial-pool-exact-fractional-ranking",
+    "package": "crowd-scoring",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "events": [
+      {
+        "eventId": "idea-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-a",
+          "text": "Proposal a"
+        }
+      },
+      {
+        "eventId": "idea-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-b",
+          "text": "Proposal b"
+        }
+      },
+      {
+        "eventId": "idea-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-c",
+          "text": "Proposal c"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 300000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "score-a1",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "score-b1",
+        "type": "submit",
+        "actor": "c",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_1",
+          "score": 1
+        }
+      },
+      {
+        "eventId": "end-1",
+        "type": "tick",
+        "actor": "system",
+        "at": 360000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "late-rating",
+        "type": "submit",
+        "actor": "b",
+        "at": 360000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "stale-round",
+        "type": "submit",
+        "actor": "c",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "score-a1",
+        "type": "submit",
+        "actor": "b",
+        "at": 360000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "score-a1",
+        "type": "submit",
+        "actor": "b",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_2",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "score-a2",
+        "type": "submit",
+        "actor": "c",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_2",
+          "score": 4
+        }
+      },
+      {
+        "eventId": "score-b2",
+        "type": "submit",
+        "actor": "d",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_2",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "end-2",
+        "type": "tick",
+        "actor": "system",
+        "at": 420000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "score-a3",
+        "type": "submit",
+        "actor": "d",
+        "at": 420000,
+        "step": "rate_3",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_3",
+          "score": 2
+        }
+      },
+      {
+        "eventId": "end-3",
+        "type": "tick",
+        "actor": "system",
+        "at": 480000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "end-4",
+        "type": "tick",
+        "actor": "system",
+        "at": 540000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "end-5",
+        "type": "tick",
+        "actor": "system",
+        "at": 600000,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "rejected",
+      "replayed",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          11,
+          "ranking"
+        ],
+        "equals": [
+          {
+            "itemId": "i-a",
+            "text": "Proposal a",
+            "count": 3,
+            "total": 11,
+            "score": {
+              "numerator": 55,
+              "denominator": 3
+            },
+            "rank": 1
+          },
+          {
+            "itemId": "i-b",
+            "text": "Proposal b",
+            "count": 2,
+            "total": 3,
+            "score": {
+              "numerator": 15,
+              "denominator": 2
+            },
+            "rank": 2
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          11,
+          "unrated"
+        ],
+        "equals": [
+          {
+            "itemId": "i-c",
+            "text": "Proposal c",
+            "count": 0,
+            "total": 0,
+            "score": null
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "empty-pool-skips-ratings",
+    "package": "crowd-scoring",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "events": [
+      {
+        "eventId": "empty",
+        "type": "tick",
+        "actor": "system",
+        "at": 300000,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          11,
+          "ranking"
+        ],
+        "equals": []
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          11,
+          "unrated"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "assessment-sum-zero-and-private-followup",
+    "package": "proposal-assessment",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "events": [
+      {
+        "eventId": "idea-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-a",
+          "text": "Proposal a"
+        }
+      },
+      {
+        "eventId": "idea-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-b",
+          "text": "Proposal b"
+        }
+      },
+      {
+        "eventId": "idea-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-c",
+          "text": "Proposal c"
+        }
+      },
+      {
+        "eventId": "idea-d",
+        "type": "submit",
+        "actor": "d",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-d",
+          "text": "Proposal d"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 300000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-1-a",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 0
+        }
+      },
+      {
+        "eventId": "rating-1-b",
+        "type": "submit",
+        "actor": "c",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_1",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-1-c",
+        "type": "submit",
+        "actor": "d",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_1",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-1-d",
+        "type": "submit",
+        "actor": "a",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_1",
+          "score": 9
+        }
+      },
+      {
+        "eventId": "end-1",
+        "type": "tick",
+        "actor": "system",
+        "at": 360000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-2-a",
+        "type": "submit",
+        "actor": "c",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_2",
+          "score": 0
+        }
+      },
+      {
+        "eventId": "rating-2-b",
+        "type": "submit",
+        "actor": "d",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_2",
+          "score": 0
+        }
+      },
+      {
+        "eventId": "rating-2-c",
+        "type": "submit",
+        "actor": "a",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_2",
+          "score": 5
+        }
+      },
+      {
+        "eventId": "rating-2-d",
+        "type": "submit",
+        "actor": "b",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_2",
+          "score": 9
+        }
+      },
+      {
+        "eventId": "end-2",
+        "type": "tick",
+        "actor": "system",
+        "at": 420000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "note",
+        "type": "submit",
+        "actor": "a",
+        "at": 420000,
+        "step": "reflection",
+        "payload": {
+          "text": "A private improvement"
+        }
+      },
+      {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 480000,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": -1,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "ranking"
+        ],
+        "equals": [
+          {
+            "itemId": "i-d",
+            "text": "Proposal d",
+            "count": 2,
+            "total": 18,
+            "score": {
+              "numerator": 18,
+              "denominator": 1
+            },
+            "rank": 1
+          },
+          {
+            "itemId": "i-b",
+            "text": "Proposal b",
+            "count": 2,
+            "total": 10,
+            "score": {
+              "numerator": 10,
+              "denominator": 1
+            },
+            "rank": 2
+          },
+          {
+            "itemId": "i-c",
+            "text": "Proposal c",
+            "count": 2,
+            "total": 10,
+            "score": {
+              "numerator": 10,
+              "denominator": 1
+            },
+            "rank": 2
+          },
+          {
+            "itemId": "i-a",
+            "text": "Proposal a",
+            "count": 2,
+            "total": 0,
+            "score": {
+              "numerator": 0,
+              "denominator": 1
+            },
+            "rank": 4
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "unrated"
+        ],
+        "equals": []
+      },
+      {
+        "after": -1,
+        "actor": "b",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "A private improvement"
+            }
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "c",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": -1,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "rank-cutoff-includes-all-ties",
+    "package": "proposal-assessment",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "harmonomicon.cutoffwitness",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Peer proposal assessment",
+        "summary": "Collect proposals, route them to distinct reviewers, collect private numeric ratings, and publish exact ranked results.",
+        "setup": "Invite participants in the desired enrollment order.",
+        "prompt": "Contribute an idea and its first practical step.",
+        "participant": "Submit one idea, then rate only the item assigned for each named round.",
+        "completion": "The app publishes ranked results; missing ratings do not extend a deadline.",
+        "access": "Only assigned readers see an item before ranking. Raw ratings stay private to their contributor."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon assessment and paired-reflection composition example.",
+        "rights": "Original example wording; participant contribution rights are not specified."
+      },
+      "participants": {
+        "min": 4,
+        "max": 12
+      },
+      "requires": [
+        "aggregate@1",
+        "clock@1",
+        "collect_group@1",
+        "durable_state@1",
+        "identity@1",
+        "integer_values@1",
+        "partition@1",
+        "policy:competition_rank_all_ties@1",
+        "policy:roster_chunks@1",
+        "policy:roster_offset@1",
+        "policy:sum_scores@1",
+        "pool@1",
+        "private_views@1",
+        "publish_ranking@1",
+        "rate@1",
+        "route@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "ideas",
+            "op": "pool@1",
+            "prompt": "Submit an idea and a first step.",
+            "perActor": 1,
+            "close": "deadline",
+            "afterMs": 300000
+          },
+          {
+            "id": "route_1",
+            "op": "route@1",
+            "source": "ideas",
+            "policy": "policy:roster_offset@1",
+            "round": "round_1",
+            "offset": 1
+          },
+          {
+            "id": "rate_1",
+            "op": "rate@1",
+            "source": "route_1",
+            "prompt": "Rate your assigned idea.",
+            "min": 0,
+            "max": 10,
+            "close": "deadline",
+            "afterMs": 60000
+          },
+          {
+            "id": "route_2",
+            "op": "route@1",
+            "source": "ideas",
+            "policy": "policy:roster_offset@1",
+            "round": "round_2",
+            "offset": 2
+          },
+          {
+            "id": "rate_2",
+            "op": "rate@1",
+            "source": "route_2",
+            "prompt": "Rate your assigned idea.",
+            "min": 0,
+            "max": 10,
+            "close": "deadline",
+            "afterMs": 60000
+          },
+          {
+            "id": "totals",
+            "op": "aggregate@1",
+            "sources": [
+              "rate_1",
+              "rate_2"
+            ],
+            "policy": "policy:sum_scores@1",
+            "targetCount": null
+          },
+          {
+            "id": "results",
+            "op": "publish_ranking@1",
+            "source": "totals",
+            "limit": 2,
+            "policy": "policy:competition_rank_all_ties@1"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "events": [
+      {
+        "eventId": "idea-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-b",
+          "text": "Proposal b"
+        }
+      },
+      {
+        "eventId": "idea-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-a",
+          "text": "Proposal a"
+        }
+      },
+      {
+        "eventId": "idea-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-c",
+          "text": "Proposal c"
+        }
+      },
+      {
+        "eventId": "idea-d",
+        "type": "submit",
+        "actor": "d",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-d",
+          "text": "Proposal d"
+        }
+      },
+      {
+        "eventId": "idea-e",
+        "type": "submit",
+        "actor": "e",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-e",
+          "text": "Proposal e"
+        }
+      },
+      {
+        "eventId": "idea-f",
+        "type": "submit",
+        "actor": "f",
+        "at": 0,
+        "step": "ideas",
+        "payload": {
+          "itemId": "i-f",
+          "text": "Proposal f"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 300000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-1-a",
+        "type": "submit",
+        "actor": "b",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_1",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-1-b",
+        "type": "submit",
+        "actor": "c",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_1",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-1-c",
+        "type": "submit",
+        "actor": "d",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_1",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-1-d",
+        "type": "submit",
+        "actor": "e",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_1",
+          "score": 8
+        }
+      },
+      {
+        "eventId": "rating-1-e",
+        "type": "submit",
+        "actor": "f",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_1",
+          "score": 8
+        }
+      },
+      {
+        "eventId": "rating-1-f",
+        "type": "submit",
+        "actor": "a",
+        "at": 300000,
+        "step": "rate_1",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_1",
+          "score": 8
+        }
+      },
+      {
+        "eventId": "end-1",
+        "type": "tick",
+        "actor": "system",
+        "at": 360000,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "rating-2-a",
+        "type": "submit",
+        "actor": "c",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-a",
+          "round": "round_2",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-2-b",
+        "type": "submit",
+        "actor": "d",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-b",
+          "round": "round_2",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-2-c",
+        "type": "submit",
+        "actor": "e",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-c",
+          "round": "round_2",
+          "score": 10
+        }
+      },
+      {
+        "eventId": "rating-2-d",
+        "type": "submit",
+        "actor": "f",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-d",
+          "round": "round_2",
+          "score": 8
+        }
+      },
+      {
+        "eventId": "rating-2-e",
+        "type": "submit",
+        "actor": "a",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-e",
+          "round": "round_2",
+          "score": 8
+        }
+      },
+      {
+        "eventId": "rating-2-f",
+        "type": "submit",
+        "actor": "b",
+        "at": 360000,
+        "step": "rate_2",
+        "payload": {
+          "itemId": "i-f",
+          "round": "round_2",
+          "score": 8
+        }
+      },
+      {
+        "eventId": "end-2",
+        "type": "tick",
+        "actor": "system",
+        "at": 420000,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          5,
+          "ranking"
+        ],
+        "equals": [
+          {
+            "itemId": "i-b",
+            "text": "Proposal b",
+            "count": 2,
+            "total": 20,
+            "score": {
+              "numerator": 20,
+              "denominator": 1
+            },
+            "rank": 1
+          },
+          {
+            "itemId": "i-a",
+            "text": "Proposal a",
+            "count": 2,
+            "total": 20,
+            "score": {
+              "numerator": 20,
+              "denominator": 1
+            },
+            "rank": 1
+          },
+          {
+            "itemId": "i-c",
+            "text": "Proposal c",
+            "count": 2,
+            "total": 20,
+            "score": {
+              "numerator": 20,
+              "denominator": 1
+            },
+            "rank": 1
+          }
+        ]
+      },
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          5,
+          "unrated"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "integer-form-field-reuse",
+    "package": "check-in",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "harmonomicon.numericform",
+      "version": "0.4.1",
+      "content": {
+        "language": "en",
+        "title": "Group check-in",
+        "summary": "Group check-in coordinated through a composable runbook.",
+        "setup": "Invite participants in the desired turn order.",
+        "prompt": "Group check-in",
+        "participant": "Follow the current prompt in the app.",
+        "completion": "The app finishes after the last declared step.",
+        "access": "The app shows your own submissions and fields whose visibility permits it."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+        "rights": "Original example description. Rights to participant contributions are not specified by this package."
+      },
+      "participants": {
+        "min": 2,
+        "max": 12
+      },
+      "requires": [
+        "identity@1",
+        "serial_events@1",
+        "durable_state@1",
+        "private_views@1",
+        "clock@1",
+        "text@1",
+        "collect@1",
+        "reveal@1",
+        "integer_values@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "answer",
+            "op": "collect@1",
+            "actors": "participants",
+            "prompt": "What made you smile today?",
+            "fields": {
+              "answer": {
+                "type": "integer",
+                "visibility": "private",
+                "min": 0,
+                "max": 100
+              }
+            },
+            "close": "all",
+            "afterMs": 3600000
+          },
+          {
+            "id": "reveal",
+            "op": "reveal@1",
+            "sources": [
+              "answer"
+            ]
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "events": [
+      {
+        "eventId": "bool",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": true
+        }
+      },
+      {
+        "eventId": "fraction",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": 1.25
+        }
+      },
+      {
+        "eventId": "high",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": 101
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": 100
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": 0
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 0,
+        "step": "answer",
+        "payload": {
+          "answer": 5.0
+        }
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": -1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "answer": 100
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "answer": 0
+            }
+          },
+          {
+            "actor": "c",
+            "value": {
+              "answer": 5
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "recurrence-private-gaps-replay",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "test.private",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Private daily writing circle",
+        "summary": "A group writes each day and sees who completed the prompt, while each entry stays private.",
+        "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+        "prompt": "Write a few lines about something you noticed today.",
+        "participant": "Submit one text entry in each open window. The group sees completion status, but only you can read your entry.",
+        "completion": "Entries stay available to their authors after each window closes. Missing entries do not block the next window.",
+        "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon example activity",
+        "rights": "Illustrative package content; reuse terms have not been specified."
+      },
+      "participants": {
+        "min": 2,
+        "max": 32
+      },
+      "requires": [
+        "identity@1",
+        "serial_events@1",
+        "durable_state@1",
+        "private_views@1",
+        "clock@1",
+        "text@1",
+        "instance_settings@1",
+        "for_windows@1",
+        "collect_window@1",
+        "completion_status@1"
+      ],
+      "settings": {
+        "starts_at": {
+          "type": "time"
+        }
+      },
+      "runbook": {
+        "steps": [
+          {
+            "id": "practice",
+            "op": "for_windows@1",
+            "startsAt": {
+              "setting": "starts_at"
+            },
+            "intervalMs": 20,
+            "windowMs": 10,
+            "occurrences": 3,
+            "prompt": "Write a few lines about something you noticed today.",
+            "steps": [
+              {
+                "id": "entry",
+                "op": "collect_window@1",
+                "actors": "participants",
+                "prompt": "Write a few lines about something you noticed today.",
+                "fields": {
+                  "value": {
+                    "type": "text",
+                    "visibility": "private"
+                  }
+                },
+                "completion": "group"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "settings": {
+      "starts_at": 10
+    },
+    "events": [
+      {
+        "eventId": "early",
+        "type": "submit",
+        "actor": "a",
+        "at": 9,
+        "step": "entry:0",
+        "payload": {
+          "value": "early"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "dupe",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "value": "new"
+        }
+      },
+      {
+        "eventId": "other",
+        "type": "submit",
+        "actor": "b",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "value": "B"
+        }
+      },
+      {
+        "eventId": "manual",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 12,
+        "step": "entry:0",
+        "payload": {}
+      },
+      {
+        "eventId": "boundary",
+        "type": "submit",
+        "actor": "c",
+        "at": 20,
+        "step": "entry:0",
+        "payload": {
+          "value": "late"
+        }
+      },
+      {
+        "eventId": "gap",
+        "type": "submit",
+        "actor": "c",
+        "at": 25,
+        "step": "entry:1",
+        "payload": {
+          "value": "gap"
+        }
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:0",
+        "payload": {
+          "value": "stale"
+        }
+      },
+      {
+        "eventId": "second",
+        "type": "submit",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:1",
+        "payload": {
+          "value": "C"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 31,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 31,
+        "step": "entry:0",
+        "payload": {
+          "value": "changed"
+        }
+      },
+      {
+        "eventId": "finish",
+        "type": "tick",
+        "actor": "system",
+        "at": 70,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "replayed",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "entry:0"
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "deadline"
+        ],
+        "equals": 20
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "status": "complete"
+          },
+          {
+            "actor": "b",
+            "status": "complete"
+          },
+          {
+            "actor": "c",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "practice:1"
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses",
+          2,
+          "status"
+        ],
+        "equals": "missed"
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 8,
+        "actor": "organizer",
+        "path": [
+          "records",
+          3,
+          "count"
+        ],
+        "equals": 1
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "statuses"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "status": "missed"
+          },
+          {
+            "actor": "b",
+            "status": "missed"
+          },
+          {
+            "actor": "c",
+            "status": "missed"
+          }
+        ]
+      },
+      {
+        "after": 11,
+        "actor": "b",
+        "path": [
+          "records",
+          3,
+          "entries"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "recurrence-reveal-gaps-replay",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "test.reveal",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Daily reveal writing circle",
+        "summary": "Everyone writes privately during a window, then the group reads the entries together when it closes.",
+        "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+        "prompt": "Describe a place you would like to visit.",
+        "participant": "Submit one text entry in each open window. Others see that you submitted, but read your entry only after the window closes.",
+        "completion": "Entries from each window remain available after reveal. Missing entries do not block the next window.",
+        "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon example activity",
+        "rights": "Illustrative package content; reuse terms have not been specified."
+      },
+      "participants": {
+        "min": 2,
+        "max": 32
+      },
+      "requires": [
+        "identity@1",
+        "serial_events@1",
+        "durable_state@1",
+        "private_views@1",
+        "clock@1",
+        "text@1",
+        "instance_settings@1",
+        "for_windows@1",
+        "collect_window@1",
+        "completion_status@1",
+        "reveal@1"
+      ],
+      "settings": {
+        "starts_at": {
+          "type": "time"
+        }
+      },
+      "runbook": {
+        "steps": [
+          {
+            "id": "practice",
+            "op": "for_windows@1",
+            "startsAt": {
+              "setting": "starts_at"
+            },
+            "intervalMs": 20,
+            "windowMs": 10,
+            "occurrences": 3,
+            "prompt": "Describe a place you would like to visit.",
+            "steps": [
+              {
+                "id": "entry",
+                "op": "collect_window@1",
+                "actors": "participants",
+                "prompt": "Describe a place you would like to visit.",
+                "fields": {
+                  "value": {
+                    "type": "text",
+                    "visibility": "private"
+                  }
+                },
+                "completion": "group"
+              },
+              {
+                "id": "publish",
+                "op": "reveal@1",
+                "sources": [
+                  "entry"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "settings": {
+      "starts_at": 10
+    },
+    "events": [
+      {
+        "eventId": "early",
+        "type": "submit",
+        "actor": "a",
+        "at": 9,
+        "step": "entry:0",
+        "payload": {
+          "value": "early"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "dupe",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "value": "new"
+        }
+      },
+      {
+        "eventId": "other",
+        "type": "submit",
+        "actor": "b",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "value": "B"
+        }
+      },
+      {
+        "eventId": "manual",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 12,
+        "step": "entry:0",
+        "payload": {}
+      },
+      {
+        "eventId": "boundary",
+        "type": "submit",
+        "actor": "c",
+        "at": 20,
+        "step": "entry:0",
+        "payload": {
+          "value": "late"
+        }
+      },
+      {
+        "eventId": "gap",
+        "type": "submit",
+        "actor": "c",
+        "at": 25,
+        "step": "entry:1",
+        "payload": {
+          "value": "gap"
+        }
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:0",
+        "payload": {
+          "value": "stale"
+        }
+      },
+      {
+        "eventId": "second",
+        "type": "submit",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:1",
+        "payload": {
+          "value": "C"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 31,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 31,
+        "step": "entry:0",
+        "payload": {
+          "value": "changed"
+        }
+      },
+      {
+        "eventId": "finish",
+        "type": "tick",
+        "actor": "system",
+        "at": 70,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "replayed",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "entry:0"
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "deadline"
+        ],
+        "equals": 20
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "status": "complete"
+          },
+          {
+            "actor": "b",
+            "status": "complete"
+          },
+          {
+            "actor": "c",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "practice:1"
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses",
+          2,
+          "status"
+        ],
+        "equals": "missed"
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "value": "A"
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "value": "B"
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "organizer",
+        "path": [
+          "records",
+          3,
+          "count"
+        ],
+        "equals": 1
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "statuses"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "status": "missed"
+          },
+          {
+            "actor": "b",
+            "status": "missed"
+          },
+          {
+            "actor": "c",
+            "status": "missed"
+          }
+        ]
+      },
+      {
+        "after": 11,
+        "actor": "b",
+        "path": [
+          "records",
+          3,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "c",
+            "value": {
+              "value": "C"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "recurrence-shared-gaps-replay",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "test.shared",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Shared daily micro-story",
+        "summary": "Everyone posts one short story each day; stories are visible to the group as they arrive.",
+        "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+        "prompt": "Write a short story inspired by an ordinary object.",
+        "participant": "Submit one story in each open window. The group can read it immediately.",
+        "completion": "All stories remain available in earlier windows. Missing entries do not block the next window.",
+        "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon example activity",
+        "rights": "Illustrative package content; reuse terms have not been specified."
+      },
+      "participants": {
+        "min": 2,
+        "max": 32
+      },
+      "requires": [
+        "identity@1",
+        "serial_events@1",
+        "durable_state@1",
+        "private_views@1",
+        "clock@1",
+        "text@1",
+        "instance_settings@1",
+        "for_windows@1",
+        "collect_window@1",
+        "completion_status@1"
+      ],
+      "settings": {
+        "starts_at": {
+          "type": "time"
+        }
+      },
+      "runbook": {
+        "steps": [
+          {
+            "id": "practice",
+            "op": "for_windows@1",
+            "startsAt": {
+              "setting": "starts_at"
+            },
+            "intervalMs": 20,
+            "windowMs": 10,
+            "occurrences": 3,
+            "prompt": "Write a short story inspired by an ordinary object.",
+            "steps": [
+              {
+                "id": "entry",
+                "op": "collect_window@1",
+                "actors": "participants",
+                "prompt": "Write a short story inspired by an ordinary object.",
+                "fields": {
+                  "value": {
+                    "type": "text",
+                    "visibility": "group"
+                  }
+                },
+                "completion": "group"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "settings": {
+      "starts_at": 10
+    },
+    "events": [
+      {
+        "eventId": "early",
+        "type": "submit",
+        "actor": "a",
+        "at": 9,
+        "step": "entry:0",
+        "payload": {
+          "value": "early"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "dupe",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "value": "new"
+        }
+      },
+      {
+        "eventId": "other",
+        "type": "submit",
+        "actor": "b",
+        "at": 11,
+        "step": "entry:0",
+        "payload": {
+          "value": "B"
+        }
+      },
+      {
+        "eventId": "manual",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 12,
+        "step": "entry:0",
+        "payload": {}
+      },
+      {
+        "eventId": "boundary",
+        "type": "submit",
+        "actor": "c",
+        "at": 20,
+        "step": "entry:0",
+        "payload": {
+          "value": "late"
+        }
+      },
+      {
+        "eventId": "gap",
+        "type": "submit",
+        "actor": "c",
+        "at": 25,
+        "step": "entry:1",
+        "payload": {
+          "value": "gap"
+        }
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:0",
+        "payload": {
+          "value": "stale"
+        }
+      },
+      {
+        "eventId": "second",
+        "type": "submit",
+        "actor": "c",
+        "at": 30,
+        "step": "entry:1",
+        "payload": {
+          "value": "C"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 31,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 31,
+        "step": "entry:0",
+        "payload": {
+          "value": "changed"
+        }
+      },
+      {
+        "eventId": "finish",
+        "type": "tick",
+        "actor": "system",
+        "at": 70,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "rejected",
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "replayed",
+      "rejected",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "entry:0"
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "deadline"
+        ],
+        "equals": 20
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "status": "complete"
+          },
+          {
+            "actor": "b",
+            "status": "complete"
+          },
+          {
+            "actor": "c",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "value": "A"
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "value": "B"
+            }
+          }
+        ]
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "practice:1"
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses",
+          2,
+          "status"
+        ],
+        "equals": "missed"
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "value": "A"
+            }
+          },
+          {
+            "actor": "b",
+            "value": {
+              "value": "B"
+            }
+          }
+        ]
+      },
+      {
+        "after": 8,
+        "actor": "organizer",
+        "path": [
+          "records",
+          3,
+          "count"
+        ],
+        "equals": 1
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "records",
+          5,
+          "statuses"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "status": "missed"
+          },
+          {
+            "actor": "b",
+            "status": "missed"
+          },
+          {
+            "actor": "c",
+            "status": "missed"
+          }
+        ]
+      },
+      {
+        "after": 11,
+        "actor": "b",
+        "path": [
+          "records",
+          3,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "c",
+            "value": {
+              "value": "C"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "recurrence-contiguous-boundary",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "test.contiguous",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Shared daily micro-story",
+        "summary": "Everyone posts one short story each day; stories are visible to the group as they arrive.",
+        "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+        "prompt": "Write a short story inspired by an ordinary object.",
+        "participant": "Submit one story in each open window. The group can read it immediately.",
+        "completion": "All stories remain available in earlier windows. Missing entries do not block the next window.",
+        "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon example activity",
+        "rights": "Illustrative package content; reuse terms have not been specified."
+      },
+      "participants": {
+        "min": 2,
+        "max": 32
+      },
+      "requires": [
+        "identity@1",
+        "serial_events@1",
+        "durable_state@1",
+        "private_views@1",
+        "clock@1",
+        "text@1",
+        "instance_settings@1",
+        "for_windows@1",
+        "collect_window@1",
+        "completion_status@1"
+      ],
+      "settings": {
+        "starts_at": {
+          "type": "time"
+        }
+      },
+      "runbook": {
+        "steps": [
+          {
+            "id": "practice",
+            "op": "for_windows@1",
+            "startsAt": {
+              "setting": "starts_at"
+            },
+            "intervalMs": 10,
+            "windowMs": 10,
+            "occurrences": 2,
+            "prompt": "Write a short story inspired by an ordinary object.",
+            "steps": [
+              {
+                "id": "entry",
+                "op": "collect_window@1",
+                "actors": "participants",
+                "prompt": "Write a short story inspired by an ordinary object.",
+                "fields": {
+                  "value": {
+                    "type": "text",
+                    "visibility": "group"
+                  }
+                },
+                "completion": "group"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "settings": {
+      "starts_at": 10
+    },
+    "events": [
+      {
+        "eventId": "first",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "value": "A"
+        }
+      },
+      {
+        "eventId": "stale",
+        "type": "submit",
+        "actor": "b",
+        "at": 20,
+        "step": "entry:0",
+        "payload": {
+          "value": "old"
+        }
+      },
+      {
+        "eventId": "new",
+        "type": "submit",
+        "actor": "b",
+        "at": 20,
+        "step": "entry:1",
+        "payload": {
+          "value": "B"
+        }
+      },
+      {
+        "eventId": "end",
+        "type": "tick",
+        "actor": "system",
+        "at": 30,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "window",
+          "index"
+        ],
+        "equals": 1
+      },
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "openedAt"
+        ],
+        "equals": 20
+      },
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "recurrence-choice-tally-and-pairs",
+    "package": "repeated-poll-and-pairs",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "settings": {
+      "starts_at": 10
+    },
+    "events": [
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "choice": "draw"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 10,
+        "step": "entry:0",
+        "payload": {
+          "choice": "write"
+        }
+      },
+      {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "next",
+        "type": "submit",
+        "actor": "a",
+        "at": 30,
+        "step": "entry:1",
+        "payload": {
+          "choice": "listen"
+        }
+      },
+      {
+        "eventId": "pairs",
+        "type": "tick",
+        "actor": "system",
+        "at": 40,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "note",
+        "type": "submit",
+        "actor": "a",
+        "at": 41,
+        "step": "reflection",
+        "payload": {
+          "text": "only my partner"
+        }
+      },
+      {
+        "eventId": "done",
+        "type": "tick",
+        "actor": "system",
+        "at": 60040,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 1,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "statuses"
+        ],
+        "missing": true
+      },
+      {
+        "after": 2,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "counts"
+        ],
+        "equals": [
+          {
+            "value": "draw",
+            "count": 1
+          },
+          {
+            "value": "write",
+            "count": 1
+          },
+          {
+            "value": "listen",
+            "count": 0
+          }
+        ]
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "reflection"
+      },
+      {
+        "after": 5,
+        "actor": "b",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "only my partner"
+            }
+          }
+        ]
+      },
+      {
+        "after": 5,
+        "actor": "c",
+        "path": [
+          "records",
+          7,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 6,
+        "actor": "organizer",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "random-nonself-reuse-independent-linked-response",
+    "package": "single-source-creative-response",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "seed": 1,
+    "events": [
+      {
+        "eventId": "source-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "eventId": "source-b",
+        "type": "submit",
+        "actor": "b",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "B",
+          "text": "B source"
+        }
+      },
+      {
+        "eventId": "source-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "C",
+          "text": "C source"
+        }
+      },
+      {
+        "eventId": "source-d",
+        "type": "submit",
+        "actor": "d",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "D",
+          "text": "D source"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "b-response",
+        "type": "submit",
+        "actor": "b",
+        "at": 10,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "B response"
+        }
+      },
+      {
+        "eventId": "wrong",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "wrong source"
+        }
+      },
+      {
+        "eventId": "a-response",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "step": "response",
+        "payload": {
+          "itemId": "D",
+          "text": "A response"
+        }
+      },
+      {
+        "eventId": "duplicate",
+        "type": "submit",
+        "actor": "b",
+        "at": 12,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "new"
+        }
+      },
+      {
+        "eventId": "b-response",
+        "type": "submit",
+        "actor": "b",
+        "at": 12,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "B response"
+        }
+      },
+      {
+        "eventId": "b-response",
+        "type": "submit",
+        "actor": "b",
+        "at": 12,
+        "step": "response",
+        "payload": {
+          "itemId": "D",
+          "text": "changed"
+        }
+      },
+      {
+        "eventId": "manual",
+        "type": "advance",
+        "actor": "organizer",
+        "at": 13,
+        "step": "response",
+        "payload": {}
+      },
+      {
+        "eventId": "late",
+        "type": "submit",
+        "actor": "c",
+        "at": 20,
+        "step": "response",
+        "payload": {
+          "itemId": "D",
+          "text": "too late"
+        }
+      },
+      {
+        "eventId": "b-response",
+        "type": "submit",
+        "actor": "b",
+        "at": 20,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "B response"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "rejected",
+      "replayed",
+      "rejected",
+      "rejected",
+      "rejected",
+      "replayed"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "organizer",
+        "path": [
+          "step"
+        ],
+        "equals": "sources"
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "D",
+          "text": "D source"
+        }
+      },
+      {
+        "after": 4,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "after": 4,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "D",
+          "text": "D source"
+        }
+      },
+      {
+        "after": 4,
+        "actor": "d",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "B",
+          "text": "B source"
+        }
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": null
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "assignmentSeed"
+        ],
+        "missing": true
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "assignment",
+          "sourceActor"
+        ],
+        "missing": true
+      },
+      {
+        "after": 5,
+        "actor": "a",
+        "path": [
+          "records",
+          2,
+          "count"
+        ],
+        "equals": 1
+      },
+      {
+        "after": 5,
+        "actor": "a",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 5,
+        "actor": "b",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "source": {
+              "itemId": "A",
+              "text": "A source"
+            },
+            "text": "B response"
+          }
+        ]
+      },
+      {
+        "after": 7,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 12,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 12,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "b",
+            "source": {
+              "actor": "a",
+              "itemId": "A",
+              "text": "A source"
+            },
+            "text": "B response"
+          },
+          {
+            "actor": "a",
+            "source": {
+              "actor": "d",
+              "itemId": "D",
+              "text": "D source"
+            },
+            "text": "A response"
+          }
+        ]
+      },
+      {
+        "after": 13,
+        "actor": "d",
+        "path": [
+          "records",
+          0,
+          "entries"
+        ],
+        "equals": [
+          {
+            "itemId": "D",
+            "text": "D source"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "roster-partial-pool-all-participants",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.roster-partial",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Idea exchange and paired reflection",
+        "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+        "setup": "Enroll a fixed group; each participant may contribute one source.",
+        "prompt": "Describe an image or idea in text.",
+        "participant": "Respond to the one source assigned to you before the window closes.",
+        "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+        "access": "Your assigned source and response are private until the explicit result reveal."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+        "rights": "Original example description. Rights to participant contributions are not specified by this package."
+      },
+      "participants": {
+        "min": 2,
+        "max": 12
+      },
+      "requires": [
+        "assign_sources@1",
+        "clock@1",
+        "durable_state@1",
+        "identity@1",
+        "policy:next_nonself_source@1",
+        "pool@1",
+        "private_views@1",
+        "respond@1",
+        "reveal_responses@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "sources",
+            "op": "pool@1",
+            "prompt": "Describe an image or idea in text.",
+            "perActor": 1,
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "distribution",
+            "op": "assign_sources@1",
+            "source": "sources",
+            "recipients": "participants",
+            "policy": "policy:next_nonself_source@1",
+            "cardinality": "one",
+            "reuse": "allowed",
+            "unmatched": "skip"
+          },
+          {
+            "id": "response",
+            "op": "respond@1",
+            "source": "distribution",
+            "prompt": "Create a text response to your assigned source.",
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "results",
+            "op": "reveal_responses@1",
+            "source": "response"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "events": [
+      {
+        "eventId": "source-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "C",
+          "text": "C source"
+        }
+      },
+      {
+        "eventId": "source-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "d",
+        "type": "submit",
+        "actor": "d",
+        "at": 10,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "D independent"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 11,
+        "step": "response",
+        "payload": {
+          "itemId": "C",
+          "text": "B independent"
+        }
+      },
+      {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "C",
+          "text": "C source"
+        }
+      },
+      {
+        "after": 2,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "C",
+          "text": "C source"
+        }
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "after": 2,
+        "actor": "d",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "after": 3,
+        "actor": "a",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 5,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "d",
+            "source": {
+              "actor": "a",
+              "itemId": "A",
+              "text": "A source"
+            },
+            "text": "D independent"
+          },
+          {
+            "actor": "b",
+            "source": {
+              "actor": "c",
+              "itemId": "C",
+              "text": "C source"
+            },
+            "text": "B independent"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "contributors-linked-response-and-pairs",
+    "package": "idea-response-and-pairs",
+    "participants": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "events": [
+      {
+        "eventId": "source-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "eventId": "source-c",
+        "type": "submit",
+        "actor": "c",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "C",
+          "text": "C source"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "outsider",
+        "type": "submit",
+        "actor": "b",
+        "at": 10,
+        "step": "response",
+        "payload": {
+          "itemId": "C",
+          "text": "not eligible"
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 10,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "C review"
+        }
+      },
+      {
+        "eventId": "a",
+        "type": "submit",
+        "actor": "a",
+        "at": 11,
+        "step": "response",
+        "payload": {
+          "itemId": "C",
+          "text": "A review"
+        }
+      },
+      {
+        "eventId": "note",
+        "type": "submit",
+        "actor": "a",
+        "at": 12,
+        "step": "reflection",
+        "payload": {
+          "text": "pair private"
+        }
+      },
+      {
+        "eventId": "end",
+        "type": "tick",
+        "actor": "system",
+        "at": 21,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "eligible"
+        ],
+        "equals": false
+      },
+      {
+        "after": 2,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "unmatched"
+        ],
+        "equals": false
+      },
+      {
+        "after": 4,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "response"
+      },
+      {
+        "after": 5,
+        "actor": "a",
+        "path": [
+          "step"
+        ],
+        "equals": "reflection"
+      },
+      {
+        "after": 6,
+        "actor": "b",
+        "path": [
+          "records",
+          4,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "value": {
+              "text": "pair private"
+            }
+          }
+        ]
+      },
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 7,
+        "actor": "organizer",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      }
+    ]
+  },
+  {
+    "id": "single-source-unmatched-author-and-reuse",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.single-source",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Idea exchange and paired reflection",
+        "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+        "setup": "Enroll a fixed group; each participant may contribute one source.",
+        "prompt": "Describe an image or idea in text.",
+        "participant": "Respond to the one source assigned to you before the window closes.",
+        "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+        "access": "Your assigned source and response are private until the explicit result reveal."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+        "rights": "Original example description. Rights to participant contributions are not specified by this package."
+      },
+      "participants": {
+        "min": 2,
+        "max": 12
+      },
+      "requires": [
+        "assign_sources@1",
+        "clock@1",
+        "durable_state@1",
+        "identity@1",
+        "policy:next_nonself_source@1",
+        "pool@1",
+        "private_views@1",
+        "respond@1",
+        "reveal_responses@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "sources",
+            "op": "pool@1",
+            "prompt": "Describe an image or idea in text.",
+            "perActor": 1,
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "distribution",
+            "op": "assign_sources@1",
+            "source": "sources",
+            "recipients": "participants",
+            "policy": "policy:next_nonself_source@1",
+            "cardinality": "one",
+            "reuse": "allowed",
+            "unmatched": "skip"
+          },
+          {
+            "id": "response",
+            "op": "respond@1",
+            "source": "distribution",
+            "prompt": "Create a text response to your assigned source.",
+            "close": "all",
+            "afterMs": 10
+          },
+          {
+            "id": "results",
+            "op": "reveal_responses@1",
+            "source": "response"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "events": [
+      {
+        "eventId": "source-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "eventId": "open",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      },
+      {
+        "eventId": "own",
+        "type": "submit",
+        "actor": "a",
+        "at": 10,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "self"
+        }
+      },
+      {
+        "eventId": "b",
+        "type": "submit",
+        "actor": "b",
+        "at": 11,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "B"
+        }
+      },
+      {
+        "eventId": "c",
+        "type": "submit",
+        "actor": "c",
+        "at": 12,
+        "step": "response",
+        "payload": {
+          "itemId": "A",
+          "text": "C"
+        }
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "eligible"
+        ],
+        "equals": true
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "unmatched"
+        ],
+        "equals": true
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": null
+      },
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "assignment"
+        ],
+        "equals": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "step"
+        ],
+        "equals": "response"
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 4,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "count"
+        ],
+        "equals": 2
+      }
+    ]
+  },
+  {
+    "id": "empty-source-participants",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.empty-participants",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Idea exchange and paired reflection",
+        "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+        "setup": "Enroll a fixed group; each participant may contribute one source.",
+        "prompt": "Describe an image or idea in text.",
+        "participant": "Respond to the one source assigned to you before the window closes.",
+        "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+        "access": "Your assigned source and response are private until the explicit result reveal."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+        "rights": "Original example description. Rights to participant contributions are not specified by this package."
+      },
+      "participants": {
+        "min": 2,
+        "max": 12
+      },
+      "requires": [
+        "assign_sources@1",
+        "clock@1",
+        "durable_state@1",
+        "identity@1",
+        "policy:next_nonself_source@1",
+        "pool@1",
+        "private_views@1",
+        "respond@1",
+        "reveal_responses@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "sources",
+            "op": "pool@1",
+            "prompt": "Describe an image or idea in text.",
+            "perActor": 1,
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "distribution",
+            "op": "assign_sources@1",
+            "source": "sources",
+            "recipients": "participants",
+            "policy": "policy:next_nonself_source@1",
+            "cardinality": "one",
+            "reuse": "allowed",
+            "unmatched": "skip"
+          },
+          {
+            "id": "response",
+            "op": "respond@1",
+            "source": "distribution",
+            "prompt": "Create a text response to your assigned source.",
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "results",
+            "op": "reveal_responses@1",
+            "source": "response"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "events": [
+      {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "eligible"
+        ],
+        "equals": true
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "unmatched"
+        ],
+        "equals": true
+      },
+      {
+        "after": 0,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "empty-source-contributors",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.empty-contributors",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Idea exchange and paired reflection",
+        "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+        "setup": "Enroll a fixed group; each participant may contribute one source.",
+        "prompt": "Describe an image or idea in text.",
+        "participant": "Respond to the one source assigned to you before the window closes.",
+        "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+        "access": "Your assigned source and response are private until the explicit result reveal."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+        "rights": "Original example description. Rights to participant contributions are not specified by this package."
+      },
+      "participants": {
+        "min": 2,
+        "max": 12
+      },
+      "requires": [
+        "assign_sources@1",
+        "clock@1",
+        "durable_state@1",
+        "identity@1",
+        "policy:next_nonself_source@1",
+        "pool@1",
+        "private_views@1",
+        "respond@1",
+        "reveal_responses@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "sources",
+            "op": "pool@1",
+            "prompt": "Describe an image or idea in text.",
+            "perActor": 1,
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "distribution",
+            "op": "assign_sources@1",
+            "source": "sources",
+            "recipients": "contributors",
+            "policy": "policy:next_nonself_source@1",
+            "cardinality": "one",
+            "reuse": "allowed",
+            "unmatched": "skip"
+          },
+          {
+            "id": "response",
+            "op": "respond@1",
+            "source": "distribution",
+            "prompt": "Create a text response to your assigned source.",
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "results",
+            "op": "reveal_responses@1",
+            "source": "response"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "events": [
+      {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "eligible"
+        ],
+        "equals": false
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "unmatched"
+        ],
+        "equals": false
+      },
+      {
+        "after": 0,
+        "actor": "organizer",
+        "path": [
+          "records",
+          2,
+          "entries"
+        ],
+        "equals": []
+      }
+    ]
+  },
+  {
+    "id": "one-contributor-random-unmatched",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.24",
+      "id": "org.harmonomicon.example.only-contributor",
+      "version": "0.1.1",
+      "content": {
+        "language": "en",
+        "title": "Single-source creative response",
+        "summary": "Contribute a text source, receive one non-self source, and respond independently.",
+        "setup": "Enroll a fixed group; each participant may contribute one source.",
+        "prompt": "Describe an image or idea in text.",
+        "participant": "Respond to the one source assigned to you before the window closes.",
+        "completion": "Reveal accepted source-response pairs; missing responses do not block the deadline.",
+        "access": "Your assigned source and response are private until the explicit result reveal."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Harmonomicon digital example; the runbook defines the selected software rules.",
+        "rights": "Original example description. Rights to participant contributions are not specified by this package."
+      },
+      "participants": {
+        "min": 2,
+        "max": 12
+      },
+      "requires": [
+        "assign_sources@1",
+        "clock@1",
+        "durable_state@1",
+        "identity@1",
+        "policy:seeded_nonself_source@1",
+        "pool@1",
+        "private_views@1",
+        "respond@1",
+        "reveal_responses@1",
+        "seeded_assignment@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "sources",
+            "op": "pool@1",
+            "prompt": "Describe an image or idea in text.",
+            "perActor": 1,
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "distribution",
+            "op": "assign_sources@1",
+            "source": "sources",
+            "recipients": "contributors",
+            "policy": "policy:seeded_nonself_source@1",
+            "cardinality": "one",
+            "reuse": "allowed",
+            "unmatched": "skip"
+          },
+          {
+            "id": "response",
+            "op": "respond@1",
+            "source": "distribution",
+            "prompt": "Create a text response to your assigned source.",
+            "close": "deadline",
+            "afterMs": 10
+          },
+          {
+            "id": "results",
+            "op": "reveal_responses@1",
+            "source": "response"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "seed": 1,
+    "events": [
+      {
+        "eventId": "source-a",
+        "type": "submit",
+        "actor": "a",
+        "at": 1,
+        "step": "sources",
+        "payload": {
+          "itemId": "A",
+          "text": "A source"
+        }
+      },
+      {
+        "eventId": "close",
+        "type": "tick",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {}
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 1,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "unmatched"
+        ],
+        "equals": true
+      },
+      {
+        "after": 1,
+        "actor": "b",
+        "path": [
+          "records",
+          1,
+          "eligible"
+        ],
+        "equals": false
+      }
+    ]
+  }
+]

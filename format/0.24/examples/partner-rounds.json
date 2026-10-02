@@ -1,0 +1,114 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "harmonomicon.partnerrounds",
+  "version": "0.3.7",
+  "content": {
+    "language": "en",
+    "title": "Impromptu Networking digital rounds",
+    "summary": "Impromptu Networking digital rounds coordinated through declared pool or group steps.",
+    "setup": "Invite participants in the desired turn order.",
+    "prompt": "Impromptu Networking digital rounds",
+    "participant": "Follow the current step; claims and acknowledgments are recorded by the app.",
+    "completion": "The app finishes after the last declared step.",
+    "access": "Pooled authorship metadata is withheld; group responses use the membership recorded for their round."
+  },
+  "provenance": {
+    "kind": "adaptation",
+    "sourceUrl": "https://www.liberatingstructures.com/impromptu-networking/",
+    "credit": "Harmonomicon digital adaptation. The source supplies the human procedure; ordering, claims, acknowledgments and digital views are declared choices.",
+    "rights": "Original description of digital rules; no rights to source material or contributions are granted."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "clock@1",
+    "collect@1",
+    "collect_group@1",
+    "durable_state@1",
+    "identity@1",
+    "partition@1",
+    "pause@1",
+    "policy:organizer_groups@1",
+    "private_views@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "welcome",
+        "op": "pause@1",
+        "prompt": "Prepare to introduce yourself to successive partners.",
+        "afterMs": 30000
+      },
+      {
+        "id": "partners1",
+        "op": "partition@1",
+        "policy": "policy:organizer_groups@1",
+        "minSize": 2,
+        "maxSize": 3,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "round1",
+        "op": "collect_group@1",
+        "source": "partners1",
+        "prompt": "Introduce yourself and exchange ideas within this assigned group.",
+        "close": "deadline",
+        "afterMs": 120000
+      },
+      {
+        "id": "partners2",
+        "op": "partition@1",
+        "policy": "policy:organizer_groups@1",
+        "minSize": 2,
+        "maxSize": 3,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "round2",
+        "op": "collect_group@1",
+        "source": "partners2",
+        "prompt": "Introduce yourself and exchange ideas within this assigned group.",
+        "close": "deadline",
+        "afterMs": 120000
+      },
+      {
+        "id": "partners3",
+        "op": "partition@1",
+        "policy": "policy:organizer_groups@1",
+        "minSize": 2,
+        "maxSize": 3,
+        "prompt": "Assign the groups for this round.",
+        "afterMs": null
+      },
+      {
+        "id": "round3",
+        "op": "collect_group@1",
+        "source": "partners3",
+        "prompt": "Introduce yourself and exchange ideas within this assigned group.",
+        "close": "deadline",
+        "afterMs": 120000
+      },
+      {
+        "id": "close",
+        "op": "collect@1",
+        "actors": "participants",
+        "prompt": "Share a connection with the full group.",
+        "fields": {
+          "response": {
+            "type": "text",
+            "visibility": "group"
+          }
+        },
+        "close": "organizer",
+        "afterMs": null
+      }
+    ]
+  },
+  "settings": {}
+}

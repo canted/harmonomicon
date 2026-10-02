@@ -1,0 +1,2457 @@
+[
+  {
+    "id": "first-valid-race-and-replay",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        },
+        {
+          "eventId": "loser",
+          "type": "submit",
+          "actor": "b",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 2,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        },
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 101,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        },
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 102,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null,
+            "itemId": "changed",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "replayed",
+      "rejected"
+    ]
+  },
+  {
+    "id": "invalid-media-does-not-win",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "image",
+              "ref": "foreign"
+            }
+          }
+        },
+        {
+          "eventId": "event-1",
+          "type": "submit",
+          "actor": "b",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 2,
+            "predecessor": null,
+            "itemId": "item-1",
+            "value": {
+              "kind": "text",
+              "text": "b contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "rejected",
+      "accepted"
+    ]
+  },
+  {
+    "id": "exclusive-deadline-stale-ticket",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 100,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "rejected"
+    ]
+  },
+  {
+    "id": "decline-keeps-partner-ticket",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "decline",
+          "actor": "a",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null
+          }
+        },
+        {
+          "eventId": "retained-partner",
+          "type": "submit",
+          "actor": "b",
+          "at": 2,
+          "step": "piece",
+          "payload": {
+            "invitation": 2,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "b contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted",
+      "accepted"
+    ]
+  },
+  {
+    "id": "partner-wins-before-decline",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "b",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 2,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "b contributes"
+            }
+          }
+        },
+        {
+          "eventId": "event-0",
+          "type": "decline",
+          "actor": "a",
+          "at": 2,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ]
+  },
+  {
+    "id": "loser-front-old-author-order",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-continue",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "contribution_inputs@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": {
+                "binding": "previous"
+              },
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {
+          "previous": {
+            "type": "contribution",
+            "kinds": [
+              "text",
+              "image"
+            ]
+          }
+        },
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "b",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "b contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior"
+          },
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ],
+      "inputBindings": {
+        "previous": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "prior piece"
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior",
+            "round": null
+          }
+        }
+      },
+      "trustedInputs": [
+        {
+          "binding": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+                "source": "piece",
+                "itemId": "prior"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "prior piece"
+              },
+              "round": null
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior",
+              "round": null
+            }
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted"
+    ]
+  },
+  {
+    "id": "odd-tail-prior-author-excluded-full-pass",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-continue",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "contribution_inputs@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": {
+                "binding": "previous"
+              },
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {
+          "previous": {
+            "type": "contribution",
+            "kinds": [
+              "text",
+              "image"
+            ]
+          }
+        },
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "expire",
+          "type": "tick",
+          "actor": "system",
+          "at": 100,
+          "step": null,
+          "payload": {}
+        },
+        {
+          "eventId": "exhaust",
+          "type": "tick",
+          "actor": "system",
+          "at": 200,
+          "step": null,
+          "payload": {}
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior"
+          },
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ],
+      "inputBindings": {
+        "previous": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "prior piece"
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior",
+            "round": null
+          }
+        }
+      },
+      "trustedInputs": [
+        {
+          "binding": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+                "source": "piece",
+                "itemId": "prior"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "prior piece"
+              },
+              "round": null
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior",
+              "round": null
+            }
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted",
+      "accepted"
+    ]
+  },
+  {
+    "id": "small-roster-pause",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-continue",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "contribution_inputs@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": {
+                "binding": "previous"
+              },
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {
+          "previous": {
+            "type": "contribution",
+            "kinds": [
+              "text",
+              "image"
+            ]
+          }
+        },
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b"
+          ],
+          "canonical": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior"
+          },
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b"
+            ],
+            "canonical": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ],
+      "inputBindings": {
+        "previous": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "prior piece"
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior",
+            "round": null
+          }
+        }
+      },
+      "trustedInputs": [
+        {
+          "binding": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+                "source": "piece",
+                "itemId": "prior"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "prior piece"
+              },
+              "round": null
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior",
+              "round": null
+            }
+          },
+          "viewers": [
+            "a",
+            "b",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": []
+  },
+  {
+    "id": "late-worker-fresh-window",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "late",
+          "type": "tick",
+          "actor": "system",
+          "at": 1000,
+          "step": null,
+          "payload": {}
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted"
+    ]
+  },
+  {
+    "id": "nonresumable-safe-clock-exhaustion",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "near-max",
+          "type": "tick",
+          "actor": "system",
+          "at": 9007199254740990,
+          "step": null,
+          "payload": {}
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted"
+    ]
+  },
+  {
+    "id": "shared24h-expiration-exclusion",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-continue",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "contribution_inputs@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 86400000,
+              "retryAfterMs": 50,
+              "input": {
+                "binding": "previous"
+              },
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {
+          "previous": {
+            "type": "contribution",
+            "kinds": [
+              "text",
+              "image"
+            ]
+          }
+        },
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "day-expiry",
+          "type": "tick",
+          "actor": "system",
+          "at": 86400000,
+          "step": null,
+          "payload": {}
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior"
+          },
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ],
+      "inputBindings": {
+        "previous": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "prior piece"
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior",
+            "round": null
+          }
+        }
+      },
+      "trustedInputs": [
+        {
+          "binding": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+                "source": "piece",
+                "itemId": "prior"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "prior piece"
+              },
+              "round": null
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior",
+              "round": null
+            }
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted"
+    ]
+  },
+  {
+    "id": "membership-withdrawal-ticket-retention",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "withdraw",
+          "type": "roster",
+          "actor": "system",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "actors": [
+              "b",
+              "c",
+              "d"
+            ]
+          }
+        },
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 2,
+          "step": "piece",
+          "payload": {
+            "invitation": 1,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        },
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "b",
+          "at": 3,
+          "step": "piece",
+          "payload": {
+            "invitation": 2,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "b contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "accepted",
+      "rejected",
+      "accepted"
+    ]
+  },
+  {
+    "id": "newcomer-denied-without-canonical-authority",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-continue",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "contribution_inputs@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": {
+                "binding": "previous"
+              },
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {
+          "previous": {
+            "type": "contribution",
+            "kinds": [
+              "text",
+              "image"
+            ]
+          }
+        },
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "new-person",
+          "type": "roster",
+          "actor": "system",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "actors": [
+              "a",
+              "b",
+              "c",
+              "new"
+            ]
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior"
+          },
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ],
+      "inputBindings": {
+        "previous": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "prior piece"
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece",
+            "itemId": "prior",
+            "round": null
+          }
+        }
+      },
+      "trustedInputs": [
+        {
+          "binding": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+                "source": "piece",
+                "itemId": "prior"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "prior piece"
+              },
+              "round": null
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece",
+              "itemId": "prior",
+              "round": null
+            }
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "rejected"
+    ]
+  },
+  {
+    "id": "typed-ticket-bool-rejected",
+    "request": {
+      "package": {
+        "format": "harmonomicon.activity-package/0.24",
+        "id": "org.harmonomicon.example.creative-relay-retry-empty",
+        "version": "0.1.0",
+        "content": {
+          "language": "en",
+          "title": "Creative relay",
+          "summary": "Two invited people race to contribute one canonical story piece.",
+          "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+          "prompt": "Continue the shared story.",
+          "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+          "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+          "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+        },
+        "provenance": {
+          "kind": "original",
+          "credit": "Original Harmonomicon candidate 0.24 composition.",
+          "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+        },
+        "participants": {
+          "min": 1,
+          "max": 100
+        },
+        "requires": [
+          "clock@1",
+          "durable_state@1",
+          "first_valid@1",
+          "host_controls@1",
+          "identity@1",
+          "image_contributions@1",
+          "invitation_queue@1",
+          "policy:rolling_pair@1",
+          "private_views@1",
+          "seeded_assignment@1",
+          "serial_events@1",
+          "text@1"
+        ],
+        "settings": {},
+        "runbook": {
+          "steps": [
+            {
+              "id": "piece",
+              "op": "first_valid@1",
+              "prompt": "Add a text or image to the shared story.",
+              "kinds": [
+                "text",
+                "image"
+              ],
+              "policy": "policy:rolling_pair@1",
+              "windowMs": 100,
+              "retryAfterMs": 50,
+              "input": null,
+              "queueInput": {
+                "binding": "line"
+              }
+            }
+          ]
+        },
+        "inputs": {},
+        "queueInputs": {
+          "line": {
+            "type": "invitation_queue"
+          }
+        }
+      },
+      "participants": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "organizer": "organizer",
+      "instanceId": "urn:uuid:00000000-0000-0000-0000-000000000024",
+      "seed": 1729,
+      "events": [
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "a",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": true,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "a contributes"
+            }
+          }
+        },
+        {
+          "eventId": "event-0",
+          "type": "submit",
+          "actor": "b",
+          "at": 1,
+          "step": "piece",
+          "payload": {
+            "invitation": 2,
+            "predecessor": null,
+            "itemId": "item-0",
+            "value": {
+              "kind": "text",
+              "text": "b contributes"
+            }
+          }
+        }
+      ],
+      "queueBindings": {
+        "line": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+            "source": "piece"
+          },
+          "order": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "canonical": null,
+          "notBefore": 0
+        }
+      },
+      "trustedQueues": [
+        {
+          "queue": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-0000-0000-000000000023",
+              "source": "piece"
+            },
+            "order": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "canonical": null,
+            "notBefore": 0
+          },
+          "viewers": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "organizer"
+          ],
+          "ready": true
+        }
+      ]
+    },
+    "outcomes": [
+      "rejected",
+      "accepted"
+    ]
+  }
+]

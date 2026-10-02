@@ -1,0 +1,1401 @@
+[
+  {
+    "id": "repeated-private",
+    "package": "daily-private-practice",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "host",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "startsAt": 10
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "start-1",
+          "type": "tick",
+          "actor": "system",
+          "at": 10,
+          "payload": {}
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 0,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "pending"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "a-day-1",
+          "type": "submit",
+          "actor": "a",
+          "at": 12,
+          "payload": {
+            "occurrence": 1,
+            "value": "A quiet morning"
+          }
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ],
+                  "own": {
+                    "actor": "a",
+                    "value": "A quiet morning"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actor": "host",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "a-day-1",
+          "type": "submit",
+          "actor": "a",
+          "at": 13,
+          "payload": {
+            "occurrence": 1,
+            "value": "A quiet morning"
+          }
+        },
+        "outcome": "replayed",
+        "views": []
+      },
+      {
+        "event": {
+          "eventId": "b-late",
+          "type": "submit",
+          "actor": "b",
+          "at": 72000010,
+          "payload": {
+            "occurrence": 1,
+            "value": "Too late"
+          }
+        },
+        "outcome": "rejected",
+        "views": [
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "between",
+              "currentOccurrence": null,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "between",
+              "currentOccurrence": null,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "own": {
+                    "actor": "a",
+                    "value": "A quiet morning"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "start-2",
+          "type": "tick",
+          "actor": "system",
+          "at": 86400010,
+          "payload": {}
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "host",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 2,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ]
+                },
+                {
+                  "number": 2,
+                  "phase": "open",
+                  "submissionCount": 0,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "pending"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "b-day-2",
+          "type": "submit",
+          "actor": "b",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 2,
+            "value": "A small discovery"
+          }
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 2,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "own": {
+                    "actor": "a",
+                    "value": "A quiet morning"
+                  }
+                },
+                {
+                  "number": 2,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "pending"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "complete"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 2,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ]
+                },
+                {
+                  "number": 2,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "pending"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "complete"
+                    }
+                  ],
+                  "own": {
+                    "actor": "b",
+                    "value": "A small discovery"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "stale-day",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400012,
+          "payload": {
+            "occurrence": 1,
+            "value": "Wrong day"
+          }
+        },
+        "outcome": "rejected",
+        "views": []
+      },
+      {
+        "event": {
+          "eventId": "end-2",
+          "type": "tick",
+          "actor": "system",
+          "at": 158400010,
+          "payload": {}
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "host",
+            "expect": {
+              "phase": "complete",
+              "currentOccurrence": null,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ]
+                },
+                {
+                  "number": 2,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "missed"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "complete"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "complete",
+              "currentOccurrence": null,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "own": {
+                    "actor": "a",
+                    "value": "A quiet morning"
+                  }
+                },
+                {
+                  "number": 2,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "missed"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "complete"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "a-day-1",
+          "type": "submit",
+          "actor": "a",
+          "at": 158400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "A quiet morning"
+          }
+        },
+        "outcome": "replayed",
+        "views": []
+      },
+      {
+        "event": {
+          "eventId": "a-day-1",
+          "type": "submit",
+          "actor": "a",
+          "at": 158400012,
+          "payload": {
+            "occurrence": 1,
+            "value": "Changed"
+          }
+        },
+        "outcome": "rejected",
+        "views": []
+      }
+    ]
+  },
+  {
+    "id": "repeated-after-close",
+    "package": "daily-reveal",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "host",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "startsAt": 10
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "a-writing",
+          "type": "submit",
+          "actor": "a",
+          "at": 11,
+          "payload": {
+            "occurrence": 1,
+            "value": "The mountain path"
+          }
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ],
+                  "own": {
+                    "actor": "a",
+                    "value": "The mountain path"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "reveal",
+          "type": "tick",
+          "actor": "system",
+          "at": 72000010,
+          "payload": {}
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "between",
+              "currentOccurrence": null,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "entries": [
+                    {
+                      "actor": "a",
+                      "value": "The mountain path"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actor": "host",
+            "expect": {
+              "phase": "between",
+              "currentOccurrence": null,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "entries": [
+                    {
+                      "actor": "a",
+                      "value": "The mountain path"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "repeated-public",
+    "package": "daily-shared-prompt",
+    "instance": {
+      "createdAt": 0,
+      "organizer": "host",
+      "participants": [
+        "a",
+        "b"
+      ],
+      "startsAt": 5
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "a-story",
+          "type": "submit",
+          "actor": "a",
+          "at": 5,
+          "payload": {
+            "occurrence": 1,
+            "value": "A story about a key"
+          }
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ],
+                  "entries": [
+                    {
+                      "actor": "a",
+                      "value": "A story about a key"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actor": "host",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 1,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ],
+                  "entries": [
+                    {
+                      "actor": "a",
+                      "value": "A story about a key"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "next",
+          "type": "tick",
+          "actor": "system",
+          "at": 86400005,
+          "payload": {}
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "b",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 2,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "entries": [
+                    {
+                      "actor": "a",
+                      "value": "A story about a key"
+                    }
+                  ]
+                },
+                {
+                  "number": 2,
+                  "phase": "open",
+                  "submissionCount": 0,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "pending"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "pending"
+                    }
+                  ],
+                  "entries": []
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "event": {
+          "eventId": "b-story",
+          "type": "submit",
+          "actor": "b",
+          "at": 86400006,
+          "payload": {
+            "occurrence": 2,
+            "value": "A story about a cup"
+          }
+        },
+        "outcome": "accepted",
+        "views": [
+          {
+            "actor": "a",
+            "expect": {
+              "phase": "open",
+              "currentOccurrence": 2,
+              "occurrences": [
+                {
+                  "number": 1,
+                  "phase": "closed",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "complete"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "missed"
+                    }
+                  ],
+                  "own": {
+                    "actor": "a",
+                    "value": "A story about a key"
+                  },
+                  "entries": [
+                    {
+                      "actor": "a",
+                      "value": "A story about a key"
+                    }
+                  ]
+                },
+                {
+                  "number": 2,
+                  "phase": "open",
+                  "submissionCount": 1,
+                  "statuses": [
+                    {
+                      "actor": "a",
+                      "status": "pending"
+                    },
+                    {
+                      "actor": "b",
+                      "status": "complete"
+                    }
+                  ],
+                  "entries": [
+                    {
+                      "actor": "b",
+                      "value": "A story about a cup"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "daily-private-practice-gaps-and-history",
+    "package": "daily-private-practice",
+    "instance": {
+      "createdAt": 0,
+      "startsAt": 10,
+      "participants": [
+        "a",
+        "b",
+        "c"
+      ],
+      "organizer": "organizer"
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "early",
+          "type": "submit",
+          "actor": "a",
+          "at": 9,
+          "payload": {
+            "occurrence": 1,
+            "value": "early"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 10,
+          "payload": {
+            "occurrence": 1,
+            "value": "café 🎨"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "b",
+          "type": "submit",
+          "actor": "b",
+          "at": 11,
+          "payload": {
+            "occurrence": 1,
+            "value": "B"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 12
+        }
+      },
+      {
+        "event": {
+          "eventId": "late",
+          "type": "submit",
+          "actor": "c",
+          "at": 72000010,
+          "payload": {
+            "occurrence": 1,
+            "value": "late"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "a",
+          "at": 86400009
+        }
+      },
+      {
+        "event": {
+          "eventId": "stale",
+          "type": "submit",
+          "actor": "c",
+          "at": 86400010,
+          "payload": {
+            "occurrence": 1,
+            "value": "old"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "c",
+          "type": "submit",
+          "actor": "c",
+          "at": 86400010,
+          "payload": {
+            "occurrence": 2,
+            "value": "C"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "café 🎨"
+          }
+        },
+        "outcome": "replayed"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "changed"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 158400010
+        }
+      },
+      {
+        "event": {
+          "eventId": "c",
+          "type": "submit",
+          "actor": "c",
+          "at": 158400010,
+          "payload": {
+            "occurrence": 2,
+            "value": "C"
+          }
+        },
+        "outcome": "replayed"
+      }
+    ]
+  },
+  {
+    "id": "daily-private-practice-maximum-clock",
+    "package": "daily-private-practice",
+    "instance": {
+      "createdAt": 0,
+      "startsAt": 9007199096340991,
+      "participants": [
+        "a",
+        "b"
+      ],
+      "organizer": "organizer"
+    },
+    "actions": [
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 9007199254740991
+        }
+      }
+    ]
+  },
+  {
+    "id": "daily-reveal-gaps-and-history",
+    "package": "daily-reveal",
+    "instance": {
+      "createdAt": 0,
+      "startsAt": 10,
+      "participants": [
+        "a",
+        "b",
+        "c"
+      ],
+      "organizer": "organizer"
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "early",
+          "type": "submit",
+          "actor": "a",
+          "at": 9,
+          "payload": {
+            "occurrence": 1,
+            "value": "early"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 10,
+          "payload": {
+            "occurrence": 1,
+            "value": "café 🎨"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "b",
+          "type": "submit",
+          "actor": "b",
+          "at": 11,
+          "payload": {
+            "occurrence": 1,
+            "value": "B"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 12
+        }
+      },
+      {
+        "event": {
+          "eventId": "late",
+          "type": "submit",
+          "actor": "c",
+          "at": 72000010,
+          "payload": {
+            "occurrence": 1,
+            "value": "late"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "a",
+          "at": 86400009
+        }
+      },
+      {
+        "event": {
+          "eventId": "stale",
+          "type": "submit",
+          "actor": "c",
+          "at": 86400010,
+          "payload": {
+            "occurrence": 1,
+            "value": "old"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "c",
+          "type": "submit",
+          "actor": "c",
+          "at": 86400010,
+          "payload": {
+            "occurrence": 2,
+            "value": "C"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "café 🎨"
+          }
+        },
+        "outcome": "replayed"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "changed"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 244800010
+        }
+      },
+      {
+        "event": {
+          "eventId": "c",
+          "type": "submit",
+          "actor": "c",
+          "at": 244800010,
+          "payload": {
+            "occurrence": 2,
+            "value": "C"
+          }
+        },
+        "outcome": "replayed"
+      }
+    ]
+  },
+  {
+    "id": "daily-reveal-maximum-clock",
+    "package": "daily-reveal",
+    "instance": {
+      "createdAt": 0,
+      "startsAt": 9007199009940991,
+      "participants": [
+        "a",
+        "b"
+      ],
+      "organizer": "organizer"
+    },
+    "actions": [
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 9007199254740991
+        }
+      }
+    ]
+  },
+  {
+    "id": "daily-shared-prompt-gaps-and-history",
+    "package": "daily-shared-prompt",
+    "instance": {
+      "createdAt": 0,
+      "startsAt": 10,
+      "participants": [
+        "a",
+        "b",
+        "c"
+      ],
+      "organizer": "organizer"
+    },
+    "actions": [
+      {
+        "event": {
+          "eventId": "early",
+          "type": "submit",
+          "actor": "a",
+          "at": 9,
+          "payload": {
+            "occurrence": 1,
+            "value": "early"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 10,
+          "payload": {
+            "occurrence": 1,
+            "value": "café 🎨"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "b",
+          "type": "submit",
+          "actor": "b",
+          "at": 11,
+          "payload": {
+            "occurrence": 1,
+            "value": "B"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 12
+        }
+      },
+      {
+        "event": {
+          "eventId": "late",
+          "type": "submit",
+          "actor": "c",
+          "at": 72000010,
+          "payload": {
+            "occurrence": 1,
+            "value": "late"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "a",
+          "at": 86400009
+        }
+      },
+      {
+        "event": {
+          "eventId": "stale",
+          "type": "submit",
+          "actor": "c",
+          "at": 86400010,
+          "payload": {
+            "occurrence": 1,
+            "value": "old"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "event": {
+          "eventId": "c",
+          "type": "submit",
+          "actor": "c",
+          "at": 86400010,
+          "payload": {
+            "occurrence": 2,
+            "value": "C"
+          }
+        },
+        "outcome": "accepted"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "café 🎨"
+          }
+        },
+        "outcome": "replayed"
+      },
+      {
+        "event": {
+          "eventId": "a",
+          "type": "submit",
+          "actor": "a",
+          "at": 86400011,
+          "payload": {
+            "occurrence": 1,
+            "value": "changed"
+          }
+        },
+        "outcome": "rejected"
+      },
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 244800010
+        }
+      },
+      {
+        "event": {
+          "eventId": "c",
+          "type": "submit",
+          "actor": "c",
+          "at": 244800010,
+          "payload": {
+            "occurrence": 2,
+            "value": "C"
+          }
+        },
+        "outcome": "replayed"
+      }
+    ]
+  },
+  {
+    "id": "daily-shared-prompt-maximum-clock",
+    "package": "daily-shared-prompt",
+    "instance": {
+      "createdAt": 0,
+      "startsAt": 9007199009940991,
+      "participants": [
+        "a",
+        "b"
+      ],
+      "organizer": "organizer"
+    },
+    "actions": [
+      {
+        "view": {
+          "actor": "organizer",
+          "at": 9007199254740991
+        }
+      }
+    ]
+  }
+]
