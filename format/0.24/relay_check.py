@@ -66,6 +66,12 @@ def witnesses():
  q=base('retry-empty');old=event(q,'a');q['events']=[dict(eventId='withdraw',type='roster',actor='system',at=1,step='piece',payload={'actors':['b','c','d']}),dict(old,at=2),event(dict(q,events=q['events'][:1]),'b',at=3)]
  save('membership-withdrawal-ticket-retention',q,['accepted','rejected','accepted'])
  q=base('continue',canonical=candidate());q['events']=[dict(eventId='new-person',type='roster',actor='system',at=1,step='piece',payload={'actors':['a','b','c','new']})];save('newcomer-denied-without-canonical-authority',q,['rejected'])
+ q=base('retry-empty');q['events']=[dict(eventId='queue-outsider',type='roster',actor='system',at=0,step='piece',payload={'actors':PEOPLE+['outsider']})];save('queue-audience-denies-roster-expansion-without-canonical',q,['rejected'])
+ assert 'outsider' not in run(q)['state']['hostActors']
+ q=base('retry-empty');q['trustedQueues'][0]['viewers'].append('preauthorized');q['events']=[dict(eventId='queue-authorized',type='roster',actor='system',at=0,step='piece',payload={'actors':PEOPLE+['preauthorized']})];save('queue-audience-permits-preauthorized-roster-expansion',q,['accepted'])
+ q=base('retry-empty');q['package']['queueInputs']['other']={'type':'invitation_queue'};other=copy.deepcopy(q['package']['runbook']['steps'][0]);other.update(id='other',queueInput={'binding':'other'});q['package']['runbook']['steps'].append(other);q['queueBindings']['other']=copy.deepcopy(q['queueBindings']['line']);q['queueBindings']['other']['ref']['source']='other';q['trustedQueues'][0]['viewers'].append('outsider');q['trustedQueues'].append(dict(queue=copy.deepcopy(q['queueBindings']['other']),viewers=PEOPLE+['organizer'],ready=True));q['events']=[dict(eventId='all-queues-outsider',type='roster',actor='system',at=0,step='piece',payload={'actors':PEOPLE+['outsider']})];save('queue-audience-rechecks-every-retained-source',q,['rejected'])
+ q=base('retry-empty');p=q['package'];p['runbook']['steps'].append(dict(id='later',op='pool@2',prompt='Collect later.',kinds=['text'],perActor=1,visibility='private'));p['requires'].append('pool@2');q['events']=[event(q,'a')];q['events'].append(dict(eventId='later-queue-outsider',type='configure',actor='system',at=1,step='later',payload={'actors':PEOPLE+['outsider'],'opensAt':None,'closesAt':None}));save('queue-audience-denies-later-window-expansion',q,['accepted','rejected'])
+ assert 'outsider' not in run(q)['state']['hostActors']
  q=base('retry-empty');q['events']=[event(q,'a',invitation=True),event(q,'b',predecessor=None)];save('typed-ticket-bool-rejected',q,['rejected','accepted'])
  return cases
 
@@ -94,7 +100,7 @@ def negatives():
  return variants,len(variants)+len(setups)+1
 
 def churn():
- q=base('retry-empty');q['participants']=['a','b','c'];q['queueBindings']['line']['order']=['a','b','c'];q['trustedQueues'][0]['viewers']=['a','b','c','organizer']
+ q=base('retry-empty');q['participants']=['a','b','c'];q['queueBindings']['line']['order']=['a','b','c'];q['trustedQueues'][0]['viewers']=['a','b','c','organizer']+['new'+str(i) for i in range(100)]+['waiting'+str(i) for i in range(100)]
  # Replace only a non-survivor at every transition, so full eligible pass never completes.
  for i in range(100):
   r=run(q)['state']['records'][0];survivor=r['offer']['actors'][0];new='new'+str(i)
@@ -107,17 +113,34 @@ def churn():
  return q
 
 def held_out():
- q=base();p=q['package'];p['id']='org.harmonomicon.example.relay-paired-reflection'
- p['content']['title']='Creative contribution and paired reflection'
- p['runbook']['steps'] += [dict(id='pairs',op='partition@1',policy='policy:roster_chunks@1',minSize=2,maxSize=2,prompt='Form reflection pairs.',afterMs=None),dict(id='reflect',op='collect_group@1',source='pairs',prompt='Reflect privately with your partner on the accepted piece.',close='organizer',afterMs=1000)]
+ q=base(window=86400000);p=q['package'];p['id']='org.harmonomicon.example.relay-paired-reflection'
+ p['runbook']['steps'][0]['retryAfterMs']=86400000
+ p['participants']['min']=2
+ p['content'].update(title='Creative contribution and paired reflection',
+  summary='Two people are invited to add one canonical story piece; then everyone writes private notes in pairs.',
+  setup='Enroll an even number of participants, from 2 to 100, and keep the roster fixed for this exercise. Shuffle once and invite two people with a shared 24-hour deadline. After selection, a full unsuccessful pass or pause, form pairs in enrollment order. The organizer closes reflection, or it closes after 24 hours.',
+  prompt='Add a story piece, then reflect with your partner.',
+  participant='If invited, submit a complete text or image, or decline. The first valid accepted piece becomes canonical. Then everyone may submit one note visible only to their pair. If no piece was accepted, discuss an idea for starting the story.',
+  completion='After the invitation phase ends, move into paired reflection; the notes close when the organizer advances or 24 hours pass. The saved queue permits a separate host-launched relay continuation; this exercise does not automatically launch it.',
+  access='Canonical contributions are attributed and visible to all bound viewers. Reflection notes stay within each pair, including after closure. An organizer has no extra note-reading access; a participating organizer can read only their own pair notes. The organizer can see all pair membership and close reflection. Media bytes require host authority; queue membership gives no new access.')
+ p['runbook']['steps'] += [dict(id='pairs',op='partition@1',policy='policy:roster_chunks@1',minSize=2,maxSize=2,prompt='Form reflection pairs in enrollment order.',afterMs=None),dict(id='reflect',op='collect_group@1',source='pairs',prompt='Reflect with your partner on the accepted piece. If nobody contributed, discuss an idea for starting the story. Your note is visible only within your pair.',close='organizer',afterMs=86400000)]
  p['requires']+=['partition@1','collect_group@1','policy:roster_chunks@1']
  pair=run(q)['state']['records'][0]['offer']['actors'];q['events']=[event(q,pair[0])]
  q['events']+=[dict(eventId='private-reflection',type='submit',actor='a',at=2,step='reflect',payload={'text':'private pair note'}),dict(eventId='finish-reflection',type='advance',actor='organizer',at=3,step='reflect',payload={})]
  result=compare(q);assert result['outcomes']==['accepted']*3
  assert result['views'][-1]['a']['records'][-1]['entries']==result['views'][-1]['b']['records'][-1]['entries']
  assert result['views'][-1]['c']['records'][-1]['entries']==[]
+ assert result['views'][-1]['organizer']['records'][-1]['entries']==[]
+ empty=copy.deepcopy(q);empty['events']=[]
+ for day in [1,2]:empty['events'].append(dict(eventId='empty-day-'+str(day),type='tick',actor='system',at=day*86400000,step=None,payload={}))
+ empty['events'] += [dict(eventId='empty-reflection',type='submit',actor='a',at=2*86400000,step='reflect',payload={'text':'an idea to start'}),dict(eventId='empty-finish',type='advance',actor='organizer',at=2*86400000+1,step='reflect',payload={})]
+ empty_result=compare(empty);assert empty_result['outcomes']==['accepted']*4
+ assert empty_result['state']['records'][0]['canonical'] is None and empty_result['state']['records'][0]['status']=='exhausted'
+ assert empty_result['views'][-1]['b']['records'][-1]['entries'][0]['value']['text']=='an idea to start'
+ assert empty_result['views'][-1]['c']['records'][-1]['entries']==empty_result['views'][-1]['organizer']['records'][-1]['entries']==[]
+ odd=copy.deepcopy(q);odd['participants']=['a','b','c'];odd['events']=[];assert run(odd)==node(odd)=={'outcome':'invalid_setup'}
  (HERE/'examples/relay-paired-reflection.json').write_text(json.dumps(p,indent=2)+'\n')
- print('Held-out first-valid followed by private pair reflection passes without interpreter edits')
+ print('Held-out 24-hour first-valid/private-pair reflection: selected and empty paths, even roster and private notes pass without interpreter edits')
  return q
 
 def check(schema=False):

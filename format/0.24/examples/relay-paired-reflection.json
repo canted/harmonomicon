@@ -5,12 +5,12 @@
   "content": {
     "language": "en",
     "title": "Creative contribution and paired reflection",
-    "summary": "Two invited people race to contribute one canonical story piece.",
-    "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
-    "prompt": "Continue the shared story.",
-    "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
-    "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
-    "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+    "summary": "Two people are invited to add one canonical story piece; then everyone writes private notes in pairs.",
+    "setup": "Enroll an even number of participants, from 2 to 100, and keep the roster fixed for this exercise. Shuffle once and invite two people with a shared 24-hour deadline. After selection, a full unsuccessful pass or pause, form pairs in enrollment order. The organizer closes reflection, or it closes after 24 hours.",
+    "prompt": "Add a story piece, then reflect with your partner.",
+    "participant": "If invited, submit a complete text or image, or decline. The first valid accepted piece becomes canonical. Then everyone may submit one note visible only to their pair. If no piece was accepted, discuss an idea for starting the story.",
+    "completion": "After the invitation phase ends, move into paired reflection; the notes close when the organizer advances or 24 hours pass. The saved queue permits a separate host-launched relay continuation; this exercise does not automatically launch it.",
+    "access": "Canonical contributions are attributed and visible to all bound viewers. Reflection notes stay within each pair, including after closure. An organizer has no extra note-reading access; a participating organizer can read only their own pair notes. The organizer can see all pair membership and close reflection. Media bytes require host authority; queue membership gives no new access."
   },
   "provenance": {
     "kind": "original",
@@ -18,7 +18,7 @@
     "rights": "Authors retain rights to their contributions; this definition grants no media rights."
   },
   "participants": {
-    "min": 1,
+    "min": 2,
     "max": 100
   },
   "requires": [
@@ -50,8 +50,8 @@
           "image"
         ],
         "policy": "policy:rolling_pair@1",
-        "windowMs": 100,
-        "retryAfterMs": 50,
+        "windowMs": 86400000,
+        "retryAfterMs": 86400000,
         "input": null,
         "queueInput": null
       },
@@ -61,16 +61,16 @@
         "policy": "policy:roster_chunks@1",
         "minSize": 2,
         "maxSize": 2,
-        "prompt": "Form reflection pairs.",
+        "prompt": "Form reflection pairs in enrollment order.",
         "afterMs": null
       },
       {
         "id": "reflect",
         "op": "collect_group@1",
         "source": "pairs",
-        "prompt": "Reflect privately with your partner on the accepted piece.",
+        "prompt": "Reflect with your partner on the accepted piece. If nobody contributed, discuss an idea for starting the story. Your note is visible only within your pair.",
         "close": "organizer",
-        "afterMs": 1000
+        "afterMs": 86400000
       }
     ]
   },

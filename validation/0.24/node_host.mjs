@@ -32,7 +32,7 @@ function engine(id){
   const row=db.prepare('SELECT * FROM instances WHERE id=?').get(id);
   if(!row)throw new Error('not_found');
   const packageRow=db.prepare('SELECT body FROM packages WHERE id=? AND version=?').get(row.package_id,row.package_version);
-  return new Engine(JSON.parse(packageRow.body),JSON.parse(row.participants),row.organizer,row.started_at,JSON.parse(row.state),null,null,(actor,ref)=>authorized(id,actor,ref),null,(actor,ref,kind)=>authorized(id,actor,ref,kind),chooseTie,row.identity,null,authorizeBinding);
+  return new Engine(JSON.parse(packageRow.body),JSON.parse(row.participants),row.organizer,row.started_at,JSON.parse(row.state),null,null,(actor,ref)=>authorized(id,actor,ref),null,(actor,ref,kind)=>authorized(id,actor,ref,kind),chooseTie,row.identity,null,authorizeBinding,null,authorizeQueue);
 }
 const persist=(id,e)=>db.prepare('UPDATE instances SET state=? WHERE id=?').run(canonical(e.state),id);
 setInterval(()=>transaction(()=>{for(const {id} of db.prepare('SELECT id FROM instances').all()){const e=engine(id);e.settle(now());persist(id,e);}}),20).unref();

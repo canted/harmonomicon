@@ -619,7 +619,7 @@ class Engine:
             if event['step'] != frame['key']: return 'rejected'
             record = self.record(frame)
             if event['actor'] == 'system' and event['type'] == 'configure' and step['op'] in artifacts.WINDOWS:
-                if not artifacts.safe_control(self, event['payload']) or not continuation.authorize_expansion(self, event['payload']['actors']): return 'rejected'
+                if not artifacts.safe_control(self, event['payload']) or not continuation.authorize_expansion(self, event['payload']['actors']) or not relay.authorize_expansion(self, event['payload']['actors']): return 'rejected'
             if step['op'] in relay.OPS:
                 accepted = relay.event(self, frame, event)
             elif step['op'] in pooling.WINDOWS or step['op'] in ['assign_item@2','acknowledge@2']:

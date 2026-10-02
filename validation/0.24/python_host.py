@@ -44,7 +44,7 @@ def engine(iid):
     if row is None:raise KeyError('not_found')
     pid,version,people,organizer,start,state,identity=row
     package=json.loads(db.execute('SELECT body FROM packages WHERE id=? AND version=?',(pid,version)).fetchone()[0])
-    return runtime.Engine(package,json.loads(people),organizer,start,json.loads(state),authorize_image=lambda actor,ref: authorized(iid,actor,ref),authorize_artifact=lambda actor,ref,kind: authorized(iid,actor,ref,kind),choose_tie=(lambda count: opts.tie_choice) if opts.tie_choice is not None else None,instance_id=identity,authorize_input=authorize_binding)
+    return runtime.Engine(package,json.loads(people),organizer,start,json.loads(state),authorize_image=lambda actor,ref: authorized(iid,actor,ref),authorize_artifact=lambda actor,ref,kind: authorized(iid,actor,ref,kind),choose_tie=(lambda count: opts.tie_choice) if opts.tie_choice is not None else None,instance_id=identity,authorize_input=authorize_binding,authorize_queue=authorize_queue)
 def persist(iid,e):db.execute('UPDATE instances SET state=? WHERE id=?',(runtime.canonical(e.state),iid))
 MAX_IMAGE_BYTES = 524288
 def valid_png(data):

@@ -43,6 +43,7 @@ def valid_queue(q):
 
 
 def initialize(e,bindings,authorize,restored):
+    e.authorize_queue=authorize
     declared=e.package.get('queueInputs',{})
     supplied=e.state.get('queueBindings',{}) if restored and bindings is None else ({} if bindings is None else bindings)
     a.demand(type(supplied) is dict and set(supplied)==set(declared) and all(valid_queue(q) for q in supplied.values()))
@@ -60,6 +61,20 @@ def initialize(e,bindings,authorize,restored):
             a.demand(attested)
     if declared or any(s['op'] in OPS for s in e.definitions.values()):
         if not restored:e.state['queueBindings']=copy.deepcopy(supplied)
+
+
+def authorize_expansion(e,actors):
+    current=a.bindings(e)
+    if all(actor in current for actor in actors):return True
+    queues=e.state.get('queueBindings',{})
+    if not queues:return True
+    if not callable(e.authorize_queue):return False
+    viewers=list(dict.fromkeys(current+actors))
+    for queue in queues.values():
+        try:
+            if e.authorize_queue(copy.deepcopy(queue),viewers[:]) is not True:return False
+        except Exception:return False
+    return True
 
 
 def predecessor(e,s):
@@ -131,7 +146,7 @@ def event(e,f,event):
     r=e.record(f);s=f['step'];payload=event['payload'];actor=event['actor'];now=event['at']
     if actor=='system' and event['type']=='roster':
         if not a.exact(payload,['actors']) or not a.valid_control({'actors':payload['actors'],'opensAt':None,'closesAt':None}):return False
-        if not c.authorize_expansion(e,payload['actors']):return False
+        if not c.authorize_expansion(e,payload['actors']) or not authorize_expansion(e,payload['actors']):return False
         members=payload['actors'];old=r['order'][:];current=r['offer'];survivors=[person for person in current['actors'] if person in members]
         r['order']=[person for person in old if person in members]+[person for person in members if person not in old]
         e.state['hostActors']=list(dict.fromkeys(a.bindings(e)+members))

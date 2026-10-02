@@ -31,6 +31,7 @@ export function validQueue(q){
   return exact(q,['ref','order','canonical','notBefore'])&&exact(q.ref,['instance','source'])&&uuid(q.ref.instance)&&name(q.ref.source)&&Array.isArray(q.order)&&q.order.length<=100&&q.order.every(a=>text(a)&&a!=='system')&&new Set(q.order).size===q.order.length&&(q.canonical===null||validRef(q.canonical))&&(q.notBefore===null||integer(q.notBefore));
 }
 export function initializeRelay(e,q,authorize,restored){
+  e.authorizeQueue=authorize;
   const supplied=restored&&q===null?e.state.queueBindings??{}:q??{},declared=e.package.queueInputs??{};
   demand(supplied!==null&&typeof supplied==='object'&&!Array.isArray(supplied)&&Object.keys(supplied).length===Object.keys(declared).length&&Object.keys(declared).every(k=>Object.hasOwn(supplied,k))&&Object.values(supplied).every(validQueue));
   demand(new Set(Object.values(supplied).map(q=>e.canonical(q.ref))).size===Object.keys(supplied).length);
@@ -41,6 +42,15 @@ export function initializeRelay(e,q,authorize,restored){
     if(!restored){demand(queue.notBefore!==null&&e.state.clock>=queue.notBefore&&typeof authorize==='function');let valid=false;try{valid=authorize(clone(queue),bindings(e))===true;}catch{}demand(valid);}
   }
   if(Object.keys(declared).length||[...e.definitions.values()].some(s=>RELAY_OPS.includes(s.op)))if(!restored)e.state.queueBindings=clone(supplied);
+}
+export function authorizeQueueExpansion(e,actors){
+  const current=bindings(e);
+  if(actors.every(actor=>current.includes(actor)))return true;
+  const queues=Object.values(e.state.queueBindings??{});
+  if(!queues.length)return true;
+  if(typeof e.authorizeQueue!=='function')return false;
+  const viewers=[...new Set([...current,...actors])];
+  return queues.every(queue=>{try{return e.authorizeQueue(clone(queue),[...viewers])===true;}catch{return false;}});
 }
 const eligible=r=>r.order.filter(a=>a!==r.previousAuthor);
 function rotate(r,actors){r.order=[...r.order.filter(a=>!actors.includes(a)),...actors.filter(a=>r.order.includes(a))];}
@@ -79,7 +89,7 @@ export function settleRelay(e,f,now){
 export function relayEvent(e,f,ev){
   const r=e.record(f),s=f.step,p=ev.payload,actor=ev.actor,now=ev.at;
   if(actor==='system'&&ev.type==='roster'){
-    if(!exact(p,['actors'])||!validControl({actors:p.actors,opensAt:null,closesAt:null})||!authorizeNewViewers(e,{actors:p.actors,opensAt:null,closesAt:null}))return false;
+    if(!exact(p,['actors'])||!validControl({actors:p.actors,opensAt:null,closesAt:null})||(!authorizeNewViewers(e,{actors:p.actors,opensAt:null,closesAt:null})||!authorizeQueueExpansion(e,p.actors)))return false;
     const old=r.order,current=r.offer,survivors=current.actors.filter(a=>p.actors.includes(a));
     r.order=[...old.filter(a=>p.actors.includes(a)),...p.actors.filter(a=>!old.includes(a))];e.state.hostActors=[...new Set([...bindings(e),...p.actors])];r.effective.actors=[...r.order];
     if(survivors.length!==2){r.attempted=[...new Set([...r.attempted,...current.actors.filter(a=>!survivors.includes(a))])];r.failures++;offer(e,f,r,now,survivors,current.closesAt);}return true;

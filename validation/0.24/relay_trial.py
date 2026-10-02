@@ -134,15 +134,66 @@ def different_composition(directory):
  try:
   import_package(hosts[0],p);export=hosts[0].request('/packages/'+p['id']+'/'+p['version']);imported=hosts[1].request('/packages',{'package':export['package']});assert imported['digest']==export['digest']
   for h in hosts:
+   assert h.request('/instances',request(p,'different-odd',['a','b','c']))['outcome']=='invalid_setup'
    made=h.request('/instances',request(p,'different',people));assert made['outcome']=='created';tokens=made['tokens'];r=record(view(h,'different',tokens));author=r['offer']['actors'][0];payload=ticket_payload(r,author,text('piece for reflection'))
    assert submit(h,'different',tokens,author,payload)['outcome']=='accepted'
    assert h.request('/instances/different/events',dict(eventId='note',type='submit',step='reflect',payload={'text':'private note'}),tokens['a'])['outcome']=='accepted'
-   got=all_views(h,'different',tokens);assert got['a']['records'][-1]['entries']==got['b']['records'][-1]['entries'] and got['c']['records'][-1]['entries']==[]
+   got=all_views(h,'different',tokens);assert got['a']['records'][-1]['entries']==got['b']['records'][-1]['entries'] and got['c']['records'][-1]['entries']==got['organizer']['records'][-1]['entries']==[]
    reference=run(dict(package=p,participants=people,organizer='organizer',seed=h.seed,instanceId=made['instanceIdentity'],events=[dict(actor=author,at=0,**body('send','submit',payload)),dict(eventId='note',type='submit',actor='a',at=0,step='reflect',payload={'text':'private note'})]))
    assert got==reference['views'][-1];h.restart();assert all_views(h,'different',tokens)==got
-  print('Different first-valid/private-pair composition transfers identical definition/digest and executes with exact private views in both durable hosts',flush=True)
+   empty=h.request('/instances',request(p,'different-empty',people));assert empty['outcome']=='created';et=empty['tokens'];h.clock(DAY);assert record(view(h,'different-empty',et))['status']=='open';h.clock(2*DAY)
+   er=record(view(h,'different-empty',et));assert er['status']=='exhausted' and er['canonical'] is None
+   assert h.request('/instances/different-empty/events',dict(eventId='empty-note',type='submit',step='reflect',payload={'text':'an idea to start'}),et['a'])['outcome']=='accepted'
+   notes=all_views(h,'different-empty',et);assert notes['b']['records'][-1]['entries'][0]['value']['text']=='an idea to start'
+   assert notes['c']['records'][-1]['entries']==notes['organizer']['records'][-1]['entries']==[]
+   h.restart();assert all_views(h,'different-empty',et)==notes
+  print('Different 24-hour first-valid/private-pair composition transfers identical definition/digest; selected/empty paths, odd-roster refusal and exact private views survive restart in both hosts',flush=True)
  finally:
   for h in hosts:h.stop()
+
+def queue_audience_trial(kind,directory):
+ h=Host(kind,directory/(kind+'-queue-audience.sqlite'))
+ try:
+  start=package();start['id']+='-audience';start['runbook']['steps'][0].update(windowMs=100,retryAfterMs=50)
+  empty=package('retry-empty');empty['id']+='-audience';empty['runbook']['steps'][0].update(windowMs=100,retryAfterMs=50)
+  empty['requires'].append('pool@2');empty['runbook']['steps'].append(dict(id='later',op='pool@2',prompt='Collect a later private note.',kinds=['text'],perActor=1,visibility='private'))
+  import_package(h,empty)
+  def snapshot(iid):
+   with sqlite3.connect(h.db) as db:
+    return (db.execute('SELECT state FROM instances WHERE id=?',(iid,)).fetchone()[0],db.execute('SELECT actor,hash FROM tokens WHERE instance=? ORDER BY actor,hash',(iid,)).fetchall(),db.execute('SELECT * FROM input_grants WHERE destination=? ORDER BY actor,origin,ref',(iid,)).fetchall(),db.execute('SELECT * FROM queue_consumptions ORDER BY source_instance,source').fetchall())
+  source,_=created(h,start,'audience-source',people=['a','b']);h.clock(100)
+  sr=record(view(h,'audience-source',source['tokens']));assert sr['status']=='exhausted' and sr['canonical'] is None and sr['output']['queue']['notBefore']==150
+  h.clock(150)
+  denied=successor_request(empty,'audience-outsider-create','audience-source',None,people=['a','b','outsider'])
+  assert h.request('/instances',denied)['outcome']=='invalid_setup'
+  req=successor_request(empty,'audience-retry','audience-source',None,people=['a','b']);made=h.request('/instances',req);assert made['outcome']=='created';tokens=made['tokens']
+  h.restart();before=all_views(h,'audience-retry',tokens);stored=snapshot('audience-retry')
+  assert control(h,'audience-retry',['a','b','outsider'])['outcome']=='rejected'
+  assert snapshot('audience-retry')==stored and all_views(h,'audience-retry',tokens)==before
+  assert h.request('/instances/audience-retry/bindings',{'actor':'outsider','token':'outsider-token'})['outcome']=='invalid_request'
+  assert h.request('/instances/audience-retry/view',token='outsider-token')['outcome']=='unauthorized'
+  assert snapshot('audience-retry')==stored
+  r=record(before['a']);actor=r['offer']['actors'][0];assert submit(h,'audience-retry',tokens,actor,ticket_payload(r,actor,text('later phase')))['outcome']=='accepted'
+  h.restart();before=all_views(h,'audience-retry',tokens);stored=snapshot('audience-retry')
+  configure=dict(eventId='later-outsider',type='configure',step='later',payload={'actors':['a','b','outsider'],'opensAt':None,'closesAt':None})
+  assert h.request('/instances/audience-retry/control',configure)['outcome']=='rejected'
+  assert snapshot('audience-retry')==stored and all_views(h,'audience-retry',tokens)==before
+  assert h.request('/instances/audience-retry/bindings',{'actor':'outsider','token':'later-outsider-token'})['outcome']=='invalid_request'
+  assert snapshot('audience-retry')==stored
+  # A source-bound person removed from active membership retains read authority.
+  prebound,_=created(h,start,'audience-prebound-source',people=['a','b','preauthorized'])
+  assert control(h,'audience-prebound-source',['a','b'])['outcome']=='accepted'
+  h.clock(250);pr=record(view(h,'audience-prebound-source',prebound['tokens']));assert pr['status']=='exhausted' and pr['canonical'] is None
+  h.clock(300);pre_req=successor_request(empty,'audience-prebound-retry','audience-prebound-source',None,people=['a','b']);allowed=h.request('/instances',pre_req);assert allowed['outcome']=='created';pt=allowed['tokens']
+  h.restart();r=record(view(h,'audience-prebound-retry',pt));partner=r['offer']['actors'][0];ticket=ticket_payload(r,partner,text('authorized queue viewer'))
+  assert control(h,'audience-prebound-retry',['a','b','preauthorized'])['outcome']=='accepted'
+  assert h.request('/instances/audience-prebound-retry/bindings',{'actor':'preauthorized','token':'preauthorized-token'})['outcome']=='bound'
+  visible=h.request('/instances/audience-prebound-retry/view',token='preauthorized-token')['view'];retained=record(visible)
+  assert retained['offer']==r['offer']
+  assert submit(h,'audience-prebound-retry',pt,partner,ticket)['outcome']=='accepted'
+  h.restart();assert h.request('/instances/audience-prebound-retry/view',token='preauthorized-token')['view']['records'][-1]['step']=='later'
+  print(kind+': null-canonical queue audience rechecked on roster/later configuration after restart; denial preserves exact state/tokens/grants/claims, prebound source viewer permitted',flush=True)
+ finally:h.stop()
 
 def capability_trial(kind,directory):
  for disabled in ['first_valid@1','policy:rolling_pair@1','invitation_queue@1','seeded_assignment@1']:
@@ -155,5 +206,5 @@ def capability_trial(kind,directory):
  print(kind+': exact capability refusal without state/grants/claims passes',flush=True)
 if __name__=='__main__':
  with tempfile.TemporaryDirectory() as tmp:
-  for kind in ['python','node']:step_trial(kind,Path(tmp));capability_trial(kind,Path(tmp))
+  for kind in ['python','node']:step_trial(kind,Path(tmp));queue_audience_trial(kind,Path(tmp));capability_trial(kind,Path(tmp))
   different_composition(Path(tmp))

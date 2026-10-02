@@ -4,7 +4,7 @@ The new rolling relay supports the newly agreed first-valid pattern. It does not
 
 # Migration checklist for the twenty 0.12 examples
 
-This checklist measures migration of each earlier package's timing, supported setup choices, acceptance rules, missing-contribution behavior, and audience views. A similarly named activity with different rules is not a complete migration. Candidate 0.24 has forty examples; they are not replacements for all twenty earlier packages.
+This checklist measures migration of each earlier package's timing, supported setup choices, acceptance rules, missing-contribution behavior, and audience views. A similarly named activity with different rules is not a complete migration. Candidate 0.24 has 44 examples; they are not replacements for all twenty earlier packages.
 
 **Current result:** six complete migrations; fourteen need additional operations or bindings. Candidate 0.24 has 44 examples and preserves all 108 prior 0.23 traces; the inherited 73-trace 0.22 comparison also passes. Image check-in and image daily shared prompt now have actual byte, durable-host and legacy behavior comparison evidence; image-daily-private is an additional authored conceal/reveal witness. Single-source linked response remains distinct from full two-offer migrations.
 
@@ -61,6 +61,6 @@ Four new witnesses add contribution-derived candidate identity, optional vote ch
 
 Four further witnesses demonstrate origin-preserving typed input, explicit cross-instance host binding and opt-in no-vote policies. They do not complete another historical migration. Earlier item-loop and linked-response reuse remains available; selected typed authority/handoff is the new boundary. Six complete and fourteen incomplete translations remain separately accounted for. See [current limits](readiness-assessment.md) and [neutral host review packet](HOST-REVIEW.md).
 
-## Candidate 0.24 pooling accounting
+## Retained 0.23 pooling accounting
 
 Six new witnesses demonstrate generic typed quotas, attributed typed item iteration and compatible qualified voting/source-response inputs. Forty examples include all 34 retained translations. These changes do not complete another historical migration: the fourteen incomplete translations still need their exact balanced offers, permission/role rules, response-candidate adapters, streams or lifecycle. All six complete migrations retain their actual historical-host comparisons. See [pooling contract](pooling-notes.md), [supported profile](readiness-assessment.md) and [evidence](../../validation/0.24/EVIDENCE.md).

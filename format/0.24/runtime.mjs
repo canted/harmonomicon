@@ -4,7 +4,7 @@ import {ARTIFACT_OPS,WINDOWS,validateArtifact,initialize,bindings,control,settle
 import {VOTING_OPS,VOTING_POLICIES,validateVoting,settleVoting,votingEvent,projectVoting,initializeVoting} from './voting.mjs';
 import {CONTINUATION_OPS,CONTINUATION_POLICIES,CONTINUATION_WINDOWS,validateInputs,validateContinuation,initializeContinuation,settleContinuation,continuationEvent,projectContinuation,authorizeNewViewers} from './continuation.mjs';
 import {POOLING_OPS,POOLING_POLICIES,POOLING_WINDOWS,validatePooling,settlePooling,poolingEvent,projectPooling,canClaimItem} from './pooling.mjs';
-import {RELAY_OPS,RELAY_POLICIES,RELAY_CAPS,validateQueues,validateRelay,initializeRelay,settleRelay,relayEvent,projectRelay} from './relay.mjs';
+import {RELAY_OPS,RELAY_POLICIES,RELAY_CAPS,validateQueues,validateRelay,initializeRelay,settleRelay,relayEvent,projectRelay,authorizeQueueExpansion} from './relay.mjs';
 WINDOWS.push(...CONTINUATION_WINDOWS,...POOLING_WINDOWS);
 export const FORMAT='harmonomicon.activity-package/0.24';
 export const OPS=[...ARTIFACT_OPS,...VOTING_OPS,...CONTINUATION_OPS,...POOLING_OPS,...RELAY_OPS,'collect@1','reveal@1','append@1','tally@1','for_each@1','pool@1','for_items@1','assign_item@1','acknowledge@1','reveal_item@1','partition@1','collect_group@1','pause@1','wait_until@1','collect_until@1','route@1','rate@1','aggregate@1','publish_ranking@1','for_windows@1','collect_window@1','assign_sources@1','respond@1','reveal_responses@1'];
@@ -401,7 +401,7 @@ export class Engine{
     else if(this.state.pc<this.plan.length){
       const f=this.plan[this.state.pc],s=f.step,r=this.record(f);
       if(e.step!==f.key)return 'rejected';
-      if(e.actor==='system'&&e.type==='configure'&&WINDOWS.includes(s.op)&&!authorizeNewViewers(this,e.payload))return 'rejected';
+      if(e.actor==='system'&&e.type==='configure'&&WINDOWS.includes(s.op)&&(!authorizeNewViewers(this,e.payload)||!authorizeQueueExpansion(this,e.payload.actors)))return 'rejected';
       if(RELAY_OPS.includes(s.op)){accepted=relayEvent(this,f,e);}
       else if(POOLING_OPS.includes(s.op)){accepted=poolingEvent(this,f,e);}
       else if(CONTINUATION_OPS.includes(s.op)){accepted=continuationEvent(this,f,e);}
