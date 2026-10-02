@@ -1,0 +1,58 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "org.harmonomicon.example.creative-relay-start",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Creative relay",
+    "summary": "Two invited people race to contribute one canonical story piece.",
+    "setup": "Shuffle once. Invite two people with one shared 24-hour deadline. The host launches successors from the saved queue and actual accepted contribution.",
+    "prompt": "Continue the shared story.",
+    "participant": "If invited, submit one complete text or image. The first valid accepted contribution becomes canonical. Decline if you prefer to pass.",
+    "completion": "The winner moves back; the losing invitee moves to the front for a fresh shared window. If both expire, rotate them; pause after a full failed pass.",
+    "access": "Canonical contributions are attributed and visible to bound participants. Media references require host authority; queue membership gives no new access."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.24 composition.",
+    "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "clock@1",
+    "durable_state@1",
+    "first_valid@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "invitation_queue@1",
+    "policy:rolling_pair@1",
+    "private_views@1",
+    "seeded_assignment@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "piece",
+        "op": "first_valid@1",
+        "prompt": "Add a text or image to the shared story.",
+        "kinds": [
+          "text",
+          "image"
+        ],
+        "policy": "policy:rolling_pair@1",
+        "windowMs": 86400000,
+        "retryAfterMs": 86400000,
+        "input": null,
+        "queueInput": null
+      }
+    ]
+  },
+  "inputs": {}
+}

@@ -1,0 +1,132 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "org.harmonomicon.example.creative-continuation",
+  "version": "0.1.2",
+  "content": {
+    "language": "en",
+    "title": "Continue the station song",
+    "summary": "Write, vote, and select twice; the selected first continuation explicitly supplies the second round.",
+    "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+    "prompt": "Continue the station song",
+    "participant": "Follow each instruction; submit or vote before its window closes.",
+    "completion": "Finish after showing both round results. An unresolved or empty preceding result blocks only the collection that depends on it; later instructions still run and can show the resulting empty outcome.",
+    "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown. Selected source material is visible in the next round."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.22 activity example.",
+    "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "artifact_pool@2",
+    "clock@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "policy:most_votes@1",
+    "policy:random_tie@1",
+    "present@1",
+    "private_views@1",
+    "select@1",
+    "serial_events@1",
+    "tally@2",
+    "text@1",
+    "vote@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "continuations_one",
+        "op": "artifact_pool@2",
+        "round": "verse_one",
+        "prompt": "Propose one continuation of the opening piece.",
+        "input": {
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the old station began to sing."
+          }
+        },
+        "kinds": [
+          "text"
+        ],
+        "visibility": "private"
+      },
+      {
+        "id": "vote_one",
+        "op": "vote@1",
+        "prompt": "Choose the continuation that should become our next starting piece.",
+        "candidates": {
+          "source": "continuations_one"
+        },
+        "changes": "allowed",
+        "ballots": "private"
+      },
+      {
+        "id": "one_totals",
+        "op": "tally@2",
+        "source": "vote_one"
+      },
+      {
+        "id": "one_choice",
+        "op": "select@1",
+        "source": "one_totals",
+        "policy": "policy:most_votes@1",
+        "ties": "random"
+      },
+      {
+        "id": "one_result",
+        "op": "present@1",
+        "source": "one_choice",
+        "prompt": "Read the continuation selected for the next round.",
+        "audience": "group"
+      },
+      {
+        "id": "continuations_two",
+        "op": "artifact_pool@2",
+        "round": "verse_two",
+        "prompt": "Continue the selected piece from the preceding round.",
+        "input": {
+          "result": "one_choice"
+        },
+        "kinds": [
+          "text"
+        ],
+        "visibility": "private"
+      },
+      {
+        "id": "vote_two",
+        "op": "vote@1",
+        "prompt": "Choose the continuation that should conclude our two-round piece.",
+        "candidates": {
+          "source": "continuations_two"
+        },
+        "changes": "allowed",
+        "ballots": "private"
+      },
+      {
+        "id": "two_totals",
+        "op": "tally@2",
+        "source": "vote_two"
+      },
+      {
+        "id": "two_choice",
+        "op": "select@1",
+        "source": "two_totals",
+        "policy": "policy:most_votes@1",
+        "ties": "random"
+      },
+      {
+        "id": "two_result",
+        "op": "present@1",
+        "source": "two_choice",
+        "prompt": "Here is the final selected continuation and its vote totals.",
+        "audience": "group"
+      }
+    ]
+  },
+  "settings": {}
+}

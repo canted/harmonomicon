@@ -1,7 +1,7 @@
 {
-  "format": "harmonomicon.activity-package/0.20",
+  "format": "harmonomicon.activity-package/0.24",
   "id": "harmonomicon.listgame",
-  "version": "0.4.4",
+  "version": "0.4.7",
   "content": {
     "language": "en",
     "title": "List Game",

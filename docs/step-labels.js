@@ -1,4 +1,10 @@
 /** Summaries of reusable operation settings, never activity-specific templates. */
+function inputLabel(value) {
+  if (value === null) return 'none (null)';
+  if (value?.binding) return `host binding: ${value.binding}`;
+  if (value?.result) return `step result: ${value.result}`;
+  return JSON.stringify(value);
+}
 export function stepLines(step) {
   const lines = [step.op];
   if (typeof step.prompt === 'string') lines.push(`“${step.prompt}”`);
@@ -22,6 +28,19 @@ export function stepLines(step) {
   if (step.policy) lines.push(`Policy: ${step.policy}`);
   if (step.perActor !== undefined) lines.push(`Items per participant: ${step.perActor}`);
   if (step.round) lines.push(`Round: ${step.round}`);
+  if (Object.hasOwn(step,'input')) lines.push(`Contribution input: ${inputLabel(step.input)}`);
+  if (Object.hasOwn(step,'queueInput')) lines.push(`Invitation queue input: ${inputLabel(step.queueInput)}`);
+  if (step.candidates?.source) lines.push(`Candidates from: ${step.candidates.source}`);
+  if (step.candidates?.options) lines.push(`Candidate options: ${step.candidates.options.map(option => `${option.id}: ${option.label}`).join(' · ')}`);
+  if (step.changes) lines.push(`Ballot changes: ${step.changes}`);
+  if (step.ballots) lines.push(`Ballot visibility: ${step.ballots}`);
+  if (step.ties) lines.push(`Ties: ${step.ties}`);
+  if (step.noVotes) lines.push(`No votes: ${step.noVotes}`);
+  if (step.audience) lines.push(`Audience: ${step.audience}`);
+  if (step.op === 'first_valid@1') {
+    lines.push(`Invitation window: ${step.windowMs} ms`);
+    lines.push(`Failed-pass retry delay: ${step.retryAfterMs} ms`);
+  }
   if (step.offset !== undefined) lines.push(`Roster offset: ${step.offset}`);
   if (step.op === 'rate@1') lines.push(`Rating: ${step.min}–${step.max} · private`);
   if (step.targetCount !== undefined && step.targetCount !== null) lines.push(`Scale mean to ${step.targetCount} ratings`);
@@ -31,15 +50,15 @@ export function stepLines(step) {
     lines.push(`${step.occurrences} windows · every ${step.intervalMs} ms · open ${step.windowMs} ms`);
   }
   if (step.op === 'collect_window@1') lines.push(`Closes: fixed window deadline · completion status: ${step.completion}`);
-  if (['assign_sources@1','assign_artifacts@1'].includes(step.op)) {
+  if (['assign_sources@1','assign_artifacts@1','assign_artifacts@2'].includes(step.op)) {
     lines.push(`Recipients: ${step.recipients} · self excluded`);
     lines.push(`Cardinality: ${step.cardinality} · source reuse: ${step.reuse} · unmatched: ${step.unmatched}`);
   }
-  if (['respond@1','artifact_response@1'].includes(step.op)) lines.push('Independent responses · assigned source ID required');
-  if (['reveal_responses@1','reveal_artifact_responses@1'].includes(step.op)) lines.push('Publish accepted source-response pairs with attribution');
+  if (['respond@1','artifact_response@1','artifact_response@2'].includes(step.op)) lines.push('Independent responses · assigned source ID required');
+  if (['reveal_responses@1','reveal_artifact_responses@1','reveal_artifact_responses@2'].includes(step.op)) lines.push('Publish accepted source-response pairs with attribution');
   if (step.kinds) lines.push(`Contribution kinds: ${step.kinds.join(' · ')}`);
   if (step.visibility) lines.push(`Visibility: ${step.visibility}`);
-  if (['artifact_pool@1','artifact_response@1'].includes(step.op)) lines.push('Actors/dates: trusted host inputs · closes by date or host control');
+  if (['artifact_pool@1','artifact_pool@2','artifact_pool@3','artifact_response@1','artifact_response@2','pool@2','vote@1','vote@2','vote@3'].includes(step.op)) lines.push('Actors/dates: trusted host inputs · closes by date or host control');
   const ends = [];
   if (step.close) ends.push(({all:'all eligible submissions',organizer:'organizer advances',turn:'current participant advances',deadline:'deadline'})[step.close] ?? step.close);
   if (step.op === 'append@1') { lines.push('Actor: current participant'); ends.push('text submitted'); }
@@ -53,7 +72,7 @@ export function stepLines(step) {
 }
 export function containerLabel(step) {
   if (step.op === 'for_each@1') return `Repeat for each ${step.over === 'participants' ? 'participant' : step.over} · roster order`;
-  if (step.op === 'for_items@1') return `Repeat for each item from ${step.source}`;
+  if (['for_items@1','for_items@2'].includes(step.op)) return `Repeat for each item from ${step.source}${step.policy ? ' · '+step.policy : ''}`;
   if (step.op === 'for_windows@1') return `Repeat ${step.occurrences} fixed windows · ${step.intervalMs} ms interval`;
   return `Nested steps · ${step.op}`;
 }

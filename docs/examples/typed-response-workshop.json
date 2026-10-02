@@ -1,0 +1,102 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "org.harmonomicon.example.typed-response-workshop",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Turn shared materials into practical next steps",
+    "summary": "Collect several kinds of material, assign one non-self source to each eligible person, share linked responses, then discuss next steps privately in pairs.",
+    "setup": "The host supplies eligible actors and resolved contribution and response windows. A filled contribution limit does not close its window; the host closes it at the declared time or explicitly. Use an even roster of 4–12 for the exact pairs.",
+    "prompt": "Turn shared materials into practical next steps",
+    "participant": "Offer up to two contributions in total. Respond once to your saved assigned source. Your source comes from the next eligible author in effective order, using that author’s first accepted item. After linked sharing, discuss in your pair.",
+    "completion": "Finish after the final declared instruction; missing contributions create no invented item.",
+    "access": "Private source materials go only to their author and assigned recipients until linked reveal. Only used sources and accepted responses are revealed, with attribution; unused materials remain private. Pair notes stay within their recorded pair, including after the activity ends."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.24 composition.",
+    "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+  },
+  "participants": {
+    "min": 4,
+    "max": 12
+  },
+  "requires": [
+    "artifact_response@2",
+    "assign_artifacts@2",
+    "audio_contributions@1",
+    "clock@1",
+    "collect_group@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "partition@1",
+    "policy:next_nonself_item@1",
+    "policy:roster_chunks@1",
+    "pool@2",
+    "private_views@1",
+    "reveal_artifact_responses@2",
+    "serial_events@1",
+    "text@1"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "pieces",
+        "op": "pool@2",
+        "prompt": "Submit up to 2 independent contributions across the accepted kinds.",
+        "kinds": [
+          "text",
+          "image",
+          "audio"
+        ],
+        "perActor": 2,
+        "visibility": "private"
+      },
+      {
+        "id": "sources",
+        "op": "assign_artifacts@2",
+        "source": "pieces",
+        "policy": "policy:next_nonself_item@1",
+        "recipients": "effective",
+        "cardinality": "one",
+        "reuse": "allowed",
+        "unmatched": "skip"
+      },
+      {
+        "id": "response",
+        "op": "artifact_response@2",
+        "source": "sources",
+        "prompt": "Describe a possible use of your assigned contribution in text or audio.",
+        "kinds": [
+          "text",
+          "audio"
+        ]
+      },
+      {
+        "id": "exchange",
+        "op": "reveal_artifact_responses@2",
+        "source": "response"
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Work in pairs on a practical next step.",
+        "afterMs": null
+      },
+      {
+        "id": "discussion",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Discuss one next step using the shared exchanges, or note what is still needed if none was shared.",
+        "close": "all",
+        "afterMs": 60000
+      }
+    ]
+  }
+}

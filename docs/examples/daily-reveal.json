@@ -1,7 +1,7 @@
 {
-  "format": "harmonomicon.activity-package/0.20",
+  "format": "harmonomicon.activity-package/0.24",
   "id": "org.harmonomicon.example.daily-reveal",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "content": {
     "language": "en",
     "title": "Daily reveal writing circle",

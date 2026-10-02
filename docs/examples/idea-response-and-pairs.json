@@ -1,7 +1,7 @@
 {
-  "format": "harmonomicon.activity-package/0.20",
+  "format": "harmonomicon.activity-package/0.24",
   "id": "org.harmonomicon.example.idea-response-and-pairs",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "content": {
     "language": "en",
     "title": "Idea exchange and paired reflection",
