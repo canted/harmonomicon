@@ -36,6 +36,9 @@ def step_trial(kind,directory):
  h=Host(kind,directory/(kind+'-relay.sqlite'))
  try:
   start=package();follow=package('continue');empty=package('retry-empty')
+  invalid=copy.deepcopy(start);invalid['queueInputs']=None
+  assert h.request('/packages',{'package':invalid})=={'outcome':'invalid_package'}
+  with sqlite3.connect(h.db) as db:assert db.execute('SELECT count(*) FROM packages').fetchone()[0]==0
   import_package(h,follow);import_package(h,empty)
   first,first_req=created(h,start,'first');tokens=first['tokens'];r=record(view(h,'first',tokens));pair=r['offer']['actors']
   h.clock(1000)

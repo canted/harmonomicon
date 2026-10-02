@@ -6,12 +6,12 @@ const qualifiedContribution=(e,r,x)=>({ref:{instance:e.state.instanceId,source:r
 const clone=structuredClone,MAX=Number.MAX_SAFE_INTEGER;
 const exact=(x,keys)=>x!==null&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).length===keys.length&&keys.every(k=>Object.hasOwn(x,k));
 const name=x=>typeof x==='string'&&/^[a-z][a-z0-9_]{0,47}$(?![\s\S])/.test(x);
-const text=x=>typeof x==='string'&&x.length>0;
+const text=x=>typeof x==='string'&&x.length>0&&!/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(x);
 const integer=x=>Number.isSafeInteger(x)&&x>=0;
 const uuid=x=>typeof x==='string'&&/^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$(?![\s\S])/.test(x);
 const demand=x=>{if(!x)throw new Error('invalid_package');};
 export function validateQueues(p,used){
-  const q=p.queueInputs??{};demand(q!==null&&typeof q==='object'&&!Array.isArray(q)&&Object.keys(q).length<=8&&Object.keys(q).every(name));
+  const q=Object.hasOwn(p,'queueInputs')?p.queueInputs:{};demand(q!==null&&typeof q==='object'&&!Array.isArray(q)&&Object.keys(q).length<=8&&Object.keys(q).every(name));
   demand(Object.values(q).every(d=>exact(d,['type'])&&d.type==='invitation_queue'));
   if(Object.keys(q).length)used.add('invitation_queue@1');
 }

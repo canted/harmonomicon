@@ -75,15 +75,22 @@ def negatives():
   req=base();fn(req['package']);variants.append(req['package'])
  for field,value in [('windowMs',0),('windowMs',604800001),('windowMs',True),('retryAfterMs',0),('policy','policy:unknown@1'),('kinds',[]),('kinds',['video']),('input',{'binding':'missing'}),('queueInput',{'binding':'missing'})]:change(lambda p,f=field,v=value:p['runbook']['steps'][0].update({f:v}))
  change(lambda p:p['requires'].remove('first_valid@1'));change(lambda p:p['requires'].remove('invitation_queue@1'));change(lambda p:p.update(queueInputs={'orphan':{'type':'invitation_queue'}}));change(lambda p:p['runbook']['steps'][0].update(extra=True))
+ change(lambda p:p.update(queueInputs=None))
  for p in variants:assert run(dict(action='validate',package=p))==node(dict(action='validate',package=p))=={'outcome':'invalid_package'}
  q=base('continue',canonical=candidate())
  setups=[]
  for mutate in [lambda q:q.update(seed=0),lambda q:q['queueBindings']['line'].update(canonical=None),lambda q:q['queueBindings']['line'].update(notBefore=1),lambda q:q['queueBindings']['line'].update(notBefore=None),lambda q:q.update(trustedQueues=[]),lambda q:q.update(trustedInputs=[]),lambda q:q['queueBindings']['line'].update(order=['a','a'])]:
   x=copy.deepcopy(q);mutate(x);setups.append(x)
+ for lone_surrogate in ['\ud800','\udfff']:
+  x=base('retry-empty');x['queueBindings']['line']['order'].append(lone_surrogate);x['trustedQueues'][0]['queue']=copy.deepcopy(x['queueBindings']['line']);setups.append(x)
+ for lone_surrogate in ['\ud800','\udfff']:
+  x=base('continue',canonical=candidate());x['queueBindings']['line']['canonical']['itemId']=lone_surrogate;x['inputBindings']['previous']['candidate']['ref']['itemId']=lone_surrogate;x['inputBindings']['previous']['via']['itemId']=lone_surrogate;x['trustedQueues'][0]['queue']=copy.deepcopy(x['queueBindings']['line']);x['trustedInputs'][0]['binding']=copy.deepcopy(x['inputBindings']['previous']);setups.append(x)
  for req in setups:assert run(req)==node(req)=={'outcome':'invalid_setup'}
  # Two binding names cannot alias one actual qualified queue record.
  alias=copy.deepcopy(q);alias['package']['queueInputs']['alias']={'type':'invitation_queue'};other=copy.deepcopy(alias['package']['runbook']['steps'][0]);other.update(id='other',queueInput={'binding':'alias'});alias['package']['runbook']['steps'].append(other);alias['queueBindings']['alias']=copy.deepcopy(alias['queueBindings']['line'])
  assert run(alias)==node(alias)=={'outcome':'invalid_setup'}
+ # A valid Unicode scalar outside the destination roster is still a valid saved identity.
+ unicode_queue=base('retry-empty');unicode_queue['queueBindings']['line']['order'].append('🙂');unicode_queue['trustedQueues'][0]['queue']=copy.deepcopy(unicode_queue['queueBindings']['line']);assert run(unicode_queue)==node(unicode_queue) and 'outcome' not in run(unicode_queue)
  return variants,len(variants)+len(setups)+1
 
 def churn():
@@ -122,7 +129,7 @@ def check(schema=False):
   import jsonschema
   definition=json.loads((HERE/'package.schema.json').read_text());jsonschema.Draft202012Validator.check_schema(definition)
   for p in (HERE/'examples').glob('*.json'):jsonschema.validate(json.loads(p.read_text()),definition)
-  for i in [0,1,2,3,4,5,6,12]:
+  for i in [0,1,2,3,4,5,6,12,13]:
    try:jsonschema.validate(variants[i],definition)
    except jsonschema.ValidationError:pass
    else:raise AssertionError(('invalid structural schema',i))
