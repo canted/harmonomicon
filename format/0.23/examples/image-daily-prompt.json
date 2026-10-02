@@ -1,0 +1,72 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.image-daily-prompt",
+  "version": "0.1.4",
+  "content": {
+    "language": "en",
+    "title": "Image daily shared prompt",
+    "summary": "Everyone posts one short story each day; stories are visible to the group as they arrive.",
+    "setup": "Invite the group, choose the first opening time, and use the package interval for later windows.",
+    "prompt": "Write a short story inspired by an ordinary object.",
+    "participant": "Contribute one ready image in each scheduled window.",
+    "completion": "All stories remain available in earlier windows. Missing entries do not block the next window.",
+    "access": "Participants need text entry and reading access. The fixed interval is set in milliseconds and does not follow local calendar days."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Harmonomicon example activity",
+    "rights": "Illustrative package content; reuse terms have not been specified."
+  },
+  "participants": {
+    "min": 2,
+    "max": 32
+  },
+  "requires": [
+    "identity@1",
+    "serial_events@1",
+    "durable_state@1",
+    "private_views@1",
+    "clock@1",
+    "text@1",
+    "instance_settings@1",
+    "for_windows@1",
+    "collect_window@1",
+    "completion_status@1",
+    "image_contributions@1"
+  ],
+  "settings": {
+    "starts_at": {
+      "type": "time"
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "practice",
+        "op": "for_windows@1",
+        "startsAt": {
+          "setting": "starts_at"
+        },
+        "intervalMs": 86400000,
+        "windowMs": 72000000,
+        "occurrences": 3,
+        "prompt": "Write a short story inspired by an ordinary object.",
+        "steps": [
+          {
+            "id": "entry",
+            "op": "collect_window@1",
+            "actors": "participants",
+            "prompt": "Write a short story inspired by an ordinary object.",
+            "fields": {
+              "value": {
+                "type": "image_ref",
+                "visibility": "group"
+              }
+            },
+            "completion": "group"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "format": "harmonomicon.activity-package/0.23",
+  "id": "org.harmonomicon.example.creative-retained-source",
+  "version": "0.1.1",
+  "content": {
+    "language": "en",
+    "title": "Creative continuation with source retention",
+    "summary": "Keep the starting piece when continuations were proposed but no votes were counted.",
+    "setup": "The host supplies the declared starting contribution with its real author and origin, eligible participants, and resolved collection/voting windows.",
+    "prompt": "Continue the shared piece.",
+    "participant": "Read or play the starting piece. Submit one text, image, or audio continuation, then choose one accepted continuation before voting closes. You may change your vote until closing.",
+    "completion": "Show the outcome. With candidates but no counted votes, retain the actual supplied starting piece; with zero candidates, show no_candidates and select nothing.",
+    "access": "The supplied starting contribution and attribution are visible to all bound viewers. Accepted eligible continuations and their authors appear when voting is entered, even before a later configured opening. Ballots remain private after public totals and outcome presentation. Voting waits for its closing time or trusted host close even if everyone has voted."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.22 explicit source-retention example.",
+    "rights": "Authors retain rights to their contributions. This package grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "artifact_pool@3",
+    "audio_contributions@1",
+    "clock@1",
+    "contribution_inputs@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "policy:most_votes@1",
+    "policy:random_tie@1",
+    "policy:retain_input@1",
+    "present@2",
+    "private_views@1",
+    "select@2",
+    "serial_events@1",
+    "tally@3",
+    "text@1",
+    "vote@2"
+  ],
+  "settings": {},
+  "inputs": {
+    "starting_piece": {
+      "type": "contribution",
+      "kinds": [
+        "text",
+        "image",
+        "audio"
+      ]
+    }
+  },
+  "runbook": {
+    "steps": [
+      {
+        "id": "continuations",
+        "op": "artifact_pool@3",
+        "round": "continuation",
+        "prompt": "Propose one continuation of the supplied starting piece.",
+        "input": {
+          "binding": "starting_piece"
+        },
+        "kinds": [
+          "text",
+          "image",
+          "audio"
+        ],
+        "visibility": "private"
+      },
+      {
+        "id": "vote",
+        "op": "vote@2",
+        "prompt": "Choose the continuation that should become our next starting piece.",
+        "candidates": {
+          "source": "continuations"
+        },
+        "changes": "allowed",
+        "ballots": "private"
+      },
+      {
+        "id": "counts",
+        "op": "tally@3",
+        "source": "vote"
+      },
+      {
+        "id": "selected",
+        "op": "select@2",
+        "source": "counts",
+        "policy": "policy:most_votes@1",
+        "ties": "random",
+        "noVotes": "retain_input"
+      },
+      {
+        "id": "result",
+        "op": "present@2",
+        "source": "selected",
+        "prompt": "Here is the outcome and the selected starting material, if any.",
+        "audience": "group"
+      }
+    ]
+  }
+}

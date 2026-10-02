@@ -1,0 +1,36 @@
+{
+  "pin": "68d3f8322bee337a27ea52c9af94d330ff8116e8",
+  "branch": "codex/candidate-0-23",
+  "runtime_review": "no material runtime findings",
+  "full_durable_hosts_exit": 0,
+  "schema_engine_exit": 0,
+  "independent_probes_exit": 0,
+  "engine_traces": 108,
+  "invalid_definitions": 324,
+  "schema_examples": 40,
+  "actual_historical_0_22_traces_per_language": 73,
+  "inspector_tests": 14,
+  "independent_observable_assertions": 860,
+  "historical_format_validation_and_inspector_changed": false,
+  "checkout_clean": true,
+  "cleanup": "Successful host stop/wait and TemporaryDirectory cleanup in both suite harnesses. Process-list inspection unavailable in filesystem sandbox.",
+  "logs": {
+    "full-hosts.log": {
+      "sha256": "43b130b0d039122b886a1930e318a88557f315cacbd8f8ed185fc59bdedc1af7",
+      "bytes": 8308
+    },
+    "schema-engine.log": {
+      "sha256": "f58511f3bcd217962d860386d74dfe41b1b5bfa71621033748d00ceebebb307a",
+      "bytes": 4665
+    },
+    "independent-probes.log": {
+      "sha256": "73bdbd33b39de56cc1be9d3c8bcee0e03b9cd43fb70e7344cce4ae101e5e5a9c",
+      "bytes": 1392
+    },
+    "inspector.log": {
+      "sha256": "e427fc63f008d7b858417b6b205e6ad106fcaf218cc08e09793d9d28d75db71a",
+      "bytes": 1519
+    }
+  },
+  "scope": "Local authenticated SQLite reference hosts and supported 0.23 contract; no production/distributed/load certification."
+}

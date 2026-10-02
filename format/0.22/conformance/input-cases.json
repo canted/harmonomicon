@@ -1,0 +1,5789 @@
+[
+  {
+    "id": "qualified-text-current-votes-and-private-totals",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer",
+          "observer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c",
+          "observer"
+        ],
+        "opensAt": 12,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "tick-0",
+        "actor": "system",
+        "at": 0,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "text",
+            "text": "Same display"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "B",
+          "value": {
+            "kind": "text",
+            "text": "Same display"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-c",
+        "actor": "c",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "C",
+          "value": {
+            "kind": "text",
+            "text": "Third continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "early",
+        "actor": "a",
+        "at": 10,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "wrong-origin",
+        "actor": "a",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "unqualified",
+        "actor": "a",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "round-in-ref",
+        "actor": "a",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "same",
+            "round": "round_one"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a-old",
+        "actor": "a",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a-new",
+        "actor": "a",
+        "at": 13,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "a-old",
+        "actor": "a",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "B"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "c",
+        "actor": "c",
+        "at": 14,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "late",
+        "actor": "a",
+        "at": 20,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "rejected",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted",
+      "replayed",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          0,
+          "input"
+        ],
+        "equals": {
+          "status": "initial",
+          "predecessorRound": "opening_round",
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        }
+      },
+      {
+        "after": 4,
+        "actor": "observer",
+        "path": [
+          "records",
+          1,
+          "candidates"
+        ],
+        "equals": [
+          {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "same"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "Same display"
+            },
+            "round": "round_one"
+          },
+          {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "B"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "Same display"
+            },
+            "round": "round_one"
+          },
+          {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "C"
+            },
+            "actor": "c",
+            "value": {
+              "kind": "text",
+              "text": "Third continuation"
+            },
+            "round": "round_one"
+          }
+        ]
+      },
+      {
+        "after": 4,
+        "actor": "observer",
+        "path": [
+          "records",
+          1,
+          "opensAt"
+        ],
+        "equals": 12
+      },
+      {
+        "after": 4,
+        "actor": "observer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 11,
+        "actor": "a",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "candidate": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "B"
+            }
+          }
+        ]
+      },
+      {
+        "after": 14,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 14,
+        "actor": "organizer",
+        "path": [
+          "records",
+          1,
+          "count"
+        ],
+        "missing": true
+      },
+      {
+        "after": 14,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "same"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "Same display"
+                },
+                "round": "round_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "B"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "Same display"
+                },
+                "round": "round_one"
+              },
+              "count": 2
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "C"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "text",
+                  "text": "Third continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 3,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "B"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "Same display"
+            },
+            "round": "round_one"
+          },
+          "tied": [],
+          "basis": "most_votes"
+        }
+      },
+      {
+        "after": 14,
+        "actor": "c",
+        "path": [
+          "records",
+          2,
+          "output"
+        ],
+        "missing": true
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "retained-image-origin-and-explicit-next-round-pointer",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "audio_contributions@1",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:retain_input@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "retain_input"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          },
+          {
+            "id": "next",
+            "op": "artifact_pool@3",
+            "round": "round_two",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "result": "one_choice"
+            },
+            "kinds": [
+              "audio"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "next_vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "next"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "two_totals",
+            "op": "tally@3",
+            "source": "next_vote"
+          },
+          {
+            "id": "two_choice",
+            "op": "select@2",
+            "source": "two_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "two_result",
+            "op": "present@2",
+            "source": "two_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "image"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "image",
+            "ref": "origin:image"
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "image",
+              "ref": "origin:image"
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      },
+      "next": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 20,
+        "closesAt": 30
+      },
+      "next_vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 30,
+        "closesAt": 40
+      }
+    },
+    "events": [
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "a idea"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "b",
+          "value": {
+            "kind": "text",
+            "text": "b idea"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "new-audio",
+        "actor": "b",
+        "at": 21,
+        "step": "next",
+        "payload": {
+          "itemId": "same",
+          "value": {
+            "kind": "audio",
+            "ref": "new:audio"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-30",
+        "actor": "system",
+        "at": 30,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "old-origin",
+        "actor": "a",
+        "at": 31,
+        "step": "next_vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "stale-local",
+        "actor": "a",
+        "at": 31,
+        "step": "next_vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "current",
+        "actor": "a",
+        "at": 31,
+        "step": "next_vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "next",
+            "itemId": "same"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-40",
+        "actor": "system",
+        "at": 40,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "a idea"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "b"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "b idea"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 0,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "image",
+              "ref": "origin:image"
+            },
+            "round": "opening_round"
+          },
+          "tied": [],
+          "basis": "retained_input"
+        }
+      },
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "input"
+        ],
+        "equals": {
+          "status": "selected",
+          "predecessorRound": "round_one",
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "image",
+              "ref": "origin:image"
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "result": "one_choice",
+            "round": "round_one"
+          }
+        }
+      },
+      {
+        "after": 8,
+        "actor": "c",
+        "path": [
+          "records",
+          9,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "next",
+                  "itemId": "same"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "audio",
+                  "ref": "new:audio"
+                },
+                "round": "round_two"
+              },
+              "count": 1
+            }
+          ],
+          "totalVotes": 1,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "next",
+              "itemId": "same"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "audio",
+              "ref": "new:audio"
+            },
+            "round": "round_two"
+          },
+          "tied": [],
+          "basis": "most_votes"
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "image",
+                "ref": "origin:image"
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "trustedMedia": [
+      {
+        "actor": "b",
+        "ref": "new:audio",
+        "kind": "audio",
+        "ready": true
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "audio-handoff-random-no-vote-over-typed-candidates",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "audio_contributions@1",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "image_contributions@1",
+        "policy:most_votes@1",
+        "policy:random_candidate@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text",
+              "image",
+              "audio"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "random"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "audio"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "audio",
+            "ref": "origin:audio"
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:22222222-2222-4222-8222-222222222222",
+          "result": "previous_choice",
+          "round": "relay_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "audio",
+              "ref": "origin:audio"
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:22222222-2222-4222-8222-222222222222",
+            "result": "previous_choice",
+            "round": "relay_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "A continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "b",
+          "value": {
+            "kind": "image",
+            "ref": "new:image"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-c",
+        "actor": "c",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "c",
+          "value": {
+            "kind": "audio",
+            "ref": "new:audio"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "a",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "A continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "b"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "image",
+                  "ref": "new:image"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "c"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "audio",
+                  "ref": "new:audio"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 0,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "c"
+            },
+            "actor": "c",
+            "value": {
+              "kind": "audio",
+              "ref": "new:audio"
+            },
+            "round": "round_one"
+          },
+          "tied": [],
+          "basis": "random_no_votes"
+        }
+      },
+      {
+        "after": 0,
+        "actor": "a",
+        "path": [
+          "records",
+          0,
+          "input",
+          "via"
+        ],
+        "equals": {
+          "instance": "urn:uuid:22222222-2222-4222-8222-222222222222",
+          "result": "previous_choice",
+          "round": "relay_round"
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "audio",
+                "ref": "origin:audio"
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:22222222-2222-4222-8222-222222222222",
+              "result": "previous_choice",
+              "round": "relay_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": [
+      2
+    ],
+    "trustedMedia": [
+      {
+        "actor": "b",
+        "ref": "new:image",
+        "kind": "image",
+        "ready": true
+      },
+      {
+        "actor": "c",
+        "ref": "new:audio",
+        "kind": "audio",
+        "ready": true
+      }
+    ]
+  },
+  {
+    "id": "single-candidate-random-no-vote-needs-no-draw",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_candidate@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "random"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "one",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "Only continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "Only continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 0,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "a"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "Only continuation"
+            },
+            "round": "round_one"
+          },
+          "tied": [],
+          "basis": "random_no_votes"
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "default-no-vote-blocked-continuation",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:retain_input@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          },
+          {
+            "id": "next",
+            "op": "artifact_pool@3",
+            "round": "round_two",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "result": "one_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "next_vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "next"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "two_totals",
+            "op": "tally@3",
+            "source": "next_vote"
+          },
+          {
+            "id": "two_choice",
+            "op": "select@2",
+            "source": "two_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "retain_input"
+          },
+          {
+            "id": "two_result",
+            "op": "present@2",
+            "source": "two_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "one",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "Unchosen continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "blocked",
+        "actor": "a",
+        "at": 21,
+        "step": "next",
+        "payload": {
+          "itemId": "invented",
+          "value": {
+            "kind": "text",
+            "text": "No source was selected"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "Unchosen continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 0,
+          "status": "no_votes",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      },
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "input"
+        ],
+        "equals": {
+          "status": "no_votes",
+          "predecessorRound": "round_one",
+          "candidate": null,
+          "via": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "result": "one_choice",
+            "round": "round_one"
+          }
+        }
+      },
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "blocked"
+        ],
+        "equals": true
+      },
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          9,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "explicit-unresolved-no-vote-blocked-continuation",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:retain_input@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          },
+          {
+            "id": "next",
+            "op": "artifact_pool@3",
+            "round": "round_two",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "result": "one_choice"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "next_vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "next"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "two_totals",
+            "op": "tally@3",
+            "source": "next_vote"
+          },
+          {
+            "id": "two_choice",
+            "op": "select@2",
+            "source": "two_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "retain_input"
+          },
+          {
+            "id": "two_result",
+            "op": "present@2",
+            "source": "two_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "one",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "Unchosen continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "blocked",
+        "actor": "a",
+        "at": 21,
+        "step": "next",
+        "payload": {
+          "itemId": "invented",
+          "value": {
+            "kind": "text",
+            "text": "No source was selected"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "Unchosen continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 0,
+          "status": "no_votes",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      },
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "input"
+        ],
+        "equals": {
+          "status": "no_votes",
+          "predecessorRound": "round_one",
+          "candidate": null,
+          "via": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "result": "one_choice",
+            "round": "round_one"
+          }
+        }
+      },
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          5,
+          "blocked"
+        ],
+        "equals": true
+      },
+      {
+        "after": 1,
+        "actor": "c",
+        "path": [
+          "records",
+          9,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "positive-unresolved-tie-overrides-no-vote-policy",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_candidate@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "random"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "a continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "b",
+          "value": {
+            "kind": "text",
+            "text": "b continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-c",
+        "actor": "c",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "c",
+          "value": {
+            "kind": "text",
+            "text": "c continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "a continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "b"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "b continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "c"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "text",
+                  "text": "c continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 2,
+          "status": "tie",
+          "selected": null,
+          "tied": [
+            {
+              "ref": {
+                "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                "source": "continuations",
+                "itemId": "a"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "a continuation"
+              },
+              "round": "round_one"
+            },
+            {
+              "ref": {
+                "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                "source": "continuations",
+                "itemId": "b"
+              },
+              "actor": "b",
+              "value": {
+                "kind": "text",
+                "text": "b continuation"
+              },
+              "round": "round_one"
+            }
+          ],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "positive-random-tie-overrides-no-vote-policy",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_tie@1",
+        "policy:retain_input@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "random",
+            "noVotes": "retain_input"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "a continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "b",
+          "value": {
+            "kind": "text",
+            "text": "b continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-c",
+        "actor": "c",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "c",
+          "value": {
+            "kind": "text",
+            "text": "c continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "a continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "b"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "b continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 1
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "c"
+                },
+                "actor": "c",
+                "value": {
+                  "kind": "text",
+                  "text": "c continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 2,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "b"
+            },
+            "actor": "b",
+            "value": {
+              "kind": "text",
+              "text": "b continuation"
+            },
+            "round": "round_one"
+          },
+          "tied": [
+            {
+              "ref": {
+                "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                "source": "continuations",
+                "itemId": "a"
+              },
+              "actor": "a",
+              "value": {
+                "kind": "text",
+                "text": "a continuation"
+              },
+              "round": "round_one"
+            },
+            {
+              "ref": {
+                "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                "source": "continuations",
+                "itemId": "b"
+              },
+              "actor": "b",
+              "value": {
+                "kind": "text",
+                "text": "b continuation"
+              },
+              "round": "round_one"
+            }
+          ],
+          "basis": "random_tie"
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": [
+      1
+    ]
+  },
+  {
+    "id": "zero-candidates-default",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "missing",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "missing"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "zero-candidates-unresolved",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "missing",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "missing"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "zero-candidates-random",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:random_candidate@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "random"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "missing",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "missing"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "zero-candidates-retain_input",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "policy:retain_input@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved",
+            "noVotes": "retain_input"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "missing",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "missing"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "rejected"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "phase"
+        ],
+        "equals": "complete"
+      },
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [],
+          "totalVotes": 0,
+          "status": "no_candidates",
+          "selected": null,
+          "tied": [],
+          "basis": null
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "explicit-qualified-ballot-reveal-and-forbidden-change",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@2",
+        "private_views@1",
+        "reveal_ballots@2",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "forbidden",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          },
+          {
+            "id": "ballots",
+            "op": "reveal_ballots@2",
+            "source": "vote"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "source-a",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "a continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "source-b",
+        "actor": "b",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "b",
+          "value": {
+            "kind": "text",
+            "text": "b continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "second",
+        "actor": "a",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "b"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "b",
+        "actor": "b",
+        "at": 12,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "a"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-20",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted",
+      "rejected",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 3,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": []
+      },
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "revealed"
+        ],
+        "equals": true
+      },
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "candidate": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "a"
+            }
+          },
+          {
+            "actor": "b",
+            "candidate": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "a"
+            }
+          }
+        ]
+      },
+      {
+        "after": 6,
+        "actor": "c",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "a"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "a continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 2
+            },
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "b"
+                },
+                "actor": "b",
+                "value": {
+                  "kind": "text",
+                  "text": "b continuation"
+                },
+                "round": "round_one"
+              },
+              "count": 0
+            }
+          ],
+          "totalVotes": 2,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "a"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "a continuation"
+            },
+            "round": "round_one"
+          },
+          "tied": [],
+          "basis": "most_votes"
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "explicit-qualified-group-ballots",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "group"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": "opening_round"
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "same",
+          "round": "opening_round"
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": "opening_round"
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "same",
+            "round": "opening_round"
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "one",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "a",
+          "value": {
+            "kind": "text",
+            "text": "A continuation"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "tick-10",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "a",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "a"
+          }
+        },
+        "type": "submit"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 2,
+        "actor": "c",
+        "path": [
+          "records",
+          1,
+          "entries"
+        ],
+        "equals": [
+          {
+            "actor": "a",
+            "candidate": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "a"
+            }
+          }
+        ]
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "same"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": "opening_round"
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "same",
+              "round": "opening_round"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "unrounded-origin-and-opaque-item-identity",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "The host supplies the actual starting contribution and access authority.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "contribution_inputs@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "private_views@1",
+        "serial_events@1",
+        "text@1"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": {
+              "binding": "seed"
+            },
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          }
+        ]
+      },
+      "settings": {},
+      "inputs": {
+        "seed": {
+          "type": "contribution",
+          "kinds": [
+            "text"
+          ]
+        }
+      }
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "inputBindings": {
+      "seed": {
+        "candidate": {
+          "ref": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "😀"
+          },
+          "actor": "origin_artist",
+          "value": {
+            "kind": "text",
+            "text": "At dusk, the station began to sing."
+          },
+          "round": null
+        },
+        "via": {
+          "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+          "source": "opening",
+          "itemId": "😀",
+          "round": null
+        }
+      }
+    },
+    "trustedInputs": [
+      {
+        "binding": {
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "😀"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "😀",
+            "round": null
+          }
+        },
+        "viewers": [
+          "a",
+          "b",
+          "c",
+          "organizer"
+        ],
+        "ready": true
+      }
+    ],
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      }
+    },
+    "events": [
+      {
+        "eventId": "tick-0",
+        "actor": "system",
+        "at": 0,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "c",
+        "path": [
+          "records",
+          0,
+          "input"
+        ],
+        "equals": {
+          "status": "initial",
+          "predecessorRound": null,
+          "candidate": {
+            "ref": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "😀"
+            },
+            "actor": "origin_artist",
+            "value": {
+              "kind": "text",
+              "text": "At dusk, the station began to sing."
+            },
+            "round": null
+          },
+          "via": {
+            "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+            "source": "opening",
+            "itemId": "😀",
+            "round": null
+          }
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {
+          "seed": {
+            "candidate": {
+              "ref": {
+                "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+                "source": "opening",
+                "itemId": "😀"
+              },
+              "actor": "origin_artist",
+              "value": {
+                "kind": "text",
+                "text": "At dusk, the station began to sing."
+              },
+              "round": null
+            },
+            "via": {
+              "instance": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "source": "opening",
+              "itemId": "😀",
+              "round": null
+            }
+          }
+        }
+      }
+    ],
+    "tieChoices": []
+  },
+  {
+    "id": "standalone-qualified-chain-without-input-bindings",
+    "definition": {
+      "format": "harmonomicon.activity-package/0.22",
+      "id": "org.harmonomicon.conformance.shared-input",
+      "version": "0.1.0",
+      "content": {
+        "language": "en",
+        "title": "Continue a supplied piece",
+        "summary": "Collect continuations and choose under the declared outcome policy.",
+        "setup": "Choose the collection and voting windows; no starting contribution is required.",
+        "prompt": "Continue the supplied piece.",
+        "participant": "Submit or vote in the open phase.",
+        "completion": "Present the decision; dependent collections block when no source is selected.",
+        "access": "Starting material is visible to all bound viewers; candidate material and attribution appear when voting is entered; ballots stay private unless explicitly revealed."
+      },
+      "provenance": {
+        "kind": "original",
+        "credit": "Original candidate 0.22 conformance witness.",
+        "rights": "No rights to participant material are granted."
+      },
+      "participants": {
+        "min": 1,
+        "max": 100
+      },
+      "requires": [
+        "artifact_pool@3",
+        "clock@1",
+        "durable_state@1",
+        "host_controls@1",
+        "identity@1",
+        "policy:most_votes@1",
+        "present@2",
+        "private_views@1",
+        "select@2",
+        "serial_events@1",
+        "tally@3",
+        "text@1",
+        "vote@2"
+      ],
+      "runbook": {
+        "steps": [
+          {
+            "id": "continuations",
+            "op": "artifact_pool@3",
+            "round": "round_one",
+            "prompt": "Offer one continuation of the supplied piece.",
+            "input": null,
+            "kinds": [
+              "text"
+            ],
+            "visibility": "private"
+          },
+          {
+            "id": "vote",
+            "op": "vote@2",
+            "prompt": "Choose the continuation to develop.",
+            "candidates": {
+              "source": "continuations"
+            },
+            "changes": "allowed",
+            "ballots": "private"
+          },
+          {
+            "id": "one_totals",
+            "op": "tally@3",
+            "source": "vote"
+          },
+          {
+            "id": "one_choice",
+            "op": "select@2",
+            "source": "one_totals",
+            "policy": "policy:most_votes@1",
+            "ties": "unresolved"
+          },
+          {
+            "id": "one_result",
+            "op": "present@2",
+            "source": "one_choice",
+            "prompt": "Show the decision and how it was selected.",
+            "audience": "group"
+          }
+        ]
+      },
+      "settings": {}
+    },
+    "participants": [
+      "a",
+      "b",
+      "c"
+    ],
+    "organizer": "organizer",
+    "instanceId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+    "hostInputs": {
+      "continuations": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 0,
+        "closesAt": 10
+      },
+      "vote": {
+        "actors": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opensAt": 10,
+        "closesAt": 20
+      }
+    },
+    "events": [
+      {
+        "eventId": "source",
+        "actor": "a",
+        "at": 1,
+        "step": "continuations",
+        "payload": {
+          "itemId": "new",
+          "value": {
+            "kind": "text",
+            "text": "A standalone idea"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "open",
+        "actor": "system",
+        "at": 10,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      },
+      {
+        "eventId": "vote",
+        "actor": "a",
+        "at": 11,
+        "step": "vote",
+        "payload": {
+          "candidate": {
+            "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+            "source": "continuations",
+            "itemId": "new"
+          }
+        },
+        "type": "submit"
+      },
+      {
+        "eventId": "close",
+        "actor": "system",
+        "at": 20,
+        "step": null,
+        "payload": {},
+        "type": "tick"
+      }
+    ],
+    "outcomes": [
+      "accepted",
+      "accepted",
+      "accepted",
+      "accepted"
+    ],
+    "checks": [
+      {
+        "after": 0,
+        "actor": "b",
+        "path": [
+          "records",
+          0,
+          "input"
+        ],
+        "equals": {
+          "status": "none",
+          "predecessorRound": null,
+          "candidate": null,
+          "via": null
+        }
+      },
+      {
+        "after": 3,
+        "actor": "b",
+        "path": [
+          "records",
+          4,
+          "output"
+        ],
+        "equals": {
+          "counts": [
+            {
+              "candidate": {
+                "ref": {
+                  "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+                  "source": "continuations",
+                  "itemId": "new"
+                },
+                "actor": "a",
+                "value": {
+                  "kind": "text",
+                  "text": "A standalone idea"
+                },
+                "round": "round_one"
+              },
+              "count": 1
+            }
+          ],
+          "totalVotes": 1,
+          "status": "selected",
+          "selected": {
+            "ref": {
+              "instance": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "source": "continuations",
+              "itemId": "new"
+            },
+            "actor": "a",
+            "value": {
+              "kind": "text",
+              "text": "A standalone idea"
+            },
+            "round": "round_one"
+          },
+          "tied": [],
+          "basis": "most_votes"
+        }
+      }
+    ],
+    "stateChecks": [
+      {
+        "path": [
+          "instanceId"
+        ],
+        "equals": "urn:uuid:11111111-1111-4111-8111-111111111111"
+      },
+      {
+        "path": [
+          "inputBindings"
+        ],
+        "equals": {}
+      }
+    ]
+  }
+]

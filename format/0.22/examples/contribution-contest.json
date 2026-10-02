@@ -1,0 +1,89 @@
+{
+  "format": "harmonomicon.activity-package/0.22",
+  "id": "org.harmonomicon.example.contribution-contest",
+  "version": "0.1.1",
+  "content": {
+    "language": "en",
+    "title": "Choose a place to explore",
+    "summary": "Vote on accepted text, image, and audio contributions, then see totals and the selected piece.",
+    "setup": "Agree on the activity windows; the host supplies resolved dates and eligible participants.",
+    "prompt": "Choose a place to explore",
+    "participant": "Follow each instruction; submit or vote before its window closes.",
+    "completion": "Finish after showing the vote result, including an empty outcome when no eligible contributions or counted votes are available.",
+    "access": "Accepted eligible contribution values and their authorship become visible to all bound viewers as soon as voting is entered, even before its configured opening. Ballots remain private after totals and the selected result are shown."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.22 activity example.",
+    "rights": "Rights to participant contributions remain with their authors; this package grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "artifact_pool@2",
+    "audio_contributions@1",
+    "clock@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "policy:most_votes@1",
+    "policy:random_tie@1",
+    "present@1",
+    "private_views@1",
+    "select@1",
+    "serial_events@1",
+    "tally@2",
+    "text@1",
+    "vote@1"
+  ],
+  "runbook": {
+    "steps": [
+      {
+        "id": "entries",
+        "op": "artifact_pool@2",
+        "round": "contest",
+        "prompt": "Submit one short text, image, or audio piece about a place that matters to you.",
+        "input": null,
+        "kinds": [
+          "text",
+          "image",
+          "audio"
+        ],
+        "visibility": "private"
+      },
+      {
+        "id": "vote",
+        "op": "vote@1",
+        "prompt": "Choose the contribution you would most like the group to explore.",
+        "candidates": {
+          "source": "entries"
+        },
+        "changes": "allowed",
+        "ballots": "private"
+      },
+      {
+        "id": "contest_totals",
+        "op": "tally@2",
+        "source": "vote"
+      },
+      {
+        "id": "contest_choice",
+        "op": "select@1",
+        "source": "contest_totals",
+        "policy": "policy:most_votes@1",
+        "ties": "random"
+      },
+      {
+        "id": "contest_result",
+        "op": "present@1",
+        "source": "contest_choice",
+        "prompt": "Here are the totals and the selected contribution.",
+        "audience": "group"
+      }
+    ]
+  },
+  "settings": {}
+}

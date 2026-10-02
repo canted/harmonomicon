@@ -1,0 +1,37 @@
+{
+  "id": "creative_two",
+  "packageId": "org.harmonomicon.example.creative-continuation-input",
+  "version": "0.1.1",
+  "participants": [
+    "Alice",
+    "Bob",
+    "Carol"
+  ],
+  "organizer": "Organizer",
+  "hostBindings": {
+    "starting_piece": {
+      "instance": "creative_one",
+      "result": "selected"
+    }
+  },
+  "hostInputs": {
+    "continuations": {
+      "actors": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ],
+      "opensAt": 100,
+      "closesAt": 200
+    },
+    "vote": {
+      "actors": [
+        "Alice",
+        "Bob",
+        "Carol"
+      ],
+      "opensAt": 200,
+      "closesAt": 300
+    }
+  }
+}

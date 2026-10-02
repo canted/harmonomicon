@@ -1,0 +1,9 @@
+# Typed pooling assessment and implemented boundary
+
+The [0.22 assessment](../0.22/POOLING-ASSESSMENT.md) recorded direction only. Candidate 0.23 implements that direction after completed independent 0.22 review, with its own [design checkpoint](DESIGN-CHECKPOINT.md), [contract](pooling-notes.md), [examples](README.md), [profile](readiness-assessment.md) and [evidence](../../validation/0.23/EVIDENCE.md).
+
+Existing `pool@1`/`for_items@1` already collected multiple text items and reused them inside later body instructions. Text source/response instructions `assign_sources@1`/`respond@1` and typed artifact variants already linked material to responses; 0.21 selected outcomes fed finite rounds and 0.22 supplied actual typed inputs to another host-launched instance. The implemented gap is a consistent typed pool with author-chosen kinds and independent per-person quota, plus compatible typed item/source/candidate consumers.
+
+The smallest coherent consolidation uses `pool@2` and versioned typed consumers. It preserves stable identity, attribution, order, privacy, ready media authority and old operation semantics. It keeps separate rules for iterating every contribution, assigning one source and choosing a voted result. Lowering the number of operation names would not justify rewriting historical versions or introducing arbitrary adapter/workflow behavior.
+
+Up to eight immutable items per effective actor, three language kinds and at most 800 eligible loop iterations remain bounded. Voting treats items independently; source assignment recipients remain unique actors and one linked response each. Held-out source-response/pair discussion demonstrates reuse beyond sharing or voting. No new faithful legacy migration credit follows; balanced offers, arbitrary response-voting adapters, result-derived roles and unlimited lifecycle remain deferred.

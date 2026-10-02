@@ -1,0 +1,52 @@
+{
+  "format": "harmonomicon.activity-package/0.22",
+  "id": "org.harmonomicon.example.starting-contribution",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Starting contribution",
+    "summary": "Save real starting material with its author and origin for a later activity.",
+    "setup": "Agree whose material starts the activity; the host supplies eligible contributors and a closing window.",
+    "prompt": "Share the starting piece.",
+    "participant": "Submit one text, image, or audio starting contribution.",
+    "completion": "Finish when the contribution window closes; the host can supply a real accepted contribution to another package.",
+    "access": "Accepted contributions and attribution are group-visible. The host verifies source access for every later activity viewer."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.22 source-contribution example.",
+    "rights": "Authors retain rights to their contributions. This package grants no media rights."
+  },
+  "participants": {
+    "min": 1,
+    "max": 100
+  },
+  "requires": [
+    "artifact_pool@1",
+    "audio_contributions@1",
+    "clock@1",
+    "durable_state@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "private_views@1",
+    "serial_events@1",
+    "text@1"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "piece",
+        "op": "artifact_pool@1",
+        "prompt": "Submit the real starting piece.",
+        "kinds": [
+          "text",
+          "image",
+          "audio"
+        ],
+        "visibility": "group"
+      }
+    ]
+  }
+}
