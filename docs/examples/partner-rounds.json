@@ -1,7 +1,7 @@
 {
-  "format": "harmonomicon.activity-package/0.20",
+  "format": "harmonomicon.activity-package/0.24",
   "id": "harmonomicon.partnerrounds",
-  "version": "0.3.4",
+  "version": "0.3.7",
   "content": {
     "language": "en",
     "title": "Impromptu Networking digital rounds",

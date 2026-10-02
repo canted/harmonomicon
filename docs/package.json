@@ -2,6 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node sync-examples.mjs && node generate-previews.mjs",
     "test": "node --test viewer.test.mjs",
     "sync-examples": "node sync-examples.mjs",
     "previews": "node generate-previews.mjs"

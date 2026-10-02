@@ -4,11 +4,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildDiagram, FORMAT} from './model.js';
+import {CATALOG_VERSION, SUPPORTED_VERSIONS, formatInfo} from './formats.js';
 import {layoutDiagram, titleCase} from './diagram-layout.js';
 import {stepLines, containerLabel} from './step-labels.js';
 import {renderSvg} from './diagram-svg.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.join(here,'../format/0.20/examples');
+const source = path.join(here,`../format/${CATALOG_VERSION}/examples`);
 const read = file => JSON.parse(fs.readFileSync(file,'utf8'));
 const files = fs.readdirSync(source).filter(file => file.endsWith('.json')).sort();
 const base = {format:FORMAT,id:'example.custom',version:'1',content:{title:'Custom'},participants:{min:2,max:4},requires:[]};
@@ -39,9 +40,11 @@ test('catalog, bundled files, and generated previews match all source examples',
   for (const entry of catalog) {
     const sourcePkg = read(path.join(source,path.basename(entry.file)));
     assert.equal(entry.title,sourcePkg.content.title);
-    assert.deepEqual(read(path.join(here,entry.file)),sourcePkg);
+    assert.equal(entry.id,sourcePkg.id);
+    assert.equal(entry.format,sourcePkg.format);
+    assert.equal(fs.readFileSync(path.join(here,entry.file),'utf8'),fs.readFileSync(path.join(source,path.basename(entry.file)),'utf8'));
     const svg = fs.readFileSync(path.join(here,'previews',path.basename(entry.file,'.json')+'.svg'),'utf8');
-    for (const step of flatten(sourcePkg.runbook.steps)) assert.ok(svg.includes(`>${titleCase(step.id)}</text>`));
+    assert.equal(svg,renderSvg(buildDiagram(sourcePkg),true));
   }
 });
 
@@ -195,4 +198,96 @@ test('typed exchange shows declared media and controls without inventing host va
   assert.ok(response.includes('Independent responses · assigned source ID required'));
   assert.ok(!response.some(s=>/PNG|WAV|2026|reviewer|chosen cover/.test(s)));
   assert.deepEqual(buildDiagram(pkg).nodes.map(n=>n.step),pkg.runbook.steps);
+});
+
+test('every retained 0.20–0.23 example remains inspectable with its own references and bytes', () => {
+  for (const version of SUPPORTED_VERSIONS.filter(version => version !== CATALOG_VERSION)) {
+    const directory = path.join(here,`../format/${version}/examples`);
+    for (const file of fs.readdirSync(directory).filter(file => file.endsWith('.json'))) {
+      const pkg = read(path.join(directory,file));
+      const original = JSON.stringify(pkg);
+      const diagram = buildDiagram(pkg);
+      assert.deepEqual(diagram.nodes.map(node => node.step),flatten(pkg.runbook.steps));
+      assert.equal(diagram.contract.version,version);
+      assert.ok(diagram.contract.schema.endsWith(`/format/${version}/package.schema.json`));
+      assert.ok(diagram.contract.specification.endsWith(`/format/${version}/operations.md`));
+      assert.ok(!renderSvg(diagram).includes('[object Object]'));
+      assert.equal(JSON.stringify(pkg),original);
+    }
+  }
+  assert.throws(() => formatInfo('harmonomicon.activity-package/0.25'),/supports/);
+  assert.throws(() => formatInfo('harmonomicon.activity-package/../0.24'),/supports/);
+});
+
+test('same-title catalog variants have unique identity-based navigation labels', () => {
+  const catalog = read(path.join(here,'examples.json'));
+  assert.equal(new Set(catalog.map(entry => entry.label)).size,catalog.length);
+  for (const entry of catalog) {
+    assert.ok(entry.label.includes(entry.title));
+    if (catalog.filter(other => other.title === entry.title).length > 1) {
+      assert.ok(entry.label.endsWith(` · ${entry.title}`));
+      assert.ok(entry.label.split(' · ')[0].length > 0);
+    }
+  }
+  assert.equal(catalog.find(entry => entry.file.endsWith('/creative-relay-continue.json')).label,'Continue · Creative relay');
+  assert.equal(catalog.find(entry => entry.file.endsWith('/creative-relay-retry-empty.json')).label,'Retry empty · Creative relay');
+  assert.equal(catalog.find(entry => entry.file.endsWith('/creative-relay-start.json')).label,'Start · Creative relay');
+});
+
+test('contribution bindings and preceding results are preserved without resolving material', () => {
+  const pkg = read(path.join(source,'typed-continuation.json'));
+  const diagram = buildDiagram(pkg);
+  assert.deepEqual(diagram.inputs,pkg.inputs);
+  assert.deepEqual(diagram.queueInputs,{});
+  assert.match(stepLines(pkg.runbook.steps[0]).join('\n'),/Contribution input: host binding: starting_piece/);
+  assert.match(stepLines(pkg.runbook.steps.at(-1)).join('\n'),/Contribution input: step result: selected/);
+  assert.match(stepLines({op:'artifact_pool@2',input:{literal:{type:'text',text:'Original material'}}}).join('\n'),/Original material/);
+  assert.match(stepLines({op:'artifact_pool@2',input:null}).join('\n'),/none \(null\)/);
+});
+
+test('voting summaries retain candidate identity, privacy, policies and declared audience', () => {
+  const pkg = read(path.join(source,'typed-continuation.json'));
+  const vote = stepLines(pkg.runbook.steps[1]).join('\n');
+  assert.match(vote,/Candidates from: continuations/);
+  assert.match(vote,/Ballot changes: allowed/);
+  assert.match(vote,/Ballot visibility: private/);
+  assert.match(vote,/trusted host inputs/);
+  const selection = stepLines(pkg.runbook.steps[3]).join('\n');
+  assert.match(selection,/Ties: random/);
+  assert.match(selection,/No votes: random/);
+  assert.match(stepLines({...pkg.runbook.steps[3],noVotes:'retain_input'}).join('\n'),/No votes: retain_input/);
+  assert.match(stepLines(pkg.runbook.steps[4]).join('\n'),/Audience: group/);
+  const predefined = read(path.join(source,'predefined-vote.json'));
+  const options = predefined.runbook.steps.find(step => step.candidates?.options);
+  const lines = stepLines(options).join('\n');
+  for (const option of options.candidates.options) assert.ok(lines.includes(`${option.id}: ${option.label}`));
+  assert.doesNotMatch(lines,/undefined|\[object Object\]/);
+});
+
+test('typed iteration and response operations preserve source relations without expanding items', () => {
+  const pkg = {...base,runbook:{steps:[{id:'each',op:'for_items@2',source:'pieces',policy:'policy:pool_order@1',steps:[{id:'read',op:'acknowledge@2',source:'claim',afterMs:30000}]}]}};
+  assert.equal(buildDiagram(pkg).nodes.length,2);
+  assert.match(containerLabel(pkg.runbook.steps[0]),/pieces · policy:pool_order@1/);
+  const assignment = stepLines({op:'assign_artifacts@2',source:'pieces',recipients:'effective',cardinality:'one',reuse:'allowed',unmatched:'skip'}).join('\n');
+  assert.match(assignment,/Recipients: effective · self excluded/);
+  assert.match(assignment,/Cardinality: one · source reuse: allowed · unmatched: skip/);
+  assert.match(stepLines({op:'artifact_response@2',source:'assignments',kinds:['text','audio']}).join('\n'),/assigned source ID required/);
+  assert.match(stepLines({op:'reveal_artifact_responses@2',source:'responses'}).join('\n'),/with attribution/);
+});
+
+test('relay blueprints display declarations and exact delays without inventing live invitations', () => {
+  for (const file of ['creative-relay-start.json','creative-relay-continue.json','creative-relay-retry-empty.json']) {
+    const pkg = read(path.join(source,file));
+    const diagram = buildDiagram(pkg);
+    assert.equal(diagram.nodes.length,1);
+    assert.deepEqual(diagram.inputs,pkg.inputs ?? {});
+    assert.deepEqual(diagram.queueInputs,pkg.queueInputs ?? {});
+    const step = pkg.runbook.steps[0];
+    const text = stepLines(step).join('\n');
+    assert.match(text,/Invitation window: 86400000 ms/);
+    assert.match(text,/Failed-pass retry delay: 86400000 ms/);
+    assert.ok(text.includes(step.input === null ? 'Contribution input: none (null)' : 'Contribution input: host binding: previous'));
+    assert.ok(text.includes(step.queueInput === null ? 'Invitation queue input: none (null)' : 'Invitation queue input: host binding: line'));
+    assert.doesNotMatch(text,/winner|2026-|undefined|\[object Object\]/);
+  }
 });

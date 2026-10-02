@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <title>Activity package viewer · Harmonomicon</title>
-  <link rel="stylesheet" href="styles.css?v=viewer-20261001">
+  <link rel="stylesheet" href="styles.css?v=viewer-20261002">
 </head>
 <body>
   <header class="site-header">
@@ -17,18 +17,18 @@
           <svg x="64" y="1" width="401" height="52" viewBox="77 101 401 52" overflow="hidden"><image href="assets/harmonomicon-logo.svg" width="552" height="174"/></svg>
         </svg>
       </a>
-      <div class="brand-sub">Activity package viewer · format 0.20</div>
+      <div class="brand-sub">Activity package viewer · catalog 0.24</div>
     </div>
   </header>
 
   <main>
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Activity package viewer</h1>
-      <p>Explore the steps, settings, participation rules, and visibility that let an app run user-defined activities. Choose an example or open a Harmonomicon 0.20 package.</p>
+      <p>Explore the steps, settings, participation rules, and visibility that let an app run user-defined activities. Choose a 0.24 example or open a Harmonomicon package in format 0.20–0.24.</p>
     </section>
 
     <section class="load-panel" aria-labelledby="load-title">
-      <div><h2 id="load-title">Choose a package</h2><p>Start with a repository example or open a JSON file from your computer.</p></div>
+      <div><h2 id="load-title">Choose a package</h2><p>Browse all 44 examples from candidate 0.24, or open a local JSON file.</p></div>
       <div class="load-controls">
         <label class="field"><span>Example</span><select id="example-select"></select></label>
         <span class="or" aria-hidden="true">or</span>
@@ -39,7 +39,7 @@
     <p id="status" class="status" role="status" aria-live="polite"></p>
 
     <section class="package-heading" aria-labelledby="package-title">
-      <div><h2 id="package-title">Loading…</h2><p id="package-summary"></p></div>
+      <div><h2 id="package-title">Loading…</h2><p id="package-summary"></p><p id="package-source"></p></div>
       <div class="identity"><span id="package-contract" class="contract-badge"></span><span id="package-identity"></span></div>
     </section>
 
@@ -64,11 +64,14 @@
       <div><b>Operations</b><span id="layer-events"></span></div>
       <div><b>Views</b><span id="layer-views"></span></div>
       <div><b>App requirements</b><span id="layer-requires"></span></div>
+      <div><b>Contribution input declarations</b><span id="layer-inputs"></span></div>
+      <div><b>Invitation queue declarations</b><span id="layer-queue-inputs"></span></div>
+      <div><b>Selected format reference</b><a id="specification-link">Operation rules</a><a id="schema-link">JSON Schema</a></div>
     </div></section>
 
-    <p class="boundary">This visualization reads the package’s runbook directly. Arrows show array order and nesting, not runtime outcomes or participant iterations. It does not run an instance, certify an app host, or infer rules from human-facing instructions. The normative rules are in the repository’s <code>format/0.20</code> specification.</p>
+    <p class="boundary">This visualization reads the package’s runbook directly. Arrows show array order and nesting, not runtime outcomes or participant iterations. File inspection checks structure only; it does not validate JSON Schema or semantic conformance, run an instance, or certify an app host. Input declarations describe values a host supplies, not live contributions or invitation queues. The selected format’s references are linked above. Candidate 0.24’s outstanding independent runtime review is recorded in the <a href="https://github.com/canted/harmonomicon/blob/main/validation/0.24/EVIDENCE.md">validation evidence</a>.</p>
   </main>
-  <footer>Harmonomicon · Activity package format 0.20</footer>
+  <footer>Harmonomicon · Activity package catalog 0.24</footer>
 
   <script type="module" src="app.js"></script>
 </body>

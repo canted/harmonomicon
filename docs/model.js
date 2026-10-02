@@ -1,7 +1,8 @@
 /** Render declared JSON structure; no activity templates or runtime inference. */
-export const FORMAT = 'harmonomicon.activity-package/0.20';
+import {formatInfo} from './formats.js';
+export {FORMAT} from './formats.js';
 export function buildDiagram(pkg) {
-  if (pkg?.format !== FORMAT) throw new Error(`This viewer supports ${FORMAT}.`);
+  const contract = formatInfo(pkg?.format);
   if (!pkg.content?.title || !pkg.id || !pkg.version || !pkg.participants || !Array.isArray(pkg.requires)) {
     throw new Error('Package needs identity, content.title, participants, and requires.');
   }
@@ -27,6 +28,7 @@ export function buildDiagram(pkg) {
   }
   sequence(pkg.runbook?.steps, '/runbook/steps');
   return {title:pkg.content.title, summary:pkg.content.summary ?? '', id:pkg.id, version:pkg.version,
-    format:pkg.format, participants:pkg.participants, requires:pkg.requires,
+    format:pkg.format, contract, participants:pkg.participants, requires:pkg.requires,
+    inputs:pkg.inputs ?? {}, queueInputs:pkg.queueInputs ?? {},
     settings:pkg.settings ?? {}, content:pkg.content, prompt:pkg.content.prompt ?? '', nodes, edges};
 }

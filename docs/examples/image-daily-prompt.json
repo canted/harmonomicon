@@ -1,7 +1,7 @@
 {
-  "format": "harmonomicon.activity-package/0.20",
+  "format": "harmonomicon.activity-package/0.24",
   "id": "org.harmonomicon.example.image-daily-prompt",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "content": {
     "language": "en",
     "title": "Image daily shared prompt",

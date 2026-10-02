@@ -1,0 +1,78 @@
+{
+  "format": "harmonomicon.activity-package/0.24",
+  "id": "org.harmonomicon.example.relay-paired-reflection",
+  "version": "0.1.0",
+  "content": {
+    "language": "en",
+    "title": "Creative contribution and paired reflection",
+    "summary": "Two people are invited to add one canonical story piece; then everyone writes private notes in pairs.",
+    "setup": "Enroll an even number of participants, from 2 to 100, and keep the roster fixed for this exercise. Shuffle once and invite two people with a shared 24-hour deadline. After selection, a full unsuccessful pass or pause, form pairs in enrollment order. The organizer closes reflection, or it closes after 24 hours.",
+    "prompt": "Add a story piece, then reflect with your partner.",
+    "participant": "If invited, submit a complete text or image, or decline. The first valid accepted piece becomes canonical. Then everyone may submit one note visible only to their pair. If no piece was accepted, discuss an idea for starting the story.",
+    "completion": "After the invitation phase ends, move into paired reflection; the notes close when the organizer advances or 24 hours pass. The saved queue permits a separate host-launched relay continuation; this exercise does not automatically launch it.",
+    "access": "Canonical contributions are attributed and visible to all bound viewers. Reflection notes stay within each pair, including after closure. An organizer has no extra note-reading access; a participating organizer can read only their own pair notes. The organizer can see all pair membership and close reflection. Media bytes require host authority; queue membership gives no new access."
+  },
+  "provenance": {
+    "kind": "original",
+    "credit": "Original Harmonomicon candidate 0.24 composition.",
+    "rights": "Authors retain rights to their contributions; this definition grants no media rights."
+  },
+  "participants": {
+    "min": 2,
+    "max": 100
+  },
+  "requires": [
+    "clock@1",
+    "durable_state@1",
+    "first_valid@1",
+    "host_controls@1",
+    "identity@1",
+    "image_contributions@1",
+    "invitation_queue@1",
+    "policy:rolling_pair@1",
+    "private_views@1",
+    "seeded_assignment@1",
+    "serial_events@1",
+    "text@1",
+    "partition@1",
+    "collect_group@1",
+    "policy:roster_chunks@1"
+  ],
+  "settings": {},
+  "runbook": {
+    "steps": [
+      {
+        "id": "piece",
+        "op": "first_valid@1",
+        "prompt": "Add a text or image to the shared story.",
+        "kinds": [
+          "text",
+          "image"
+        ],
+        "policy": "policy:rolling_pair@1",
+        "windowMs": 86400000,
+        "retryAfterMs": 86400000,
+        "input": null,
+        "queueInput": null
+      },
+      {
+        "id": "pairs",
+        "op": "partition@1",
+        "policy": "policy:roster_chunks@1",
+        "minSize": 2,
+        "maxSize": 2,
+        "prompt": "Form reflection pairs in enrollment order.",
+        "afterMs": null
+      },
+      {
+        "id": "reflect",
+        "op": "collect_group@1",
+        "source": "pairs",
+        "prompt": "Reflect with your partner on the accepted piece. If nobody contributed, discuss an idea for starting the story. Your note is visible only within your pair.",
+        "close": "organizer",
+        "afterMs": 86400000
+      }
+    ]
+  },
+  "inputs": {}
+}

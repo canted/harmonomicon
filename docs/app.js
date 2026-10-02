@@ -5,6 +5,8 @@ import {layoutDiagram, titleCase} from './diagram-layout.js';
 const $ = id => document.getElementById(id);
 let current = null;
 let graph = null;
+let loadRevision = 0;
+let displayedExample = '';
 
 
 function setStatus(message, error = false, announceOnly = false) {
@@ -67,6 +69,10 @@ function render(diagram) {
   setText('package-summary',diagram.summary);
   setText('package-contract',diagram.format);
   setText('package-identity',`${diagram.id} · ${diagram.version}`);
+  for (const [id,key] of [['specification-link','specification'],['schema-link','schema']]) {
+    $(id).href = diagram.contract[key];
+    $(id).textContent = `${key === 'schema' ? 'JSON Schema' : 'Operation rules'} ${diagram.contract.version}`;
+  }
   const buttons = $('stage-buttons'); buttons.replaceChildren();
   for (const stage of diagram.nodes) {
     const button = document.createElement('button');
@@ -81,25 +87,37 @@ function render(diagram) {
   setText('layer-events',unique(diagram.nodes.map(n=>n.subtitle)).join(' · '));
   setText('layer-views',diagram.content.access ?? 'Not declared');
   setText('layer-requires',diagram.requires.join(' · '));
+  for (const [id,declarations] of [['layer-inputs',diagram.inputs],['layer-queue-inputs',diagram.queueInputs]]) {
+    setText(id,Object.entries(declarations).map(([name,value]) => `${name}: ${JSON.stringify(value)}`).join('\n') || 'Not declared');
+  }
   renderGraph(diagram);
   selectStage(diagram.nodes[0].id, false);
 }
-function openPackage(pkg) {
+function openPackage(pkg, sourceName, example = '') {
   try {
     const diagram = buildDiagram(pkg);
     render(diagram);
+    displayedExample = example;
+    $('example-select').value = example;
+    setText('package-source',sourceName);
     setStatus(`${diagram.title} loaded.`, false, true);
   } catch (error) {
-    setStatus(error instanceof Error ? error.message : 'Could not read this package.',true);
+    $('example-select').value = displayedExample;
+    setStatus((error instanceof Error ? error.message : 'Could not read this package.') + (current ? ' The previous package remains displayed.' : ''),true);
   }
 }
 async function loadExample(file) {
+  const revision = ++loadRevision;
   try {
     setStatus('Loading example…');
     const response = await fetch(file);
     if (!response.ok) throw new Error(`Example could not be loaded (${response.status}).`);
-    openPackage(await response.json());
+    const pkg = await response.json();
+    if (revision !== loadRevision) return;
+    openPackage(pkg,`Catalog: ${file}`,file);
   } catch (error) {
+    if (revision !== loadRevision) return;
+    $('example-select').value = displayedExample;
     setStatus('Example could not be loaded. Serve the docs folder over HTTP, or open a local JSON file.',true);
   }
 }
@@ -108,9 +126,15 @@ $('open-file-button').addEventListener('click',()=> $('file-input').click());
 $('file-input').addEventListener('change',async event=>{
   const file=event.target.files?.[0];
   if (!file) return;
+  const revision = ++loadRevision;
+  event.target.value = '';
   if (file.size>1_500_000) { setStatus('This file is too large for the viewer.',true); return; }
-  try { openPackage(JSON.parse(await file.text())); }
-  catch { setStatus('The selected file is not valid JSON.',true); }
+  try {
+    const contents = await file.text();
+    if (revision !== loadRevision) return;
+    openPackage(JSON.parse(contents),`Local file: ${file.name}`);
+  }
+  catch { if (revision === loadRevision) setStatus('The selected file is not valid JSON.' + (current ? ' The previous package remains displayed.' : ''),true); }
 });
 $('fit-button').addEventListener('click',()=> $('diagram-scroll').scrollTo({left:0,top:0}));
 $('png-button').addEventListener('click',async()=>{
@@ -132,7 +156,7 @@ async function loadCatalog() {
     const catalog = await response.json();
     const select = $('example-select'); select.replaceChildren();
     for (const entry of catalog) {
-      const option = document.createElement('option'); option.value = entry.file; option.textContent = entry.title;
+      const option = document.createElement('option'); option.value = entry.file; option.textContent = entry.label;
       select.append(option);
     }
     if (catalog.length) await loadExample(catalog[0].file);

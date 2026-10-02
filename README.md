@@ -12,7 +12,7 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current candidate:** [0.24](format/0.24/README.md) adds first-valid typed contribution acceptance and a saved rolling two-person invitation queue, with shared configurable deadlines, explicit canonical material handoff and bounded failed-pass retry. It retains all completed 0.23 behavior. The [supported profile](format/0.24/readiness-assessment.md), [verification record](validation/0.24/EVIDENCE.md) and [host review packet](format/0.24/HOST-REVIEW.md) distinguish local evidence from host integration and independent review. Candidate 0.24 is merged locally based on completed local validation and independent authoring/schema review. Independent runtime clearance of the queue-audience correction remains unverified after a platform safeguard stopped the recheck. Further development follows real-world use cases and demonstrated capability gaps. The inspector and illustrative sections below remain pinned to retained 0.20.
+**Current candidate:** [0.24](format/0.24/README.md) adds first-valid typed contribution acceptance and a saved rolling two-person invitation queue, with shared configurable deadlines, explicit canonical material handoff and bounded failed-pass retry. It retains all completed 0.23 behavior. The [supported profile](format/0.24/readiness-assessment.md), [verification record](validation/0.24/EVIDENCE.md) and [host review packet](format/0.24/HOST-REVIEW.md) distinguish local evidence from host integration and independent review. Candidate 0.24 is merged locally based on completed local validation and independent authoring/schema review. Independent runtime clearance of the queue-audience correction remains unverified after a platform safeguard stopped the recheck. Further development follows real-world use cases and demonstrated capability gaps. The inspector now catalogs all 44 candidate 0.24 examples and accepts local 0.20–0.24 files. The illustrative format section below retains its 0.20 context.
 
 ## A simple example: one question for a group
 
@@ -28,7 +28,7 @@ The package would describe the activity in terms like these:
 | Who can see what | A participant sees their own answer before the reveal; everyone sees the answers afterward |
 | What happens if someone misses it | The reveal still happens after one hour |
 
-The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.20 package](format/0.20/examples/check-in.json) if it supports those operations.
+The runbook has two steps: **collect answers**, then **reveal answers**. The collection step defines who can answer, what an answer looks like, its privacy, and when collection ends. The reveal step makes those answers visible. Another app can run the same [0.24 package](format/0.24/examples/check-in.json) if it supports those operations.
 
 ![Runbook structure generated from the check-in package: answer then reveal](docs/previews/check-in.svg)
 
@@ -91,7 +91,7 @@ A [simplified Chorus](format/0.20/examples/simplified-chorus.json) carries image
 
 **[Open the live Runbook Structure diagrammer](https://canted.github.io/harmonomicon/)**
 
-The [activity package inspector](docs/README.md) renders candidate 0.20 runbooks directly from their JSON. It lists all current examples and can open another package file locally. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. Use the [live diagrammer](https://canted.github.io/harmonomicon/) in your browser, or follow the [local setup instructions](docs/README.md#run-locally). The live site is published from `docs/` on the repository’s default branch.
+The [activity package inspector](docs/README.md) renders all 44 candidate 0.24 runbooks directly from their JSON and can inspect local 0.20–0.24 package files. It exposes typed contribution/queue declarations and version-specific schema and operation links. Select a step to see its operation and settings. Arrows show declared sequence and nesting; the viewer does not simulate an activity. Generated SVG diagrams display in this repository. Use the [live diagrammer](https://canted.github.io/harmonomicon/) in your browser, or follow the [local setup instructions](docs/README.md#run-locally). The live site is published from `docs/` on the repository’s default branch.
 
 ### Runbook Structure screenshots
 

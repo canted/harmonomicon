@@ -1,106 +1,310 @@
 [
   {
+    "file": "examples/audio-pool-sharing.json",
+    "title": "Listen and share recordings",
+    "id": "org.harmonomicon.example.audio-pool-sharing",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Listen and share recordings"
+  },
+  {
     "file": "examples/check-in.json",
-    "title": "Group check-in"
+    "title": "Group check-in",
+    "id": "harmonomicon.checkin",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Group check-in"
   },
   {
     "file": "examples/choice-poll.json",
-    "title": "Choose a group outing"
+    "title": "Choose a group outing",
+    "id": "harmonomicon.choicepoll",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Choose a group outing"
+  },
+  {
+    "file": "examples/contribution-contest.json",
+    "title": "Choose a place to explore",
+    "id": "org.harmonomicon.example.contribution-contest",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Choose a place to explore"
+  },
+  {
+    "file": "examples/creative-continuation-input.json",
+    "title": "Creative continuation",
+    "id": "org.harmonomicon.example.creative-continuation-input",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Creative continuation"
+  },
+  {
+    "file": "examples/creative-continuation.json",
+    "title": "Continue the station song",
+    "id": "org.harmonomicon.example.creative-continuation",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Continue the station song"
+  },
+  {
+    "file": "examples/creative-relay-continue.json",
+    "title": "Creative relay",
+    "id": "org.harmonomicon.example.creative-relay-continue",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Continue · Creative relay"
+  },
+  {
+    "file": "examples/creative-relay-retry-empty.json",
+    "title": "Creative relay",
+    "id": "org.harmonomicon.example.creative-relay-retry-empty",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Retry empty · Creative relay"
+  },
+  {
+    "file": "examples/creative-relay-start.json",
+    "title": "Creative relay",
+    "id": "org.harmonomicon.example.creative-relay-start",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Start · Creative relay"
+  },
+  {
+    "file": "examples/creative-retained-source.json",
+    "title": "Creative continuation with source retention",
+    "id": "org.harmonomicon.example.creative-retained-source",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Creative continuation with source retention"
   },
   {
     "file": "examples/crowd-scoring.json",
-    "title": "Rate and Rank Ideas"
+    "title": "Rate and Rank Ideas",
+    "id": "harmonomicon.crowdscoring",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Rate and Rank Ideas"
   },
   {
     "file": "examples/daily-music-journal.json",
-    "title": "Daily music journal: one host-scheduled instance"
+    "title": "Daily music journal: one host-scheduled instance",
+    "id": "harmonomicon.daily-music-journal",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Daily music journal: one host-scheduled instance"
   },
   {
     "file": "examples/daily-private-practice.json",
-    "title": "Private daily writing circle"
+    "title": "Private daily writing circle",
+    "id": "org.harmonomicon.example.daily-private-practice",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Private daily writing circle"
   },
   {
     "file": "examples/daily-reveal.json",
-    "title": "Daily reveal writing circle"
+    "title": "Daily reveal writing circle",
+    "id": "org.harmonomicon.example.daily-reveal",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Daily reveal writing circle"
   },
   {
     "file": "examples/daily-shared-prompt.json",
-    "title": "Shared daily micro-story"
+    "title": "Shared daily micro-story",
+    "id": "org.harmonomicon.example.daily-shared-prompt",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Shared daily micro-story"
   },
   {
     "file": "examples/feedback-round.json",
-    "title": "Feedback Round: open primary posts"
+    "title": "Feedback Round: open primary posts",
+    "id": "harmonomicon.feedback-round",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Feedback Round: open primary posts"
   },
   {
     "file": "examples/gratitude-pool.json",
-    "title": "Gratefulness Grab Bag"
+    "title": "Gratefulness Grab Bag",
+    "id": "harmonomicon.gratitudepool",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Gratefulness Grab Bag"
   },
   {
     "file": "examples/idea-response-and-pairs.json",
-    "title": "Idea exchange and paired reflection"
+    "title": "Idea exchange and paired reflection",
+    "id": "org.harmonomicon.example.idea-response-and-pairs",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Idea exchange and paired reflection"
   },
   {
     "file": "examples/image-check-in.json",
-    "title": "Image One-question group check-in"
+    "title": "Image One-question group check-in",
+    "id": "org.harmonomicon.example.image-check-in",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Image One-question group check-in"
   },
   {
     "file": "examples/image-daily-private.json",
-    "title": "Image Daily reveal writing circle"
+    "title": "Image Daily reveal writing circle",
+    "id": "harmonomicon.image-daily-private",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Image Daily reveal writing circle"
   },
   {
     "file": "examples/image-daily-prompt.json",
-    "title": "Image daily shared prompt"
+    "title": "Image daily shared prompt",
+    "id": "org.harmonomicon.example.image-daily-prompt",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Image daily shared prompt"
+  },
+  {
+    "file": "examples/image-pool-vote.json",
+    "title": "Choose an image",
+    "id": "org.harmonomicon.example.image-pool-vote",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Choose an image"
   },
   {
     "file": "examples/list-game.json",
-    "title": "List Game"
+    "title": "List Game",
+    "id": "harmonomicon.listgame",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "List Game"
   },
   {
     "file": "examples/one-two-four-all.json",
-    "title": "1-2-4-All fixed digital rooms"
+    "title": "1-2-4-All fixed digital rooms",
+    "id": "harmonomicon.onetwofourall",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "1-2-4-All fixed digital rooms"
   },
   {
     "file": "examples/partner-rounds.json",
-    "title": "Impromptu Networking digital rounds"
+    "title": "Impromptu Networking digital rounds",
+    "id": "harmonomicon.partnerrounds",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Impromptu Networking digital rounds"
   },
   {
     "file": "examples/pooled-ideas-and-pairs.json",
-    "title": "Pooled ideas followed by pair discussion"
+    "title": "Pooled ideas followed by pair discussion",
+    "id": "harmonomicon.pooledideasandpairs",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Pooled ideas followed by pair discussion"
+  },
+  {
+    "file": "examples/predefined-vote.json",
+    "title": "Choose a conversation subject",
+    "id": "org.harmonomicon.example.predefined-vote",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Choose a conversation subject"
   },
   {
     "file": "examples/proposal-assessment.json",
-    "title": "Peer proposal assessment"
+    "title": "Peer proposal assessment",
+    "id": "harmonomicon.proposalassessment",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Peer proposal assessment"
+  },
+  {
+    "file": "examples/proposal-workshop.json",
+    "title": "Turn a proposal into a shared experiment",
+    "id": "org.harmonomicon.example.proposal-workshop",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Turn a proposal into a shared experiment"
+  },
+  {
+    "file": "examples/relay-paired-reflection.json",
+    "title": "Creative contribution and paired reflection",
+    "id": "org.harmonomicon.example.relay-paired-reflection",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Creative contribution and paired reflection"
   },
   {
     "file": "examples/repeated-poll-and-pairs.json",
-    "title": "Repeated choices and paired reflection"
+    "title": "Repeated choices and paired reflection",
+    "id": "org.harmonomicon.example.repeated-poll-and-pairs",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Repeated choices and paired reflection"
   },
   {
     "file": "examples/scheduled-check-in-pairs.json",
-    "title": "Scheduled check-in and paired reflection"
+    "title": "Scheduled check-in and paired reflection",
+    "id": "harmonomicon.scheduledcheckinpairs",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Scheduled check-in and paired reflection"
   },
   {
     "file": "examples/scheduled-check-in.json",
-    "title": "One-question group check-in"
+    "title": "One-question group check-in",
+    "id": "org.harmonomicon.example.group-check-in",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "One-question group check-in"
   },
   {
     "file": "examples/see-think-wonder.json",
-    "title": "See, Think, Wonder"
+    "title": "See, Think, Wonder",
+    "id": "harmonomicon.seethinkwonder",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "See, Think, Wonder"
   },
   {
     "file": "examples/simplified-chorus.json",
-    "title": "Simplified The Art Before the Chorus"
+    "title": "Simplified The Art Before the Chorus",
+    "id": "harmonomicon.simplified-chorus",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Simplified The Art Before the Chorus"
   },
   {
     "file": "examples/single-source-creative-response.json",
-    "title": "Single-source creative response"
+    "title": "Single-source creative response",
+    "id": "org.harmonomicon.example.single-source-creative-response",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Single-source creative response"
+  },
+  {
+    "file": "examples/starting-contribution.json",
+    "title": "Starting contribution",
+    "id": "org.harmonomicon.example.starting-contribution",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Starting contribution"
+  },
+  {
+    "file": "examples/supplied-brief-workshop.json",
+    "title": "Plan from a supplied brief",
+    "id": "org.harmonomicon.example.supplied-brief-workshop",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Plan from a supplied brief"
+  },
+  {
+    "file": "examples/text-pool-vote.json",
+    "title": "Choose among written ideas",
+    "id": "org.harmonomicon.example.text-pool-vote",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Choose among written ideas"
   },
   {
     "file": "examples/timed-story.json",
-    "title": "Timed cumulative story"
+    "title": "Timed cumulative story",
+    "id": "harmonomicon.timedstory",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Timed cumulative story"
   },
   {
     "file": "examples/two-truths.json",
-    "title": "Two Truths and a Tall Tale"
+    "title": "Two Truths and a Tall Tale",
+    "id": "harmonomicon.twotruths",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Two Truths and a Tall Tale"
+  },
+  {
+    "file": "examples/typed-continuation.json",
+    "title": "Choose and continue a supplied piece",
+    "id": "org.harmonomicon.example.typed-continuation",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Choose and continue a supplied piece"
+  },
+  {
+    "file": "examples/typed-response-workshop.json",
+    "title": "Turn shared materials into practical next steps",
+    "id": "org.harmonomicon.example.typed-response-workshop",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Turn shared materials into practical next steps"
+  },
+  {
+    "file": "examples/typed-sharing.json",
+    "title": "Read, play and share contributions",
+    "id": "org.harmonomicon.example.typed-sharing",
+    "format": "harmonomicon.activity-package/0.24",
+    "label": "Read, play and share contributions"
   }
 ]
