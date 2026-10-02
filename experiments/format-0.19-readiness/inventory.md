@@ -1,6 +1,6 @@
-# Concrete pre-1 supported profile and remaining decisions
+# Historical 0.19 capability profile and remaining decisions
 
-**Review baseline:** candidate 0.19 at `eab8745`. Independent recheck confirms the three identified PNG defects are closed; no focused concrete finding remained. This review neither defines nor declares 1.0. In-app authoring/composition remains primary; portability is a secondary potential benefit with uncertain demand.
+**Review baseline:** candidate 0.19 at `eab8745`. Independent recheck confirms the three identified PNG defects are closed; no focused concrete finding remained. This inventory records the supported profile at that historical baseline. In-app authoring/composition remains primary; portability is a secondary potential benefit with uncertain demand.
 
 The bounded ordered-runbook core is reusable across several families. Four new cross-family arrangements pass both engines, schema, restart at every event boundary and actual durable hosts. Six negative witnesses and the image-read workaround establish important limits. These are a small constructed challenge, not a representative or blind coverage estimate.
 
@@ -19,15 +19,15 @@ Candidate evidence remains **23 examples, 38 engine traces, 114 invalid definiti
 
 ## Important missing primitives versus optional nuance
 
-| Gap | Demonstrated consequence | Readiness distinction |
+| Gap | Demonstrated consequence | Scope distinction |
 |---|---|---|
 | Typed image source → assignment → linked response | A collected image cannot be an assignment source; image pool shape/submission rejects. A digest smuggled as text assigns a string but grants no image byte access in either durable host. | **Meaningful composability gap** if image peer exchange is in the initial core. It is independent of optional two-cover choice. A bounded typed-source/assignment/read-projection path is the strongest next extension candidate. |
 | Ongoing entries/comments beside a final window | A second progress contribution from the same actor rejects; fixed form/turn steps do not provide an open stream alongside final submission. | Important for journal/project variants; choose whether that family belongs in the initial supported profile. Do not infer generic concurrency or claim GGJ universally requires a feed. |
-| Permission/result-dependent gates | A consent form recording `deny` can still advance to an ordinary opinion form that accepts text. | Exclude permission-enforced feedback until an exact reusable gate/authority contract is provided. Recorded directions/choices are not enforcement. Full Critical Response Process parity is not an automatic release gate. |
+| Permission/result-dependent gates | A consent form recording `deny` can still advance to an ordinary opinion form that accepts text. | Exclude permission-enforced feedback until an exact reusable gate/authority contract is provided. Recorded directions/choices are not enforcement. Full Critical Response Process parity is relevant only when a selected use case needs it. |
 | Variable prompt series | A prompt list in fixed recurrence rejects. | Short explicitly authored top-level scheduled windows can use different prompts within package limits; no compact per-occurrence prompt binding or general expression evaluator. Judge authoring practicality against selected use cases. |
 | Mutable participants, contributions and schedules | No replacement/moderation, live settings update or organizer-as-participant contract | Scope-dependent lifecycle capabilities, not proven by static settings or token possession. Must be disclosed where required. |
 
-Two-source offers, participant choice, exposure balancing, product-specific late-third-cover recovery, specialized vote/scoring variants and exact legacy phase details are **optional parity refinements**, not requirements inferred for 1.0. Audio/video, dynamic calendars, image routing, streams and permission enforcement are **unsupported capabilities**, not merely UI chores; their necessity depends on the supported scope. Upload processing/drafts/notifications/chat/boards are host integration, not automatic language gaps.
+Two-source offers, participant choice, exposure balancing, product-specific late-third-cover recovery, specialized vote/scoring variants and exact legacy phase details are **optional parity refinements**, to prioritize only when concrete use cases need them. Audio/video, dynamic calendars, image routing, streams and permission enforcement are **unsupported capabilities**, not merely UI chores; their necessity depends on the supported scope. Upload processing/drafts/notifications/chat/boards are host integration, not automatic language gaps.
 
 ## Host integration contract
 
@@ -48,4 +48,4 @@ A real host must decide notification channels and participant preferences separa
 
 Decide whether **single non-self image-source assignment with an independently submitted text response** belongs in the initial core. If yes, the highest-value next bounded milestone is to preserve typed image identity and authorization through a closed source pool, saved assignment, actor-private readable projection and linked-result reveal, reusing the current named algorithms and exact retry/recovery rules. It need not add two alternatives, choice, fairness, audio/video, general concurrency or full Chorus parity. If excluded, name that exclusion plainly; image forms must not be described as image exchange.
 
-Separately decide whether ongoing progress and permission-enforced feedback are required initial families or deferred capabilities. Then review the supported profile, authoring clarity, host embedding/prompt semantics and eventual version compatibility with the user. Prepare explicit exclusions and evidence rather than assuming a release from a count of passed examples. **Stop before any 1.0 identifier/release/readiness claim for the user's decision.** No runtime expansion occurs in this review.
+Separately decide whether ongoing progress and permission-enforced feedback are required initial families or deferred capabilities. Then review the supported profile, authoring clarity, host embedding/prompt semantics and eventual version compatibility with the user. Prepare explicit exclusions and evidence so subsequent activity needs can be assessed against the supported profile. Use real-world activity needs and demonstrated gaps to choose subsequent work. No runtime expansion occurs in this review.

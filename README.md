@@ -12,7 +12,7 @@ Think of an icebreaker in a group chat, a collaborative drawing game on a websit
 
 Each activity has its own package. Some packages need only a prompt and a timer; others need private submissions, assignments, and a record of what happened. People may step away from the app to take a photo or make something. The package describes the digital steps around that work: the prompt, submission, deadline, and sharing.
 
-**Current candidate:** [0.23](format/0.23/README.md) adds one typed pool with independently configured text/image/audio kinds and per-person limits, plus compatible typed iteration, voting and source-response consumers. It retains 0.22 qualified starting inputs, stable outcomes and host-launched continuation. The [supported profile](format/0.23/readiness-assessment.md), [verification record](validation/0.23/EVIDENCE.md) and [host review packet](format/0.23/HOST-REVIEW.md) distinguish demonstrated core behavior from product parity. The completed reviewed [0.22](validation/0.22/EVIDENCE.md) remains separately retained. Fresh independent runtime and authoring reviews cleared the 0.23 implementation; candidate 0.23 is prepared for user review; no publication or 1.0 decision is implied. The inspector and illustrative sections below remain pinned to the retained 0.20 catalog.
+**Current candidate:** [0.23](format/0.23/README.md) adds one typed pool with independently configured text/image/audio kinds and per-person limits, plus compatible typed iteration, voting and source-response consumers. It retains 0.22 qualified starting inputs, stable outcomes and host-launched continuation. The [supported profile](format/0.23/readiness-assessment.md), [verification record](validation/0.23/EVIDENCE.md) and [host review packet](format/0.23/HOST-REVIEW.md) distinguish demonstrated core behavior from product parity. The completed reviewed [0.22](validation/0.22/EVIDENCE.md) remains separately retained. Fresh independent runtime and authoring reviews cleared the 0.23 implementation; candidate 0.23 is merged into local main. Further development will follow real-world use cases and expand the language where existing operations fall short. The inspector and illustrative sections below remain pinned to the retained 0.20 catalog.
 
 ## A simple example: one question for a group
 
@@ -105,7 +105,7 @@ The [activity package inspector](docs/README.md) renders candidate 0.20 runbooks
 
 ## Roadmap
 
-The [format roadmap](ROADMAP.md) records candidate evidence, proposed readiness criteria, and a user review checkpoint before any 1.0 decision. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
+The [format roadmap](ROADMAP.md) records the development direction, candidate history, evidence, and remaining capabilities to explore through real-world use cases. The [coverage audit](COVERAGE.md) maps the research examples to current rules and remaining gaps.
 
 ## Research
 

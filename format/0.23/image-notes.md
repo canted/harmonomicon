@@ -1,6 +1,6 @@
 # Typed image contributions and host boundary
 
-Candidate 0.23 retains the `image_ref` fields introduced by 0.19 to `collect@1`, `collect_until@1` and `collect_window@1`, gated by `image_contributions@1`. Existing operation meanings, text values and prior package revisions remain intact. Retained `collect_group@1`, `pool@1`, `route@1` and `respond@1` remain text-only; separate typed pools/assignments/responses carry image/audio values as specified in artifact notes. This candidate does not define 1.0.
+Candidate 0.23 retains the `image_ref` fields introduced by 0.19 to `collect@1`, `collect_until@1` and `collect_window@1`, gated by `image_contributions@1`. Existing operation meanings, text values and prior package revisions remain intact. Retained `collect_group@1`, `pool@1`, `route@1` and `respond@1` remain text-only; separate typed pools/assignments/responses carry image/audio values as specified in artifact notes.
 
 ## Language and authority
 

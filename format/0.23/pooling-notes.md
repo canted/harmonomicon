@@ -50,4 +50,4 @@ UUID identity, declared input/via authority, every viewer including future/later
 
 Conservative safe-clock budgeting includes up to 100 source actors and each pool's maximum quota, even when host actors are outside the original roster. Resolve dates/setup/config time fields only with room for that bounded relative body budget. A null closing reserves no future interval; near MAX, a late trusted close retains the existing capped-relative-deadline behavior and overdue item timeouts settle at MAX without fabricated readers/publication.
 
-See [examples](README.md), [decision record](DECISIONS.md), [conformance](conformance/README.md), [durable evidence](../../validation/0.23/EVIDENCE.md) and [supported limits](readiness-assessment.md). Historical migrations are accounted separately; useful typed reuse does not establish faithful product parity or 1.0.
+See [examples](README.md), [decision record](DECISIONS.md), [conformance](conformance/README.md), [durable evidence](../../validation/0.23/EVIDENCE.md) and [supported limits](readiness-assessment.md). Historical migrations are accounted separately; useful typed reuse does not establish faithful product parity.

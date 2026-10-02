@@ -1,4 +1,4 @@
-# Candidate 0.23 supported profile for review
+# Candidate 0.23 capabilities and limitations
 
 The demonstrated addition is a generic typed pool with independently chosen accepted kinds and per-person limits, feeding typed iteration, qualified voting and one-source linked response. Six original compositions supplement 34 retained examples. Earlier loops and source-response instructions already reused submitted content; the narrower gap was typed multi-item collection and compatible identity-preserving consumers.
 
@@ -24,6 +24,6 @@ No video, arbitrary type registry, moderation/replacement, unlimited streams, pr
 
 Private ballots and sources are access rules, not universal anonymity. Public attribution/counts and external information may disclose participation. Local serial SQLite trials do not establish distributed ordering, performance/load, arbitrary storage-failure robustness or production security. PNG/WAV are reference upload profiles, not language encoding restrictions. Authoring review is technical clarity review, not nontechnical usability research.
 
-Six exact historical migrations remain complete and fourteen incomplete. Useful creative support and simpler workshop witnesses are not faithful product migration. [Compatibility](COMPATIBILITY.md), [migration](MIGRATION.md), [decision record](DECISIONS.md) and [host review packet](HOST-REVIEW.md) accompany the candidate. No merge, publication, deployment or 1.0 declaration is authorized.
+Six exact historical migrations remain complete and fourteen incomplete. Useful creative support and simpler workshop witnesses are not faithful product migration. [Compatibility](COMPATIBILITY.md), [migration](MIGRATION.md), [decision record](DECISIONS.md) and [host review packet](HOST-REVIEW.md) accompany the candidate. Further extensions should start with concrete real-world use cases and test whether existing operations already express them.
 
 Fresh independent runtime and authoring reviews cleared implementation `68d3f8322bee337a27ea52c9af94d330ff8116e8`, including both full hosts and 860 independent observable assertions. See [review evidence](../../validation/0.23/INDEPENDENT-REVIEW.md). The documentation-only completion pin remains distinct; user review determines subsequent direction.

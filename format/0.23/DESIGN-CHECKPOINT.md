@@ -1,6 +1,6 @@
 # Candidate 0.23 design checkpoint
 
-October 1, 2026. Base: completed reviewed candidate 0.22 at `5006b99cb850d51ba82991e5740cfdf60a7f32d2` (implementation reviewed at `88ce95c`), separately retained on `codex/candidate-0-22`. Candidate numbering follows the incremental format directories. Current main and its Rate and Rank Ideas title correction remain untouched. This checkpoint precedes implementation; no merge/publication/deployment or 1.0 decision is authorized.
+October 1, 2026. Base: completed reviewed candidate 0.22 at `5006b99cb850d51ba82991e5740cfdf60a7f32d2` (implementation reviewed at `88ce95c`), separately retained on `codex/candidate-0-22`. Candidate numbering follows the incremental format directories. Current main and its Rate and Rank Ideas title correction remain untouched. This checkpoint precedes implementation; no merge/publication/deployment is authorized by this historical checkpoint.
 
 ## Activity-level direction
 

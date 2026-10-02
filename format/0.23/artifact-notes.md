@@ -1,7 +1,7 @@
 # Typed contributions and the host boundary
 
 Candidate 0.23 retains these versioned rules. [Generic typed pooling](pooling-notes.md) adds compatible new consumer versions without widening the old contracts.
-These four top-level operations and two capabilities were introduced by candidate 0.20 over 0.19 and are retained without semantic changes in 0.22. Earlier directories and operation contracts are retained. It is an incremental pre-1 candidate; it neither defines nor declares 1.0.
+These four top-level operations and two capabilities were introduced by candidate 0.20 over 0.19 and are retained without semantic changes in 0.22. Earlier directories and operation contracts are retained. This is an incremental candidate with the supported scope and limits recorded below.
 
 ## Exact contribution and distribution rules
 

@@ -1,6 +1,6 @@
 # Single-source distribution: scope and evidence
 
-**Status:** Retained text-source/linked-text-response design and validation notes in candidate 0.22. New typed operations are specified in [artifact notes](artifact-notes.md). It does not certify production app integration or define 1.0.
+**Status:** Retained text-source/linked-text-response design and validation notes in candidate 0.22. New typed operations are specified in [artifact notes](artifact-notes.md). It does not certify production app integration.
 
 The latest project scope clarification prioritizes explicit useful distribution algorithms over faithful reproduction of every activity detail. A simplified creative-response activity can give each person one non-self source rather than two alternatives. The Chorus comparison, pinned to 0.16, identifies authoritative source links and independent participant progress as useful core witnesses; it also identifies many additional product rules. Those rules are not all readiness prerequisites.
 
@@ -18,4 +18,4 @@ Seven explicit traces cover full/partial/empty/one-source pools, both recipient 
 | Legacy paired story response | Reusable text source pool and authoritative response relation. | Exact two-source balanced offers, contributor selection, phase time bindings and the legacy insufficient-source terminal branch. Its migration remains incomplete. |
 | Unrelated idea assessment/reflection | Deterministic source assignment and text response followed by private pair reflection. | Numeric grading of those links, representative synthesis and reviewer balancing are not inferred. |
 
-Uploads, drafts, notification delivery, chat cards and board publication remain host integration work. Candidate 0.23 retains 0.20 typed image/audio pools and linked responses, organizer participation and effective actor/date controls via separate operations. Retained text operation contracts remain unchanged; their text-only witnesses are distinct from the new simplified image-source Chorus. See [typed rules](artifact-notes.md). Richer offer choice and exact app parity remain optional. No 1.0 promotion follows automatically from this candidate.
+Uploads, drafts, notification delivery, chat cards and board publication remain host integration work. Candidate 0.23 retains 0.20 typed image/audio pools and linked responses, organizer participation and effective actor/date controls via separate operations. Retained text operation contracts remain unchanged; their text-only witnesses are distinct from the new simplified image-source Chorus. See [typed rules](artifact-notes.md). Richer offer choice and exact app parity remain optional.

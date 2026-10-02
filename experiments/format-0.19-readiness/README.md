@@ -1,6 +1,6 @@
 # Candidate 0.19 held-out coverage and profile review
 
-**Pinned implementation:** `eab8745fc5e0b70afc1617845e3c9005b5bad019`, including the independently rechecked PNG corrections after initial candidate commit `8411c02`. No runtime operation or version was added for this review. **Result:** useful bounded composition is demonstrated; image-source distribution is a concrete composability gap. This is not a 1.0 readiness declaration.
+**Pinned implementation:** `eab8745fc5e0b70afc1617845e3c9005b5bad019`, including the independently rechecked PNG corrections after initial candidate commit `8411c02`. No runtime operation or version was added for this review. **Result:** useful bounded composition is demonstrated; image-source distribution is a concrete composability gap. This is a historical capability assessment at the stated pin.
 
 [Inventory and next decision](inventory.md) records supported families, important missing primitives, optional nuances, the host contract and nonfunctional limits. [Cases](cases.json) and [authored packages](examples/) are review witnesses outside the candidate corpus. [probe.py](probe.py) runs independent engines/schema and restarts at every event boundary. [host_probe.py](host_probe.py) runs both durable hosts with actual PNGs and demonstrates why text reference assignment cannot grant image read access.
 

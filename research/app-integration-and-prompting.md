@@ -1,6 +1,6 @@
 # App integration and prompting: open directions
 
-**Status:** Product direction and design questions from the current project discussion. These possibilities are not settled format requirements, operation semantics, or a definition of 1.0. Existing candidate specifications remain authoritative for their implemented behavior.
+**Status:** Product direction and design questions from the current project discussion. These possibilities are not settled format requirements or operation semantics. Existing candidate specifications remain authoritative for their implemented behavior.
 
 ## Purpose and priorities
 
@@ -24,4 +24,4 @@ An explicit requirement for a particular channel would constrain compatibility: 
 
 A prompt shown only when someone next opens the app may suit an asynchronous activity. It cannot silently replace time-sensitive prompting while preserving a claim of equivalent activity semantics. For example, showing a scheduled one-minute prompt hours later raises an explicit decision about whether the original window was missed or a different event starts a new deadline. Any fallback would need to preserve the declared behavior or make a changed activity arrangement explicit. No such fallback or delivery-triggered timer is specified here.
 
-Future investigation can test these choices with concrete activities and host capabilities. It should separate enforced software facts from unverified delivery, attention, or offline actions, and bring unresolved choices to the [pre-1.0 review](../ROADMAP.md#proposed-development-oversight-and-review-checkpoint).
+Future investigation can test these choices with concrete activities and host capabilities. It should separate enforced software facts from unverified delivery, attention, or offline actions, and bring unresolved choices to [ongoing development review](../ROADMAP.md#proposed-development-oversight-and-review-checkpoint), using real-world activity needs to choose the next work.
